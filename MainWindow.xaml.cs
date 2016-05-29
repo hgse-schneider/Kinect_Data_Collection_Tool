@@ -24,18 +24,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     /// Interaction logic for MainWindow
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
-    {
-        /// <summary>
-        /// filename information for logging the data
-        /// </summary>
-        static int unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-        static bool log_body;
-        static bool log_face;
-        static string bodyFilename;
-        static string faceFilename;
-        System.IO.StreamWriter bodyFile;
-        System.IO.StreamWriter faceFile;
-        
+    {        
         /// <summary>
         /// Radius of drawn hand circles
         /// </summary>
@@ -225,6 +214,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private WriteableBitmap colorBitmap = null;
 
         /// <summary>
+        /// Bitmap to display
+        /// </summary>
+        private Logger logger;
+
+        /// <summary>
         /// Current status text to display
         /// </summary>
         private string statusText = null;
@@ -234,25 +228,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public MainWindow()
         {
-            // get participant ID
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Enter Participant ID", "Kinect Data Collection Tool", "Default", -1, -1);
+            // get session ID
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Enter Session ID", "Kinect Data Collection Tool", "Default", -1, -1);
             if (input == "") Application.Current.Shutdown();
+            this.logger = new Logger(input);
 
-            // define the logs filenames
-            string myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            bodyFilename = string.Format(@"{0}-Kinect-BodyLog-{1}.csv", input, unixTimestamp);
-            faceFilename = string.Format(@"{0}-Kinect-FaceLog-{1}.csv", input, unixTimestamp);
-            bodyFilename = Path.Combine(myDocuments, bodyFilename);
-            faceFilename = Path.Combine(myDocuments, faceFilename);
-
-            // start log files
-            bodyFile = new System.IO.StreamWriter(bodyFilename, true);
-            faceFile = new System.IO.StreamWriter(faceFilename, true);
-
-            // print headers
-            bodyFile.WriteLine("Timestamp, SpineBase_X, SpineBase_Y, SpineBase_Z, SpineBase_inferred, SpineMid_X, SpineMid_Y, SpineMid_Z, SpineMid_inferred, Neck_X, Neck_Y, Neck_Z, Neck_inferred, Head_X, Head_Y, Head_Z, Head_inferred, ShoulderLeft_X, ShoulderLeft_Y, ShoulderLeft_Z, ShoulderLeft_inferred, ElbowLeft_X, ElbowLeft_Y, ElbowLeft_Z, ElbowLeft_inferred, WristLeft_X, WristLeft_Y, WristLeft_Z, WristLeft_inferred, HandLeft_X, HandLeft_Y, HandLeft_Z, HandLeft_inferred, ShoulderRight_X, ShoulderRight_Y, ShoulderRight_Z, ShoulderRight_inferred, ElbowRight_X, ElbowRight_Y, ElbowRight_Z, ElbowRight_inferred, WristRight_X, WristRight_Y, WristRight_Z, WristRight_inferred, HandRight_X, HandRight_Y, HandRight_Z, HandRight_inferred, HipLeft_X, HipLeft_Y, HipLeft_Z, HipLeft_inferred, KneeLeft_X, KneeLeft_Y, KneeLeft_Z, KneeLeft_inferred, AnkleLeft_X, AnkleLeft_Y, AnkleLeft_Z, AnkleLeft_inferred, FootLeft_X, FootLeft_Y, FootLeft_Z, FootLeft_inferred, HipRight_X, HipRight_Y, HipRight_Z, HipRight_inferred, KneeRight_X, KneeRight_Y, KneeRight_Z, KneeRight_inferred, AnkleRight_X, AnkleRight_Y, AnkleRight_Z, AnkleRight_inferred, FootRight_X, FootRight_Y, FootRight_Z, FootRight_inferred, SpineShoulder_X, SpineShoulder_Y, SpineShoulder_Z, SpineShoulder_inferred, HandTipLeft_X, HandTipLeft_Y, HandTipLeft_Z, HandTipLeft_inferred, ThumbLeft_X, ThumbLeft_Y, ThumbLeft_Z, ThumbLeft_inferred, HandTipRight_X, HandTipRight_Y, HandTipRight_Z, HandTipRight_inferred, ThumbRight_X, ThumbRight_Y, ThumbRight_Z, ThumbRight_inferred");
-            faceFile.WriteLine("Timestamp, Happy, Engaged, WearingGlasses, LeftEyeClosed, RightEyeClosed, MouthOpen, MouthMoved, LookingAway, FaceYaw, FacePitch, FacenRoll");
-            
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
 
@@ -856,8 +836,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             string faceText = string.Empty;
 
             // get the timestamp and creat the line for the log
-            int unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            string faceLog = unixTimestamp.ToString() + ", ";
+            string faceLog = logger.getTimestamp().ToString() + ", " + faceIndex + ", ";
 
             // extract each face property information and store it in faceText
             if (faceResult.FaceProperties != null)
@@ -907,10 +886,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                             drawingBrush),
                         faceTextLayout);
             }
-
+            
             // if the checkbox is selected, we log the face data
-            if(log_face)
-                faceFile.WriteLine(faceLog);
+            if(logger.log_face)
+                logger.faceFile.WriteLine(faceLog);
         }
 
         /// <summary>
@@ -1010,9 +989,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
 
             // get the timestamp and creat the line for the log
-            int unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            String data = unixTimestamp.ToString() + ", ";
-
+            String data = logger.getTimestamp().ToString() + ", " + bodyIndex + ", ";
+            
             // Draw the joints
             foreach (JointType jointType in joints.Keys)
             {
@@ -1046,8 +1024,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
 
             // if the checkbox is selected, we log the body data
-            if(log_body)
-                bodyFile.WriteLine(data.Remove(data.Length-2));
+            if (logger.log_body)
+                logger.bodyFile.WriteLine(data.Remove(data.Length-2));
         }
 
         /// <summary>
@@ -1176,9 +1154,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // Use IsChecked.
             bool flag = checkBox.IsChecked.Value;
             if (checkBox.Name.ToString() == "body")
-                log_body = flag;
+                logger.log_body = flag;
             if (checkBox.Name.ToString() == "face")
-                log_face = flag;
+                logger.log_face = flag;
         }
     }
 }
