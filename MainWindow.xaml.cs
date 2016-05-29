@@ -25,7 +25,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        // filename information for logging the data
+        /// <summary>
+        /// filename information for logging the data
+        /// </summary>
         static int unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         static bool log_body;
         static bool log_face;
@@ -33,8 +35,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         static string faceFilename;
         System.IO.StreamWriter bodyFile;
         System.IO.StreamWriter faceFile;
-
-
+        
         /// <summary>
         /// Radius of drawn hand circles
         /// </summary>
@@ -214,6 +215,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private List<Pen> bodyColors;
 
         /// <summary>
+        /// Reader for color frames
+        /// </summary>
+        private ColorFrameReader colorFrameReader = null;
+
+        /// <summary>
+        /// Bitmap to display
+        /// </summary>
+        private WriteableBitmap colorBitmap = null;
+
+        /// <summary>
         /// Current status text to display
         /// </summary>
         private string statusText = null;
@@ -228,8 +239,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (input == "") Application.Current.Shutdown();
 
             // define the logs filenames
-            bodyFilename = string.Format(@"C:\Users\LabUser\Desktop\{0}-Kinect-BodyLog-{1}.csv", input, unixTimestamp);
-            faceFilename = string.Format(@"C:\Users\LabUser\Desktop\{0}-Kinect-FaceLog-{1}.csv", input, unixTimestamp);
+            string myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            bodyFilename = string.Format(@"{0}-Kinect-BodyLog-{1}.csv", input, unixTimestamp);
+            faceFilename = string.Format(@"{0}-Kinect-FaceLog-{1}.csv", input, unixTimestamp);
+            bodyFilename = Path.Combine(myDocuments, bodyFilename);
+            faceFilename = Path.Combine(myDocuments, faceFilename);
 
             // start log files
             bodyFile = new System.IO.StreamWriter(bodyFilename, true);
@@ -241,6 +255,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
+
+            // open the reader for the color frames
+            this.colorFrameReader = this.kinectSensor.ColorFrameSource.OpenReader();
+
+            // wire handler for frame arrival
+            this.colorFrameReader.FrameArrived += this.Reader_ColorFrameArrived;
+
+            // create the colorFrameDescription from the ColorFrameSource using Bgra format
+            FrameDescription colorFrameDescription = this.kinectSensor.ColorFrameSource.CreateFrameDescription(ColorImageFormat.Bgra);
+
+            // create the bitmap to display
+            this.colorBitmap = new WriteableBitmap(colorFrameDescription.Width, colorFrameDescription.Height, 96.0, 96.0, PixelFormats.Bgr32, null);
 
             // get the coordinate mapper
             this.coordinateMapper = this.kinectSensor.CoordinateMapper;
@@ -393,6 +419,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         }
 
         /// <summary>
+        /// Gets the bitmap to display
+        /// </summary>
+        public ImageSource ColorImageSource
+        {
+            get
+            {
+                return this.colorBitmap;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the current status text to display
         /// </summary>
         public string StatusText
@@ -476,6 +513,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
+            if (this.colorFrameReader != null)
+            {
+                // ColorFrameReder is IDisposable
+                this.colorFrameReader.Dispose();
+                this.colorFrameReader = null;
+            }
+
             for (int i = 0; i < this.bodyCount; i++)
             {
                 if (this.faceFrameReaders[i] != null)
@@ -504,6 +548,41 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 this.kinectSensor.Close();
                 this.kinectSensor = null;
+            }
+        }
+        
+        /// <summary>
+        /// Handles the color frame data arriving from the sensor
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
+        {
+            // ColorFrame is IDisposable
+            using (ColorFrame colorFrame = e.FrameReference.AcquireFrame())
+            {
+                if (colorFrame != null)
+                {
+                    FrameDescription colorFrameDescription = colorFrame.FrameDescription;
+
+                    using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
+                    {
+                        this.colorBitmap.Lock();
+
+                        // verify data and write the new color frame data to the display bitmap
+                        if ((colorFrameDescription.Width == this.colorBitmap.PixelWidth) && (colorFrameDescription.Height == this.colorBitmap.PixelHeight))
+                        {
+                            colorFrame.CopyConvertedFrameDataToIntPtr(
+                                this.colorBitmap.BackBuffer,
+                                (uint)(colorFrameDescription.Width * colorFrameDescription.Height * 4),
+                                ColorImageFormat.Bgra);
+
+                            this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
+                        }
+
+                        this.colorBitmap.Unlock();
+                    }
+                }
             }
         }
 
@@ -538,7 +617,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
                     // Draw a transparent background to set the render size
-                    dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
+                    dc.DrawRectangle(Brushes.Transparent, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
 
                     int penIndex = 0;
 
@@ -567,7 +646,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     position.Z = InferredZPositionClamp;
                                 }
 
-                                DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
+                                ColorSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToColorSpace(position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
@@ -693,7 +772,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     using (DrawingContext dc = this.drawingGroup.Open())
                     {
                         // draw the dark background
-                        dc.DrawRectangle(Brushes.Black, null, this.displayRect);
+                        dc.DrawRectangle(Brushes.Transparent, null, this.displayRect);
 
                         bool drawFaceResult = false;
 

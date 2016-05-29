@@ -27,6 +27,10 @@
     <Image Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="124,5,823.6,0.2" />
 
     <Viewbox Grid.Row="1" HorizontalAlignment="Center">
+        <Image Source="{Binding ColorImageSource}" Stretch="UniformToFill" />
+    </Viewbox>
+
+    <Viewbox Grid.Row="1" HorizontalAlignment="Center">
       <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
     </Viewbox>
       
