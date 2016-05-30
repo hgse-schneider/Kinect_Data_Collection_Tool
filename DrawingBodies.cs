@@ -678,7 +678,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // if the checkbox is selected, we log the face data
             if (logger.log_face)
-                logger.faceFile.WriteLine(faceLog);
+                logger.saveData(faceLog,"face");
         }
 
         /// <summary>
@@ -814,7 +814,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // if the checkbox is selected, we log the body data
             if (logger.log_body)
-                logger.bodyFile.WriteLine(data.Remove(data.Length - 2));
+                logger.saveData(data.Remove(data.Length - 2), "body");
         }
 
         /// <summary>

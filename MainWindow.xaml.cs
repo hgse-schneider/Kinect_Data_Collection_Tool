@@ -222,5 +222,26 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
+
+        /// <summary>
+        /// Handles the recording button at the top of the main window
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void startRecording_Click(object sender, RoutedEventArgs e)
+        {
+            if(logger.recording)
+            {
+                logger.recording = false;
+                this.startRecording.Content = "Not Recording";
+                this.startRecording.Background = Brushes.Red;
+            }
+            else if(!logger.recording)
+            {
+                logger.recording = true;
+                this.startRecording.Content = "Recording !";
+                this.startRecording.Background = Brushes.LightGreen;
+            }
+        }
     }
 }
