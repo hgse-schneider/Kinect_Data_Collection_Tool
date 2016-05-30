@@ -27,6 +27,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             // retrieve data from the opening prompt
             string session = openingPrompt.SessionID.Text;
+            string destination = openingPrompt.savingDataPath.Text;
             log_body = openingPrompt.captureSkeletons.Checked;
             log_face = openingPrompt.captureFaces.Checked;
             log_sound = openingPrompt.captureSound.Checked;
@@ -35,8 +36,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             string myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             bodyFilename = string.Format(@"{0}-Kinect-BodyLog-{1}.csv", session, this.getTimestamp());
             faceFilename = string.Format(@"{0}-Kinect-FaceLog-{1}.csv", session, this.getTimestamp());
-            bodyFilename = Path.Combine(myDocuments, bodyFilename);
-            faceFilename = Path.Combine(myDocuments, faceFilename);
+            bodyFilename = Path.Combine(destination, bodyFilename);
+            faceFilename = Path.Combine(destination, faceFilename);
 
             // start log files
             bodyFile = new System.IO.StreamWriter(bodyFilename, true);

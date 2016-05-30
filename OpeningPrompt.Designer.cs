@@ -37,6 +37,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureSkeletons = new System.Windows.Forms.CheckBox();
             this.captureFaces = new System.Windows.Forms.CheckBox();
             this.captureSound = new System.Windows.Forms.CheckBox();
+            this.chooseFolder = new System.Windows.Forms.Button();
+            this.savingDataLabel = new System.Windows.Forms.Label();
+            this.savingDataPath = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // SessionID
@@ -60,7 +63,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(29, 200);
+            this.ok.Location = new System.Drawing.Point(29, 349);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 34);
             this.ok.TabIndex = 2;
@@ -70,7 +73,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(143, 200);
+            this.cancel.Location = new System.Drawing.Point(175, 349);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(88, 34);
             this.cancel.TabIndex = 3;
@@ -112,11 +115,41 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureSound.ThreeState = true;
             this.captureSound.UseVisualStyleBackColor = true;
             // 
+            // chooseFolder
+            // 
+            this.chooseFolder.Location = new System.Drawing.Point(29, 262);
+            this.chooseFolder.Name = "chooseFolder";
+            this.chooseFolder.Size = new System.Drawing.Size(183, 31);
+            this.chooseFolder.TabIndex = 7;
+            this.chooseFolder.Text = "Choose Folder";
+            this.chooseFolder.UseVisualStyleBackColor = true;
+            this.chooseFolder.Click += new System.EventHandler(this.chooseFolderClick);
+            // 
+            // savingDataLabel
+            // 
+            this.savingDataLabel.AutoSize = true;
+            this.savingDataLabel.Location = new System.Drawing.Point(25, 207);
+            this.savingDataLabel.Name = "savingDataLabel";
+            this.savingDataLabel.Size = new System.Drawing.Size(115, 20);
+            this.savingDataLabel.TabIndex = 8;
+            this.savingDataLabel.Text = "Saving data to:";
+            // 
+            // savingDataPath
+            // 
+            this.savingDataPath.Location = new System.Drawing.Point(29, 230);
+            this.savingDataPath.Name = "savingDataPath";
+            this.savingDataPath.Size = new System.Drawing.Size(265, 26);
+            this.savingDataPath.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            this.savingDataPath.TabIndex = 9;
+            // 
             // OpeningPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 246);
+            this.ClientSize = new System.Drawing.Size(408, 395);
+            this.Controls.Add(this.savingDataPath);
+            this.Controls.Add(this.savingDataLabel);
+            this.Controls.Add(this.chooseFolder);
             this.Controls.Add(this.captureSound);
             this.Controls.Add(this.captureFaces);
             this.Controls.Add(this.captureSkeletons);
@@ -141,5 +174,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public System.Windows.Forms.CheckBox captureSkeletons;
         public System.Windows.Forms.CheckBox captureFaces;
         public System.Windows.Forms.CheckBox captureSound;
+        private System.Windows.Forms.Button chooseFolder;
+        private System.Windows.Forms.Label savingDataLabel;
+        public System.Windows.Forms.TextBox savingDataPath;
     }
 }
