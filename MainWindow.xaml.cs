@@ -56,13 +56,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public MainWindow()
         {
-            // get session ID
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Enter Session ID", "Kinect Data Collection Tool", "Default", -1, -1);
-            if (input == "") Application.Current.Shutdown();
-            this.logger = new Logger(input);
+            // open a dialog prompt to give users options
+            OpeningPrompt openingPrompt = new OpeningPrompt();
+            openingPrompt.ShowDialog();     //Show secondary form, code execution stop until dialog is closed
 
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
+
+            // create an object that will manage the log files
+            this.logger = new Logger(openingPrompt);
 
             // create an object to manage the color frames
             this.drawingColorImage = new DrawingColorImage(this.kinectSensor);
@@ -219,28 +221,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // on failure, set the status text
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.SensorNotAvailableStatusText;
-        }
-
-
-        // controls
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            Handle(sender as CheckBox);
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Handle(sender as CheckBox);
-        }
-
-        void Handle(CheckBox checkBox)
-        {
-            // Use IsChecked.
-            bool flag = checkBox.IsChecked.Value;
-            if (checkBox.Name.ToString() == "body")
-                logger.log_body = flag;
-            if (checkBox.Name.ToString() == "face")
-                logger.log_face = flag;
         }
     }
 }

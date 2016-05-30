@@ -14,6 +14,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public bool log_body = false;
         public bool log_face = false;
+        public bool log_sound = false;
         public string bodyFilename;
         public string faceFilename;
         public System.IO.StreamWriter bodyFile;
@@ -22,8 +23,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
-        public Logger(string session)
+        public Logger(OpeningPrompt openingPrompt)
         {
+            // retrieve data from the opening prompt
+            string session = openingPrompt.SessionID.Text;
+            log_body = openingPrompt.captureSkeletons.Checked;
+            log_face = openingPrompt.captureFaces.Checked;
+            log_sound = openingPrompt.captureSound.Checked;
+
             // define the logs filenames
             string myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             bodyFilename = string.Format(@"{0}-Kinect-BodyLog-{1}.csv", session, this.getTimestamp());
@@ -43,9 +50,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// get the current timestamp
         /// </summary>
-        public int getTimestamp()
+        public string getTimestamp()
         {
-            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            return DateTime.Now.ToString("hh-mm-ss.ffffff");
+            //return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            //return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
     }
 }
