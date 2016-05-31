@@ -42,9 +42,9 @@ C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\MainWin
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\App.g.cs
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF_MarkupCompile.cache
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.g.resources
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\Microsoft.Samples.Kinect.BodyBasics.OpeningPrompt.resources
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\Microsoft.Samples.Kinect.BodyBasics.Properties.Resources.resources
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.csproj.GenerateResource.Cache
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.exe
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.pdb
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.csprojResolveAssemblyReference.cache
-C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\Microsoft.Samples.Kinect.BodyBasics.OpeningPrompt.resources

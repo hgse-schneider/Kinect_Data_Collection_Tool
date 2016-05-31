@@ -32,6 +32,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private KinectSensor kinectSensor = null;
 
         /// <summary>
+        /// Coordinate mapper to map one type of point to another
+        /// </summary>
+        private CoordinateMapper coordinateMapper = null;
+
+        /// <summary>
         /// Bitmap to display
         /// </summary>
         private Logger logger;
@@ -40,6 +45,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// Bitmap to display
         /// </summary>
         private DrawingColorImage drawingColorImage;
+
+        /// <summary>
+        /// Bitmap to display
+        /// </summary>
+        private DrawingDepthImage drawingDepthImage;
 
         /// <summary>
         /// Bitmap to display
@@ -62,12 +72,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
+            
+            // get the coordinate mapper
+            this.coordinateMapper = this.kinectSensor.CoordinateMapper;
 
             // create an object that will manage the log files
             this.logger = new Logger(openingPrompt);
 
             // create an object to manage the color frames
             this.drawingColorImage = new DrawingColorImage(this.kinectSensor);
+
+            // create an object to manage the color frames
+            this.drawingDepthImage = new DrawingDepthImage(this.kinectSensor);
 
             // create an object to manage the skeletons
             this.drawingBodies = new DrawingBodies(this.kinectSensor, this.logger);
@@ -102,6 +118,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             get
             {
                 return this.drawingBodies.imageSource;
+            }
+        }
+
+        /// <summary>
+        /// Gets the bitmap to display
+        /// </summary>
+        public ImageSource DepthImageSource
+        {
+            get
+            {
+                return this.drawingDepthImage.depthBitmap;
             }
         }
 
@@ -178,6 +205,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // ColorFrameReder is IDisposable
                 this.drawingColorImage.colorFrameReader.Dispose();
                 this.drawingColorImage.colorFrameReader = null;
+            }
+
+            if (this.drawingDepthImage.depthFrameReader != null)
+            {
+                // DepthFrameReader is IDisposable
+                this.drawingDepthImage.depthFrameReader.Dispose();
+                this.drawingDepthImage.depthFrameReader = null;
             }
 
             for (int i = 0; i < this.drawingBodies.bodyCount; i++)
