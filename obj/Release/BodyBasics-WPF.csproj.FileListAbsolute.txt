@@ -1,0 +1,9 @@
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Release\BodyBasics-WPF.exe.config
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Release\MainWindow.baml
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Release\MainWindow.g.cs
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Release\App.g.cs
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Release\BodyBasics-WPF_MarkupCompile.cache
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Release\BodyBasics-WPF.g.resources
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Release\Microsoft.Samples.Kinect.BodyBasics.OpeningPrompt.resources
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Release\Microsoft.Samples.Kinect.BodyBasics.Properties.Resources.resources
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Release\BodyBasics-WPF.csproj.GenerateResource.Cache

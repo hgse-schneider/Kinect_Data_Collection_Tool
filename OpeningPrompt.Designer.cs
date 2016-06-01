@@ -40,6 +40,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.chooseFolder = new System.Windows.Forms.Button();
             this.savingDataLabel = new System.Windows.Forms.Label();
             this.savingDataPath = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // SessionID
@@ -49,7 +51,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.SessionID.Size = new System.Drawing.Size(183, 26);
             this.SessionID.TabIndex = 0;
             this.SessionID.Text = "Default";
-            this.SessionID.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label1
             // 
@@ -59,7 +60,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.label1.Size = new System.Drawing.Size(112, 20);
             this.label1.TabIndex = 1;
             this.label1.Text = "Session Name";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // ok
             // 
@@ -84,7 +84,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // captureSkeletons
             // 
             this.captureSkeletons.AutoSize = true;
-            this.captureSkeletons.Location = new System.Drawing.Point(29, 89);
+            this.captureSkeletons.Location = new System.Drawing.Point(14, 25);
             this.captureSkeletons.Name = "captureSkeletons";
             this.captureSkeletons.Size = new System.Drawing.Size(167, 24);
             this.captureSkeletons.TabIndex = 4;
@@ -95,19 +95,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // captureFaces
             // 
             this.captureFaces.AutoSize = true;
-            this.captureFaces.Location = new System.Drawing.Point(29, 120);
+            this.captureFaces.Location = new System.Drawing.Point(14, 55);
             this.captureFaces.Name = "captureFaces";
             this.captureFaces.Size = new System.Drawing.Size(140, 24);
             this.captureFaces.TabIndex = 5;
             this.captureFaces.Text = "Capture Faces";
             this.captureFaces.ThreeState = true;
             this.captureFaces.UseVisualStyleBackColor = true;
-            this.captureFaces.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // captureSound
             // 
             this.captureSound.AutoSize = true;
-            this.captureSound.Location = new System.Drawing.Point(29, 151);
+            this.captureSound.Location = new System.Drawing.Point(11, 85);
             this.captureSound.Name = "captureSound";
             this.captureSound.Size = new System.Drawing.Size(143, 24);
             this.captureSound.TabIndex = 6;
@@ -117,7 +116,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // chooseFolder
             // 
-            this.chooseFolder.Location = new System.Drawing.Point(29, 262);
+            this.chooseFolder.Location = new System.Drawing.Point(14, 178);
             this.chooseFolder.Name = "chooseFolder";
             this.chooseFolder.Size = new System.Drawing.Size(183, 31);
             this.chooseFolder.TabIndex = 7;
@@ -128,7 +127,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // savingDataLabel
             // 
             this.savingDataLabel.AutoSize = true;
-            this.savingDataLabel.Location = new System.Drawing.Point(25, 207);
+            this.savingDataLabel.Location = new System.Drawing.Point(10, 123);
             this.savingDataLabel.Name = "savingDataLabel";
             this.savingDataLabel.Size = new System.Drawing.Size(115, 20);
             this.savingDataLabel.TabIndex = 8;
@@ -136,23 +135,33 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // savingDataPath
             // 
-            this.savingDataPath.Location = new System.Drawing.Point(29, 230);
+            this.savingDataPath.Location = new System.Drawing.Point(14, 146);
             this.savingDataPath.Name = "savingDataPath";
             this.savingDataPath.Size = new System.Drawing.Size(265, 26);
-            this.savingDataPath.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             this.savingDataPath.TabIndex = 9;
+            this.savingDataPath.Text = "C:\\Users\\schneibe\\Documents";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.captureSkeletons);
+            this.groupBox1.Controls.Add(this.savingDataPath);
+            this.groupBox1.Controls.Add(this.captureFaces);
+            this.groupBox1.Controls.Add(this.savingDataLabel);
+            this.groupBox1.Controls.Add(this.chooseFolder);
+            this.groupBox1.Controls.Add(this.captureSound);
+            this.groupBox1.Location = new System.Drawing.Point(29, 91);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(367, 225);
+            this.groupBox1.TabIndex = 10;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Log file";
             // 
             // OpeningPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(408, 395);
-            this.Controls.Add(this.savingDataPath);
-            this.Controls.Add(this.savingDataLabel);
-            this.Controls.Add(this.chooseFolder);
-            this.Controls.Add(this.captureSound);
-            this.Controls.Add(this.captureFaces);
-            this.Controls.Add(this.captureSkeletons);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
             this.Controls.Add(this.label1);
@@ -160,6 +169,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.Name = "OpeningPrompt";
             this.Text = "Kinect Data Collection Tool";
             this.Load += new System.EventHandler(this.OpeningPrompt_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -177,5 +188,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private System.Windows.Forms.Button chooseFolder;
         private System.Windows.Forms.Label savingDataLabel;
         public System.Windows.Forms.TextBox savingDataPath;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

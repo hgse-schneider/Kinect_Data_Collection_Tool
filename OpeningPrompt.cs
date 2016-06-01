@@ -18,34 +18,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void OpeningPrompt_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
 
         }
 
         private void cancel_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.Application.Exit();
+            System.Environment.Exit(0);
         }
 
         private void ok_Click(object sender, EventArgs e)

@@ -10,7 +10,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     class Logger
     {
         /// <summary>
-        /// filename information for logging the data
+        /// information for logging the data
         /// </summary>
         public bool recording = false;
         public bool log_body = false;
@@ -36,9 +36,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             log_sound = openingPrompt.captureSound.Checked;
 
             // define the logs filenames
-            string myDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             bodyFilename = string.Format(@"{0}-Kinect-BodyLog-{1}.csv", session, this.getTimestamp());
             faceFilename = string.Format(@"{0}-Kinect-FaceLog-{1}.csv", session, this.getTimestamp());
+
+            // combine the path and the filenames
             bodyFilename = Path.Combine(destination, bodyFilename);
             faceFilename = Path.Combine(destination, faceFilename);
 
@@ -59,13 +60,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (recording)
             {
                 if (type == "body")
-                {
                     this.bodyFile.WriteLine(data);
-                }
                 else if (type == "face")
-                {
                     this.faceFile.WriteLine(data);
-                }
             }
         }
 

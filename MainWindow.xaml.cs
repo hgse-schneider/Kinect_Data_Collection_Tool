@@ -103,6 +103,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
+
+            // change the display
+            this.savingTo.Content += openingPrompt.savingDataPath.Text;
         }
 
         /// <summary>
