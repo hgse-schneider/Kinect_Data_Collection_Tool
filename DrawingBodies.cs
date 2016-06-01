@@ -420,7 +420,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            this.DrawBody(joints, jointPoints, dc, drawPen, i);
+                            this.DrawBody(body, joints, jointPoints, dc, drawPen, i);
 
                             this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
@@ -770,7 +770,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="jointPoints">translated positions of joints to draw</param>
         /// <param name="drawingContext">drawing context to draw to</param>
         /// <param name="drawingPen">specifies color to draw a specific body</param>
-        private void DrawBody(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, DrawingContext drawingContext, Pen drawingPen, int bodyIndex)
+        private void DrawBody(Body body, IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, DrawingContext drawingContext, Pen drawingPen, int bodyIndex)
         {
             // Draw the bones
             foreach (var bone in this.bones)
@@ -812,6 +812,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                       + trackingStateBinary + ", ";
 
             }
+
+            data += body.HandLeftState + ", "
+                + body.HandLeftConfidence + ", "
+                + body.HandRightState + ", "
+                + body.HandRightConfidence + ", ";
 
             // if the checkbox is selected, we log the body data
             if (logger.log_body)

@@ -83,18 +83,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     // the underlying buffer
                     using (Microsoft.Kinect.KinectBuffer depthBuffer = depthFrame.LockImageBuffer())
                     {
-                        //// map depth data to color data
-                        //using (KinectBuffer depthFrameData = depthFrame.LockImageBuffer())
-                        //{
-                        //    ColorSpacePoint[] depthPointsMappedToColor = new ColorSpacePoint[depthFrameDescription.Width * depthFrameDescription.Height];
-
-                        //    this.kinectSensor.CoordinateMapper.MapDepthFrameToColorSpaceUsingIntPtr(
-                        //        depthFrameData.UnderlyingBuffer,
-                        //        depthFrameData.Size,
-                        //        depthPointsMappedToColor);
-                        //}
-
-
                         // verify data and write the color data to the display bitmap
                         if (((this.depthFrameDescription.Width * this.depthFrameDescription.Height) == (depthBuffer.Size / this.depthFrameDescription.BytesPerPixel)) &&
                             (this.depthFrameDescription.Width == this.depthBitmap.PixelWidth) && (this.depthFrameDescription.Height == this.depthBitmap.PixelHeight))
