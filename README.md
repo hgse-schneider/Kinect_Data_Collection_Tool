@@ -13,7 +13,7 @@ Main window:
 
 
 ##Features
-Right now, generates a log file containing the following information:
+Generates a log file with the following information:
 * Skeleton data
 	* x,y,z positions of each joint 
 	* records whether the joint position is inferred or not
@@ -27,12 +27,13 @@ Right now, generates a log file containing the following information:
 * Windows 8 or 10
 * 64-bit (x64) processor (not tested on x86)
 * USB3 port (doesn't work with USB2)
-* [https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx Visual studio]
+* [Visual studio](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx)
 
 ##Dependencies
-* .NET framework
-* [https://www.microsoft.com/en-us/download/details.aspx?id44561 Kinect v2 SDK]
+* .NET framework 4.5
+* [Kinect v2 SDK](https://www.microsoft.com/en-us/download/details.aspx?id44561)
 
 ##Next Steps
+* add sound events to the log file (e.g., if a person is talking)
 * Give the option to save audio and video files (or just screenshots)
-* 
+
