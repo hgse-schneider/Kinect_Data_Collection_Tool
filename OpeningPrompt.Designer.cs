@@ -84,6 +84,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // captureSkeletons
             // 
             this.captureSkeletons.AutoSize = true;
+            this.captureSkeletons.Checked = true;
+            this.captureSkeletons.CheckState = System.Windows.Forms.CheckState.Checked;
             this.captureSkeletons.Location = new System.Drawing.Point(14, 25);
             this.captureSkeletons.Name = "captureSkeletons";
             this.captureSkeletons.Size = new System.Drawing.Size(167, 24);
@@ -95,6 +97,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // captureFaces
             // 
             this.captureFaces.AutoSize = true;
+            this.captureFaces.Checked = true;
+            this.captureFaces.CheckState = System.Windows.Forms.CheckState.Checked;
             this.captureFaces.Location = new System.Drawing.Point(14, 55);
             this.captureFaces.Name = "captureFaces";
             this.captureFaces.Size = new System.Drawing.Size(140, 24);
@@ -102,11 +106,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureFaces.Text = "Capture Faces";
             this.captureFaces.ThreeState = true;
             this.captureFaces.UseVisualStyleBackColor = true;
+            this.captureFaces.CheckedChanged += new System.EventHandler(this.captureFaces_CheckedChanged);
             // 
             // captureSound
             // 
             this.captureSound.AutoSize = true;
-            this.captureSound.Location = new System.Drawing.Point(11, 85);
+            this.captureSound.Location = new System.Drawing.Point(14, 85);
             this.captureSound.Name = "captureSound";
             this.captureSound.Size = new System.Drawing.Size(143, 24);
             this.captureSound.TabIndex = 6;

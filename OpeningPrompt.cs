@@ -44,5 +44,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.savingDataPath.Text = fbd.SelectedPath.ToString();
             }
         }
+
+        private void captureFaces_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

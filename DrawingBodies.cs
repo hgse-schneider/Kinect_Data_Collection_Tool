@@ -335,7 +335,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="pitch">rotation about the X-axis</param>
         /// <param name="yaw">rotation about the Y-axis</param>
         /// <param name="roll">rotation about the Z-axis</param>
-        private static void ExtractFaceRotationInDegrees(Vector4 rotQuaternion, out int pitch, out int yaw, out int roll)
+        public void ExtractFaceRotationInDegrees(Vector4 rotQuaternion, out int pitch, out int yaw, out int roll)
         {
             double x = rotQuaternion.X;
             double y = rotQuaternion.Y;
@@ -573,6 +573,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                     this.faceFrameSources[i].TrackingId = this.bodies[i].TrackingId;
                                 }
                             }
+
+                            if(this.bodies[i].IsTracked)
+                                logger.saveData(this, i, bodies[i], drawFaceResult, this.faceFrameResults[i]);
                         }
 
                         if (!drawFaceResult)
@@ -677,9 +680,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         faceTextLayout);
             }
 
-            // if the checkbox is selected, we log the face data
-            if (logger.log_face)
-                logger.saveData(faceLog,"face");
         }
 
         /// <summary>
@@ -778,9 +778,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.DrawBone(joints, jointPoints, bone.Item1, bone.Item2, drawingContext, drawingPen);
             }
 
-            // get the timestamp and creat the line for the log
-            String data = logger.getTimestamp().ToString() + ", " + bodyIndex + ", ";
-
             // Draw the joints
             foreach (JointType jointType in joints.Keys)
             {
@@ -788,17 +785,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                 TrackingState trackingState = joints[jointType].TrackingState;
 
-                String trackingStateBinary = "";
-
                 if (trackingState == TrackingState.Tracked)
                 {
                     drawBrush = this.trackedJointBrush;
-                    trackingStateBinary = "1";
                 }
                 else if (trackingState == TrackingState.Inferred)
                 {
                     drawBrush = this.inferredJointBrush;
-                    trackingStateBinary = "0";
                 }
 
                 if (drawBrush != null)
@@ -806,21 +799,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     drawingContext.DrawEllipse(drawBrush, null, jointPoints[jointType], JointThickness, JointThickness);
                 }
 
-                data += joints[jointType].Position.X.ToString() + ", "
-                      + joints[jointType].Position.Y.ToString() + ", "
-                      + joints[jointType].Position.Z.ToString() + ", "
-                      + trackingStateBinary + ", ";
-
             }
-
-            data += body.HandLeftState + ", "
-                + body.HandLeftConfidence + ", "
-                + body.HandRightState + ", "
-                + body.HandRightConfidence + ", ";
-
-            // if the checkbox is selected, we log the body data
-            if (logger.log_body)
-                logger.saveData(data.Remove(data.Length - 2), "body");
+            
         }
 
         /// <summary>
