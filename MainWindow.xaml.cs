@@ -246,6 +246,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.kinectSensor.Close();
                 this.kinectSensor = null;
             }
+
+            // make sure we finish writing our data to the file
+            this.logger.close_logger();
         }
         
         /// <summary>

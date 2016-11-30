@@ -34,13 +34,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.label1 = new System.Windows.Forms.Label();
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
-            this.captureSkeletons = new System.Windows.Forms.CheckBox();
+            this.captureUpperSkeletons = new System.Windows.Forms.CheckBox();
             this.captureFaces = new System.Windows.Forms.CheckBox();
-            this.captureSound = new System.Windows.Forms.CheckBox();
+            this.captureLowerSkeleton = new System.Windows.Forms.CheckBox();
             this.chooseFolder = new System.Windows.Forms.Button();
             this.savingDataLabel = new System.Windows.Forms.Label();
             this.savingDataPath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.captureSounds = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,7 +64,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(29, 349);
+            this.ok.Location = new System.Drawing.Point(29, 384);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 34);
             this.ok.TabIndex = 2;
@@ -73,7 +74,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(175, 349);
+            this.cancel.Location = new System.Drawing.Point(220, 384);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(88, 34);
             this.cancel.TabIndex = 3;
@@ -81,47 +82,48 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.cancel.UseVisualStyleBackColor = true;
             this.cancel.Click += new System.EventHandler(this.cancel_Click);
             // 
-            // captureSkeletons
+            // captureUpperSkeletons
             // 
-            this.captureSkeletons.AutoSize = true;
-            this.captureSkeletons.Checked = true;
-            this.captureSkeletons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureSkeletons.Location = new System.Drawing.Point(14, 25);
-            this.captureSkeletons.Name = "captureSkeletons";
-            this.captureSkeletons.Size = new System.Drawing.Size(167, 24);
-            this.captureSkeletons.TabIndex = 4;
-            this.captureSkeletons.Text = "Capture Skeletons";
-            this.captureSkeletons.ThreeState = true;
-            this.captureSkeletons.UseVisualStyleBackColor = true;
+            this.captureUpperSkeletons.AutoSize = true;
+            this.captureUpperSkeletons.Checked = true;
+            this.captureUpperSkeletons.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.captureUpperSkeletons.Location = new System.Drawing.Point(14, 25);
+            this.captureUpperSkeletons.Name = "captureUpperSkeletons";
+            this.captureUpperSkeletons.Size = new System.Drawing.Size(180, 24);
+            this.captureUpperSkeletons.TabIndex = 4;
+            this.captureUpperSkeletons.Text = "Capture Upper Body";
+            this.captureUpperSkeletons.ThreeState = true;
+            this.captureUpperSkeletons.UseVisualStyleBackColor = true;
             // 
             // captureFaces
             // 
             this.captureFaces.AutoSize = true;
             this.captureFaces.Checked = true;
             this.captureFaces.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureFaces.Location = new System.Drawing.Point(14, 55);
+            this.captureFaces.Location = new System.Drawing.Point(14, 85);
             this.captureFaces.Name = "captureFaces";
-            this.captureFaces.Size = new System.Drawing.Size(140, 24);
+            this.captureFaces.Size = new System.Drawing.Size(217, 24);
             this.captureFaces.TabIndex = 5;
-            this.captureFaces.Text = "Capture Faces";
+            this.captureFaces.Text = "Capture Face Information";
             this.captureFaces.ThreeState = true;
             this.captureFaces.UseVisualStyleBackColor = true;
             this.captureFaces.CheckedChanged += new System.EventHandler(this.captureFaces_CheckedChanged);
             // 
-            // captureSound
+            // captureLowerSkeleton
             // 
-            this.captureSound.AutoSize = true;
-            this.captureSound.Location = new System.Drawing.Point(14, 85);
-            this.captureSound.Name = "captureSound";
-            this.captureSound.Size = new System.Drawing.Size(143, 24);
-            this.captureSound.TabIndex = 6;
-            this.captureSound.Text = "Capture Sound";
-            this.captureSound.ThreeState = true;
-            this.captureSound.UseVisualStyleBackColor = true;
+            this.captureLowerSkeleton.AutoSize = true;
+            this.captureLowerSkeleton.Location = new System.Drawing.Point(14, 55);
+            this.captureLowerSkeleton.Name = "captureLowerSkeleton";
+            this.captureLowerSkeleton.Size = new System.Drawing.Size(179, 24);
+            this.captureLowerSkeleton.TabIndex = 6;
+            this.captureLowerSkeleton.Text = "Capture Lower Body";
+            this.captureLowerSkeleton.ThreeState = true;
+            this.captureLowerSkeleton.UseVisualStyleBackColor = true;
+            this.captureLowerSkeleton.CheckedChanged += new System.EventHandler(this.captureSound_CheckedChanged);
             // 
             // chooseFolder
             // 
-            this.chooseFolder.Location = new System.Drawing.Point(14, 178);
+            this.chooseFolder.Location = new System.Drawing.Point(14, 221);
             this.chooseFolder.Name = "chooseFolder";
             this.chooseFolder.Size = new System.Drawing.Size(183, 31);
             this.chooseFolder.TabIndex = 7;
@@ -132,7 +134,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // savingDataLabel
             // 
             this.savingDataLabel.AutoSize = true;
-            this.savingDataLabel.Location = new System.Drawing.Point(10, 123);
+            this.savingDataLabel.Location = new System.Drawing.Point(10, 166);
             this.savingDataLabel.Name = "savingDataLabel";
             this.savingDataLabel.Size = new System.Drawing.Size(115, 20);
             this.savingDataLabel.TabIndex = 8;
@@ -140,32 +142,44 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // savingDataPath
             // 
-            this.savingDataPath.Location = new System.Drawing.Point(14, 146);
+            this.savingDataPath.Location = new System.Drawing.Point(14, 189);
             this.savingDataPath.Name = "savingDataPath";
             this.savingDataPath.Size = new System.Drawing.Size(265, 26);
             this.savingDataPath.TabIndex = 9;
-            this.savingDataPath.Text = "C:\\Users\\schneibe\\Documents";
+            this.savingDataPath.Text = "C:\\Users\\schneibe\\OneDrive";
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.captureSkeletons);
+            this.groupBox1.Controls.Add(this.captureSounds);
+            this.groupBox1.Controls.Add(this.captureUpperSkeletons);
             this.groupBox1.Controls.Add(this.savingDataPath);
             this.groupBox1.Controls.Add(this.captureFaces);
             this.groupBox1.Controls.Add(this.savingDataLabel);
             this.groupBox1.Controls.Add(this.chooseFolder);
-            this.groupBox1.Controls.Add(this.captureSound);
+            this.groupBox1.Controls.Add(this.captureLowerSkeleton);
             this.groupBox1.Location = new System.Drawing.Point(29, 91);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(367, 225);
+            this.groupBox1.Size = new System.Drawing.Size(367, 269);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log file";
+            // 
+            // captureSounds
+            // 
+            this.captureSounds.AutoSize = true;
+            this.captureSounds.Location = new System.Drawing.Point(14, 115);
+            this.captureSounds.Name = "captureSounds";
+            this.captureSounds.Size = new System.Drawing.Size(151, 24);
+            this.captureSounds.TabIndex = 10;
+            this.captureSounds.Text = "Capture Sounds";
+            this.captureSounds.ThreeState = true;
+            this.captureSounds.UseVisualStyleBackColor = true;
             // 
             // OpeningPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 395);
+            this.ClientSize = new System.Drawing.Size(408, 441);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
@@ -187,12 +201,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ok;
         private System.Windows.Forms.Button cancel;
-        public System.Windows.Forms.CheckBox captureSkeletons;
+        public System.Windows.Forms.CheckBox captureUpperSkeletons;
         public System.Windows.Forms.CheckBox captureFaces;
-        public System.Windows.Forms.CheckBox captureSound;
+        public System.Windows.Forms.CheckBox captureLowerSkeleton;
         private System.Windows.Forms.Button chooseFolder;
         private System.Windows.Forms.Label savingDataLabel;
         public System.Windows.Forms.TextBox savingDataPath;
         private System.Windows.Forms.GroupBox groupBox1;
+        public System.Windows.Forms.CheckBox captureSounds;
     }
 }

@@ -49,5 +49,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
 
         }
+
+        private void captureSound_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
