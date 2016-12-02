@@ -103,7 +103,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // ----- RECORDING BODY INFO ------- // 
 
                 // get the timestamp and creat the line for the log
-                String data = getTimestamp("time").ToString() + ", " + bodyIndex + ", ";
+                String data = getTimestamp(null).ToString() + ", " + bodyIndex + ", ";
 
                 // get the joints
                 IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
@@ -184,9 +184,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             else if (type == "date")
                 return DateTime.Now.ToString("yyyy-MM-dd");
             else if (type == "time")
-                return DateTime.Now.ToString("HH-mm-ss.ff");
+                return DateTime.Now.ToString("HH:mm:ss");
             else
-                return DateTime.Now.ToString();
+                return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         }
         
         /// <summary>
@@ -196,7 +196,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             logFile.Close();
 
-            if(this.outputxlsx)
+            if(this.outputxlsx == true)
             {
                 // convert the csv file to xlsx
                 string csvFilePath = this.logFilename;
@@ -216,11 +216,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(worksheetsName);
                     worksheet.Cells["A1"].LoadFromText(csvFileInfo, excelTextFormat, OfficeOpenXml.Table.TableStyles.Medium25, firstRowIsHeader);
+                    worksheet.Column(1).Style.Numberformat.Format = "yyyy-mm-dd hh:mm:ss";
                     package.Save();
                 }
             }
 
-            if(!this.outputcsv)
+            if(this.outputcsv == false)
             {
                 File.Delete(this.logFilename);
             }
