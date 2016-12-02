@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
@@ -245,5 +246,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public System.Windows.Forms.CheckBox outputXLSX;
         public System.Windows.Forms.CheckBox outputCSV;
         private System.Windows.Forms.Label label2;
+        
     }
 }
