@@ -48,3 +48,5 @@ C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBas
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.exe
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.pdb
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.csprojResolveAssemblyReference.cache
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\EPPlus.dll
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\EPPlus.xml

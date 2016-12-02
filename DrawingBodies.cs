@@ -628,9 +628,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             string faceText = string.Empty;
 
-            // get the timestamp and creat the line for the log
-            string faceLog = logger.getTimestamp().ToString() + ", " + faceIndex + ", ";
-
             // extract each face property information and store it in faceText
             if (faceResult.FaceProperties != null)
             {
@@ -648,8 +645,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     {
                         faceText += item.Value.ToString() + "\n";
                     }
-
-                    faceLog += item.Value.ToString() + ", ";
                 }
             }
 
@@ -661,8 +656,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 faceText += "FaceYaw : " + yaw + "\n" +
                             "FacePitch : " + pitch + "\n" +
                             "FacenRoll : " + roll + "\n";
-
-                faceLog += yaw + ", " + pitch + "," + roll;
             }
 
             // render the face property and face rotation information

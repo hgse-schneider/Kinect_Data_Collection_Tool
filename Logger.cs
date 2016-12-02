@@ -1,5 +1,6 @@
 ﻿using Microsoft.Kinect;
 using Microsoft.Kinect.Face;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +20,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_lowerbody = false;
         public bool log_face = false;
         public bool log_sound = false;
+        public bool outputcsv = true;
+        public bool outputxlsx = true;
         public string header = "";
         public string session;
         public string destination;
@@ -37,9 +40,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             log_lowerbody = openingPrompt.captureLowerSkeleton.Checked;
             log_face = openingPrompt.captureFaces.Checked;
             log_sound = openingPrompt.captureSounds.Checked;
+            outputcsv = openingPrompt.outputCSV.Checked;
+            outputxlsx = openingPrompt.outputXLSX.Checked;
 
             // define the logs filenames
-            logFilename = string.Format(@"{0}-Kinect-Log-{1}.csv", session, this.getTimestamp());
+            logFilename = string.Format(@"{0}-Kinect-Log-{1}.csv", session, this.getTimestamp("datetime"));
 
             // combine the path and the filenames
             logFilename = Path.Combine(destination, logFilename);
@@ -98,7 +103,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // ----- RECORDING BODY INFO ------- // 
 
                 // get the timestamp and creat the line for the log
-                String data = getTimestamp().ToString() + ", " + bodyIndex + ", ";
+                String data = getTimestamp("time").ToString() + ", " + bodyIndex + ", ";
 
                 // get the joints
                 IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
@@ -172,11 +177,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// get the current timestamp
         /// </summary>
-        public string getTimestamp()
+        public string getTimestamp(String type)
         {
-            return DateTime.Now.ToString("hh-mm-ss.ffffff");
-            //return DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            //return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            if (type == "datetime")
+                return DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
+            else if (type == "date")
+                return DateTime.Now.ToString("yyyy-MM-dd");
+            else if (type == "time")
+                return DateTime.Now.ToString("HH-mm-ss.ff");
+            else
+                return DateTime.Now.ToString();
         }
         
         /// <summary>
@@ -185,6 +195,36 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public void close_logger()
         {
             logFile.Close();
+
+            if(this.outputxlsx)
+            {
+                // convert the csv file to xlsx
+                string csvFilePath = this.logFilename;
+                string excelFilePath = this.logFilename.Substring(0, this.logFilename.Length - 4) + ".xlsx";
+
+                string worksheetsName = "DATA";
+                bool firstRowIsHeader = true;
+
+                var excelTextFormat = new ExcelTextFormat();
+                excelTextFormat.Delimiter = ',';
+                excelTextFormat.EOL = "\r";
+
+                var excelFileInfo = new FileInfo(excelFilePath);
+                var csvFileInfo = new FileInfo(csvFilePath);
+
+                using (ExcelPackage package = new ExcelPackage(excelFileInfo))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(worksheetsName);
+                    worksheet.Cells["A1"].LoadFromText(csvFileInfo, excelTextFormat, OfficeOpenXml.Table.TableStyles.Medium25, firstRowIsHeader);
+                    package.Save();
+                }
+            }
+
+            if(!this.outputcsv)
+            {
+                File.Delete(this.logFilename);
+            }
+
         }
     }
 }

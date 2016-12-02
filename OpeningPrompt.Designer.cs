@@ -42,6 +42,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataPath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.captureSounds = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.outputCSV = new System.Windows.Forms.CheckBox();
+            this.outputXLSX = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,7 +67,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(29, 384);
+            this.ok.Location = new System.Drawing.Point(29, 467);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 34);
             this.ok.TabIndex = 2;
@@ -74,7 +77,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(220, 384);
+            this.cancel.Location = new System.Drawing.Point(220, 467);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(88, 34);
             this.cancel.TabIndex = 3;
@@ -92,7 +95,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureUpperSkeletons.Size = new System.Drawing.Size(180, 24);
             this.captureUpperSkeletons.TabIndex = 4;
             this.captureUpperSkeletons.Text = "Capture Upper Body";
-            this.captureUpperSkeletons.ThreeState = true;
             this.captureUpperSkeletons.UseVisualStyleBackColor = true;
             // 
             // captureFaces
@@ -105,7 +107,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureFaces.Size = new System.Drawing.Size(217, 24);
             this.captureFaces.TabIndex = 5;
             this.captureFaces.Text = "Capture Face Information";
-            this.captureFaces.ThreeState = true;
             this.captureFaces.UseVisualStyleBackColor = true;
             this.captureFaces.CheckedChanged += new System.EventHandler(this.captureFaces_CheckedChanged);
             // 
@@ -117,7 +118,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureLowerSkeleton.Size = new System.Drawing.Size(179, 24);
             this.captureLowerSkeleton.TabIndex = 6;
             this.captureLowerSkeleton.Text = "Capture Lower Body";
-            this.captureLowerSkeleton.ThreeState = true;
             this.captureLowerSkeleton.UseVisualStyleBackColor = true;
             this.captureLowerSkeleton.CheckedChanged += new System.EventHandler(this.captureSound_CheckedChanged);
             // 
@@ -150,6 +150,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.outputXLSX);
+            this.groupBox1.Controls.Add(this.outputCSV);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.captureSounds);
             this.groupBox1.Controls.Add(this.captureUpperSkeletons);
             this.groupBox1.Controls.Add(this.savingDataPath);
@@ -159,7 +162,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.Controls.Add(this.captureLowerSkeleton);
             this.groupBox1.Location = new System.Drawing.Point(29, 91);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(367, 269);
+            this.groupBox1.Size = new System.Drawing.Size(367, 356);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log file";
@@ -172,14 +175,44 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureSounds.Size = new System.Drawing.Size(151, 24);
             this.captureSounds.TabIndex = 10;
             this.captureSounds.Text = "Capture Sounds";
-            this.captureSounds.ThreeState = true;
             this.captureSounds.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 265);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 20);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "File format:";
+            // 
+            // outputCSV
+            // 
+            this.outputCSV.AutoSize = true;
+            this.outputCSV.Location = new System.Drawing.Point(14, 288);
+            this.outputCSV.Name = "outputCSV";
+            this.outputCSV.Size = new System.Drawing.Size(62, 24);
+            this.outputCSV.TabIndex = 12;
+            this.outputCSV.Text = ".csv";
+            this.outputCSV.UseVisualStyleBackColor = true;
+            // 
+            // outputXLSX
+            // 
+            this.outputXLSX.AutoSize = true;
+            this.outputXLSX.Checked = true;
+            this.outputXLSX.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.outputXLSX.Location = new System.Drawing.Point(14, 318);
+            this.outputXLSX.Name = "outputXLSX";
+            this.outputXLSX.Size = new System.Drawing.Size(180, 24);
+            this.outputXLSX.TabIndex = 13;
+            this.outputXLSX.Text = ".xlsx (recommended)";
+            this.outputXLSX.UseVisualStyleBackColor = true;
             // 
             // OpeningPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 441);
+            this.ClientSize = new System.Drawing.Size(408, 513);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
@@ -209,5 +242,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public System.Windows.Forms.TextBox savingDataPath;
         private System.Windows.Forms.GroupBox groupBox1;
         public System.Windows.Forms.CheckBox captureSounds;
+        public System.Windows.Forms.CheckBox outputXLSX;
+        public System.Windows.Forms.CheckBox outputCSV;
+        private System.Windows.Forms.Label label2;
     }
 }
