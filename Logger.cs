@@ -25,6 +25,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool outputcsv = true;
         public bool outputxlsx = true;
         public string header = "";
+        public string annotation = "";
         public string session;
         public string destination;
         public string logFilename;
@@ -92,6 +93,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 " MouthOpen, MouthMoved, LookingAway, " +
                 "FaceYaw, FacePitch, FacenRoll";
 
+            header += ", Posture";
             logFile.WriteLine(header);
         }
 
@@ -172,6 +174,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     data = data.Replace("Unknown", "");
                 }
 
+                data += ", " + this.annotation;
                 logFile.WriteLine(data);
             }
         }

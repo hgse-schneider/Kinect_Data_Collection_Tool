@@ -282,5 +282,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.startRecording.Background = Brushes.LightGreen;
             }
         }
+
+        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Label label = (Label) this.postures.SelectedItem;
+            logger.annotation = label.Content.ToString();
+        }
     }
 }

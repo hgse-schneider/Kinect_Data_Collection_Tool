@@ -33,12 +33,21 @@
             <Image x:Name="DepthImage" Source="{Binding DepthImageSource}" Stretch="UniformToFill" Opacity="{Binding ElementName=depthSlider, Path=Value}" />
         </Viewbox>
 
-        <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+        <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}" Margin="0,0,410.333,-0.333">
             <StatusBarItem Content="{Binding StatusText}" HorizontalAlignment="Left"  />
             <Label x:Name="savingTo" Content="Saving to: " HorizontalAlignment="Right"/>
         </StatusBar>
-        <Button x:Name="startRecording" Content="Start Recording?" HorizontalAlignment="Left" Margin="221,11,0,0" VerticalAlignment="Top" Width="157" Height="35" Click="startRecording_Click"/>
+        <Button x:Name="startRecording" Content="Start Recording?" HorizontalAlignment="Left" Margin="378,4.333,0,0" VerticalAlignment="Top" Width="157" Height="22" Click="startRecording_Click" Grid.Row="2"/>
         <Slider x:Name="depthSlider" HorizontalAlignment="Left" Margin="423,25,0,0" VerticalAlignment="Top" Height="20" Width="112" Maximum="1"/>
         <Label x:Name="depthImagelabel" Content="Show Depth Image" HorizontalAlignment="Left" Margin="423,5,0,0" VerticalAlignment="Top"/>
+        <Viewbox HorizontalAlignment="Left" Margin="31,10.333,0,-0.333" VerticalAlignment="Top" Width="157" Height="22" Grid.Row="2" Stretch="Fill"/>
+        <ComboBox x:Name="postures" HorizontalAlignment="Left" Margin="867,4.333,0,0" Grid.Row="2" VerticalAlignment="Top" Width="120" SelectionChanged="comboBox_SelectionChanged">
+            <Label x:Name="neutral" Content=""/>
+            <Label x:Name="holdingHead" Content="Holding head"/>
+            <Label x:Name="armsCrossed" Content="Arms crossed"/>
+            <Label x:Name="handsJoined" Content="Hands Joined"/>
+            <Label x:Name="headRest" Content="Head rest"/>
+            <Label x:Name="handsHidden" Content="Hands hidden"/>
+        </ComboBox>
     </Grid>
 </Window>
