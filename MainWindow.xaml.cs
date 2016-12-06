@@ -80,7 +80,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.logger = new Logger(openingPrompt);
 
             // create an object to manage the color frames
-            this.drawingColorImage = new DrawingColorImage(this.kinectSensor);
+            this.drawingColorImage = new DrawingColorImage(this.kinectSensor, logger);
 
             // create an object to manage the color frames
             this.drawingDepthImage = new DrawingDepthImage(this.kinectSensor);
@@ -192,7 +192,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 // wire handler for body frame arrival
                 this.drawingBodies.bodyFrameReader.FrameArrived += this.drawingBodies.Reader_FrameArrived;
-                //this.bodyFrameReader.FrameArrived += this.Reader_BodyFrameArrived;
             }
         }
 

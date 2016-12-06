@@ -3,6 +3,8 @@ using Microsoft.Kinect.Face;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -196,7 +198,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             logFile.Close();
 
-            if(this.outputxlsx == true)
+            if (this.outputxlsx == true)
             {
                 // convert the csv file to xlsx
                 string csvFilePath = this.logFilename;

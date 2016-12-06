@@ -33,8 +33,10 @@ C:\Users\LabUser\Desktop\Kinect_examples\TLTL_Data_Collector\obj\Debug\BodyBasic
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\BodyBasics-WPF.exe.config
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\BodyBasics-WPF.exe
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\BodyBasics-WPF.pdb
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\EPPlus.dll
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\Microsoft.Kinect.dll
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\Microsoft.Kinect.Face.dll
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\EPPlus.xml
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\Microsoft.Kinect.xml
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\Microsoft.Kinect.Face.xml
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\MainWindow.baml
@@ -47,6 +49,3 @@ C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\Microso
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.csproj.GenerateResource.Cache
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.exe
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.pdb
-C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.csprojResolveAssemblyReference.cache
-C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\EPPlus.dll
-C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\EPPlus.xml

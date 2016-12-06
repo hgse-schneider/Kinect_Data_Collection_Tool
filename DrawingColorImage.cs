@@ -1,6 +1,8 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +20,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public KinectSensor kinectSensor = null;
 
         /// <summary>
+        /// Logger
+        /// </summary>
+        public Logger logger = null;
+
+        /// <summary>
         /// Reader for color frames
         /// </summary>
         public ColorFrameReader colorFrameReader = null;
@@ -30,10 +37,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Constructor
         /// </summary>
-        public DrawingColorImage(KinectSensor kinectSensor)
+        public DrawingColorImage(KinectSensor kinectSensor, Logger logger)
         {
             // get a reference to the kinect sensor
             this.kinectSensor = kinectSensor;
+            this.logger = logger;
 
             // open the reader for the color frames
             this.colorFrameReader = this.kinectSensor.ColorFrameSource.OpenReader();
@@ -82,6 +90,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     }
                 }
             }
+
         }
     }
 }

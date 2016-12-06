@@ -33,15 +33,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.Close();
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-
-            if (e.CloseReason == CloseReason.WindowsShutDown) return;
-
-            System.Environment.Exit(0);
-        }
-
         private void chooseFolderClick(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
