@@ -60,6 +60,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             if (log_upperbody) header +=
                  "SpineBase_X, SpineBase_Y, SpineBase_Z, SpineBase_inferred, " +
+                 "SpineShoulder_X, SpineShoulder_Y, SpineShoulder_Z, SpineShoulder_inferred, " +
                  "SpineMid_X, SpineMid_Y, SpineMid_Z, SpineMid_inferred, " +
                  "Neck_X, Neck_Y, Neck_Z, Neck_inferred, " +
                  "Head_X, Head_Y, Head_Z, Head_inferred, " +
@@ -71,23 +72,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                  "ElbowRight_X, ElbowRight_Y, ElbowRight_Z, ElbowRight_inferred, " +
                  "WristRight_X, WristRight_Y, WristRight_Z, WristRight_inferred, " +
                  "HandRight_X, HandRight_Y, HandRight_Z, HandRight_inferred, " +
-                 "HipLeft_X, HipLeft_Y, HipLeft_Z, HipLeft_inferred, ";
-            if (log_lowerbody) header +=
-                 "KneeLeft_X, KneeLeft_Y, KneeLeft_Z, KneeLeft_inferred, " +
-                 "AnkleLeft_X, AnkleLeft_Y, AnkleLeft_Z, AnkleLeft_inferred, " +
-                 "FootLeft_X, FootLeft_Y, FootLeft_Z, FootLeft_inferred, " +
+                 "HipLeft_X, HipLeft_Y, HipLeft_Z, HipLeft_inferred, " + 
                  "HipRight_X, HipRight_Y, HipRight_Z, HipRight_inferred, " +
-                 "KneeRight_X, KneeRight_Y, KneeRight_Z, KneeRight_inferred, " +
-                 "AnkleRight_X, AnkleRight_Y, AnkleRight_Z, AnkleRight_inferred, " +
-                 "FootRight_X, FootRight_Y, FootRight_Z, FootRight_inferred, " +
-                 "SpineShoulder_X, SpineShoulder_Y, SpineShoulder_Z, SpineShoulder_inferred, ";
-            if (log_upperbody) header +=
                 "HandTipLeft_X, HandTipLeft_Y, HandTipLeft_Z, HandTipLeft_inferred, " +
                 "ThumbLeft_X, ThumbLeft_Y, ThumbLeft_Z, ThumbLeft_inferred, " +
                 "HandTipRight_X, HandTipRight_Y, HandTipRight_Z, HandTipRight_inferred, " +
                 "ThumbRight_X, ThumbRight_Y, ThumbRight_Z, ThumbRight_inferred, " +
                 "HandLeftState, HandLeftStateConfidence, HandRightState, HandRightStateConfidence," +
                 "Lean_X, Lean_Y, Lean_TrackingState, ";
+            if (log_lowerbody) header +=
+                 "KneeLeft_X, KneeLeft_Y, KneeLeft_Z, KneeLeft_inferred, " +
+                 "AnkleLeft_X, AnkleLeft_Y, AnkleLeft_Z, AnkleLeft_inferred, " +
+                 "FootLeft_X, FootLeft_Y, FootLeft_Z, FootLeft_inferred, " +
+                 "KneeRight_X, KneeRight_Y, KneeRight_Z, KneeRight_inferred, " +
+                 "AnkleRight_X, AnkleRight_Y, AnkleRight_Z, AnkleRight_inferred, " +
+                 "FootRight_X, FootRight_Y, FootRight_Z, FootRight_inferred, ";
             if (log_face) header +=
                 "Happy, Engaged, WearingGlasses, LeftEyeClosed, RightEyeClosed," +
                 " MouthOpen, MouthMoved, LookingAway, " +
