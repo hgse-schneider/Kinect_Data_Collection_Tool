@@ -42,10 +42,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataLabel = new System.Windows.Forms.Label();
             this.savingDataPath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.captureSounds = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.outputCSV = new System.Windows.Forms.CheckBox();
             this.outputXLSX = new System.Windows.Forms.CheckBox();
+            this.outputCSV = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.captureSounds = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.computeJointAngles = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,7 +94,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureUpperSkeletons.AutoSize = true;
             this.captureUpperSkeletons.Checked = true;
             this.captureUpperSkeletons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureUpperSkeletons.Location = new System.Drawing.Point(14, 25);
+            this.captureUpperSkeletons.Location = new System.Drawing.Point(14, 56);
             this.captureUpperSkeletons.Name = "captureUpperSkeletons";
             this.captureUpperSkeletons.Size = new System.Drawing.Size(180, 24);
             this.captureUpperSkeletons.TabIndex = 4;
@@ -103,7 +106,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureFaces.AutoSize = true;
             this.captureFaces.Checked = true;
             this.captureFaces.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureFaces.Location = new System.Drawing.Point(14, 85);
+            this.captureFaces.Location = new System.Drawing.Point(275, 56);
             this.captureFaces.Name = "captureFaces";
             this.captureFaces.Size = new System.Drawing.Size(217, 24);
             this.captureFaces.TabIndex = 5;
@@ -114,7 +117,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // captureLowerSkeleton
             // 
             this.captureLowerSkeleton.AutoSize = true;
-            this.captureLowerSkeleton.Location = new System.Drawing.Point(14, 55);
+            this.captureLowerSkeleton.Location = new System.Drawing.Point(14, 86);
             this.captureLowerSkeleton.Name = "captureLowerSkeleton";
             this.captureLowerSkeleton.Size = new System.Drawing.Size(179, 24);
             this.captureLowerSkeleton.TabIndex = 6;
@@ -151,6 +154,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.computeJointAngles);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.outputXLSX);
             this.groupBox1.Controls.Add(this.outputCSV);
             this.groupBox1.Controls.Add(this.label2);
@@ -163,39 +169,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.Controls.Add(this.captureLowerSkeleton);
             this.groupBox1.Location = new System.Drawing.Point(29, 91);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(367, 356);
+            this.groupBox1.Size = new System.Drawing.Size(508, 356);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log file";
-            // 
-            // captureSounds
-            // 
-            this.captureSounds.AutoSize = true;
-            this.captureSounds.Location = new System.Drawing.Point(14, 115);
-            this.captureSounds.Name = "captureSounds";
-            this.captureSounds.Size = new System.Drawing.Size(151, 24);
-            this.captureSounds.TabIndex = 10;
-            this.captureSounds.Text = "Capture Sounds";
-            this.captureSounds.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 265);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 20);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "File format:";
-            // 
-            // outputCSV
-            // 
-            this.outputCSV.AutoSize = true;
-            this.outputCSV.Location = new System.Drawing.Point(14, 288);
-            this.outputCSV.Name = "outputCSV";
-            this.outputCSV.Size = new System.Drawing.Size(62, 24);
-            this.outputCSV.TabIndex = 12;
-            this.outputCSV.Text = ".csv";
-            this.outputCSV.UseVisualStyleBackColor = true;
             // 
             // outputXLSX
             // 
@@ -209,11 +186,71 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.outputXLSX.Text = ".xlsx (recommended)";
             this.outputXLSX.UseVisualStyleBackColor = true;
             // 
+            // outputCSV
+            // 
+            this.outputCSV.AutoSize = true;
+            this.outputCSV.Location = new System.Drawing.Point(14, 288);
+            this.outputCSV.Name = "outputCSV";
+            this.outputCSV.Size = new System.Drawing.Size(62, 24);
+            this.outputCSV.TabIndex = 12;
+            this.outputCSV.Text = ".csv";
+            this.outputCSV.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 265);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 20);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "File format:";
+            // 
+            // captureSounds
+            // 
+            this.captureSounds.AutoSize = true;
+            this.captureSounds.Location = new System.Drawing.Point(275, 86);
+            this.captureSounds.Name = "captureSounds";
+            this.captureSounds.Size = new System.Drawing.Size(151, 24);
+            this.captureSounds.TabIndex = 10;
+            this.captureSounds.Text = "Capture Sounds";
+            this.captureSounds.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(10, 31);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 20);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Skeleton";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(270, 31);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(164, 20);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Additional Information";
+            // 
+            // computeJointAngles
+            // 
+            this.computeJointAngles.AutoSize = true;
+            this.computeJointAngles.Checked = true;
+            this.computeJointAngles.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.computeJointAngles.Location = new System.Drawing.Point(14, 116);
+            this.computeJointAngles.Name = "computeJointAngles";
+            this.computeJointAngles.Size = new System.Drawing.Size(189, 24);
+            this.computeJointAngles.TabIndex = 16;
+            this.computeJointAngles.Text = "Compute Joint angles";
+            this.computeJointAngles.UseVisualStyleBackColor = true;
+            // 
             // OpeningPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 513);
+            this.ClientSize = new System.Drawing.Size(568, 513);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
@@ -246,6 +283,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public System.Windows.Forms.CheckBox outputXLSX;
         public System.Windows.Forms.CheckBox outputCSV;
         private System.Windows.Forms.Label label2;
-        
+        private Label label3;
+        public CheckBox computeJointAngles;
+        private Label label4;
     }
 }

@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
@@ -20,6 +21,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool recording = false;
         public bool log_upperbody = false;
         public bool log_lowerbody = false;
+        public bool log_angles = false;
         public bool log_face = false;
         public bool log_sound = false;
         public bool outputcsv = true;
@@ -42,6 +44,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             log_upperbody = openingPrompt.captureUpperSkeletons.Checked;
             log_lowerbody = openingPrompt.captureLowerSkeleton.Checked;
             log_face = openingPrompt.captureFaces.Checked;
+            log_angles = openingPrompt.computeJointAngles.Checked;
             log_sound = openingPrompt.captureSounds.Checked;
             outputcsv = openingPrompt.outputCSV.Checked;
             outputxlsx = openingPrompt.outputXLSX.Checked;
@@ -87,6 +90,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                  "KneeRight_X, KneeRight_Y, KneeRight_Z, KneeRight_inferred, " +
                  "AnkleRight_X, AnkleRight_Y, AnkleRight_Z, AnkleRight_inferred, " +
                  "FootRight_X, FootRight_Y, FootRight_Z, FootRight_inferred, ";
+            if (log_angles) header +=
+                 "Neck_angle, Spine_angle, Hip_angle, " +
+                 "ShoulderL_angle, ShoulderR_angle, " +
+                 "ElbowL_angle, ElbowR_angle, " +
+                 "WristL_angle, WristR_angle, " +
+                 "HandL_angle, HandR_angle, ";
             if (log_face) header +=
                 "Happy, Engaged, WearingGlasses, LeftEyeClosed, RightEyeClosed," +
                 " MouthOpen, MouthMoved, LookingAway, " +
@@ -94,6 +103,23 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             header += ", Posture";
             logFile.WriteLine(header);
+        }
+
+        public String GetAngle(CameraSpacePoint a, CameraSpacePoint b, CameraSpacePoint c)
+        {
+            // b is the center point and becomes the origin
+            Point3D ba = new Point3D( a.X - b.X, a.Y - b.Y, a.Z - b.Z );
+            Point3D bc = new Point3D( c.X - b.X, c.Y - b.Y, c.Z - b.Z );
+            
+            double baVec = Math.Sqrt(ba.X * ba.X + ba.Y * ba.Y + ba.Z * ba.Z);
+            double bcVec = Math.Sqrt(bc.X * bc.X + bc.Y * bc.Y + bc.Z * bc.Z);
+
+            Point3D baNorm = new Point3D ( ba.X / baVec, ba.Y / baVec, ba.Z / baVec );
+            Point3D bcNorm = new Point3D ( bc.X / bcVec, bc.Y / bcVec, bc.Z / bcVec );
+
+            double res = baNorm.X * bcNorm.X + baNorm.Y * bcNorm.Y + baNorm.Z * bcNorm.Z;
+
+            return Convert.ToString(Math.Acos(res) * 180.0 / 3.141592653589793);
         }
 
         /// <summary>
@@ -147,9 +173,35 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         + body.LeanTrackingState + ", ";
                 }
 
+                // ----- RECORDING ANGLES INFO ------- // 
+
+                if (log_angles)
+                {
+                    data += GetAngle(joints[JointType.Head].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position) + ", "
+                         + GetAngle(joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position, joints[JointType.SpineMid].Position) + ", "
+                         + GetAngle(joints[JointType.HipRight].Position, joints[JointType.SpineBase].Position, joints[JointType.HipLeft].Position) + ", "
+
+                         // shoulders
+                         + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position) + ", "
+                         + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position) + ", "
+
+                         // Elbows
+                         + GetAngle(joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position) + ", "
+                         + GetAngle(joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position) + ", "
+
+                         // Wrists
+                         + GetAngle(joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position, joints[JointType.HandLeft].Position) + ", "
+                         + GetAngle(joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position, joints[JointType.HandRight].Position) + ", "
+
+                         // Hands (angle between thumb and hand tip)
+                         + GetAngle(joints[JointType.HandTipLeft].Position, joints[JointType.HandLeft].Position, joints[JointType.ThumbLeft].Position) + ", "
+                         + GetAngle(joints[JointType.HandTipRight].Position, joints[JointType.HandRight].Position, joints[JointType.ThumbRight].Position) + ", ";
+
+                }
+
                 // ----- RECORDING FACE INFO ------- // 
 
-                if(log_face)
+                if (log_face)
                 {
                     if (faceResult == null) return;
 

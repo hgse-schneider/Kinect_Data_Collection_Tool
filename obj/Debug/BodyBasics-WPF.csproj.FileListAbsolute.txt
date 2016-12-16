@@ -49,3 +49,4 @@ C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\Microso
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.csproj.GenerateResource.Cache
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.exe
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.pdb
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.csprojResolveAssemblyReference.cache
