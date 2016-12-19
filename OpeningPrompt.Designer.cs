@@ -42,14 +42,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataLabel = new System.Windows.Forms.Label();
             this.savingDataPath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.computeJointAngles = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.outputXLSX = new System.Windows.Forms.CheckBox();
             this.outputCSV = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.captureSounds = new System.Windows.Forms.CheckBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.computeJointAngles = new System.Windows.Forms.CheckBox();
+            this.hertz = new System.Windows.Forms.TrackBar();
+            this.hertzLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hertz)).BeginInit();
             this.SuspendLayout();
             // 
             // SessionID
@@ -71,7 +74,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(29, 467);
+            this.ok.Location = new System.Drawing.Point(29, 520);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 34);
             this.ok.TabIndex = 2;
@@ -81,7 +84,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(220, 467);
+            this.cancel.Location = new System.Drawing.Point(124, 520);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(88, 34);
             this.cancel.TabIndex = 3;
@@ -127,7 +130,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // chooseFolder
             // 
-            this.chooseFolder.Location = new System.Drawing.Point(14, 221);
+            this.chooseFolder.Location = new System.Drawing.Point(14, 231);
             this.chooseFolder.Name = "chooseFolder";
             this.chooseFolder.Size = new System.Drawing.Size(183, 31);
             this.chooseFolder.TabIndex = 7;
@@ -146,14 +149,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // savingDataPath
             // 
-            this.savingDataPath.Location = new System.Drawing.Point(14, 189);
+            this.savingDataPath.Location = new System.Drawing.Point(14, 199);
             this.savingDataPath.Name = "savingDataPath";
-            this.savingDataPath.Size = new System.Drawing.Size(265, 26);
+            this.savingDataPath.Size = new System.Drawing.Size(478, 26);
             this.savingDataPath.TabIndex = 9;
             this.savingDataPath.Text = "C:\\Users\\schneibe\\OneDrive";
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.hertzLabel);
+            this.groupBox1.Controls.Add(this.hertz);
             this.groupBox1.Controls.Add(this.computeJointAngles);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
@@ -169,17 +174,48 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.Controls.Add(this.captureLowerSkeleton);
             this.groupBox1.Location = new System.Drawing.Point(29, 91);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(508, 356);
+            this.groupBox1.Size = new System.Drawing.Size(508, 423);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log file";
+            // 
+            // computeJointAngles
+            // 
+            this.computeJointAngles.AutoSize = true;
+            this.computeJointAngles.Checked = true;
+            this.computeJointAngles.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.computeJointAngles.Location = new System.Drawing.Point(14, 116);
+            this.computeJointAngles.Name = "computeJointAngles";
+            this.computeJointAngles.Size = new System.Drawing.Size(189, 24);
+            this.computeJointAngles.TabIndex = 16;
+            this.computeJointAngles.Text = "Compute Joint angles";
+            this.computeJointAngles.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(270, 31);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(164, 20);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Additional Information";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(10, 31);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(72, 20);
+            this.label3.TabIndex = 14;
+            this.label3.Text = "Skeleton";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // outputXLSX
             // 
             this.outputXLSX.AutoSize = true;
             this.outputXLSX.Checked = true;
             this.outputXLSX.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.outputXLSX.Location = new System.Drawing.Point(14, 318);
+            this.outputXLSX.Location = new System.Drawing.Point(14, 385);
             this.outputXLSX.Name = "outputXLSX";
             this.outputXLSX.Size = new System.Drawing.Size(180, 24);
             this.outputXLSX.TabIndex = 13;
@@ -189,7 +225,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // outputCSV
             // 
             this.outputCSV.AutoSize = true;
-            this.outputCSV.Location = new System.Drawing.Point(14, 288);
+            this.outputCSV.Location = new System.Drawing.Point(14, 355);
             this.outputCSV.Name = "outputCSV";
             this.outputCSV.Size = new System.Drawing.Size(62, 24);
             this.outputCSV.TabIndex = 12;
@@ -199,7 +235,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 265);
+            this.label2.Location = new System.Drawing.Point(10, 332);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(88, 20);
             this.label2.TabIndex = 11;
@@ -215,42 +251,33 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureSounds.Text = "Capture Sounds";
             this.captureSounds.UseVisualStyleBackColor = true;
             // 
-            // label3
+            // hertz
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 31);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 20);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "Skeleton";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.hertz.LargeChange = 1;
+            this.hertz.Location = new System.Drawing.Point(141, 283);
+            this.hertz.Maximum = 7;
+            this.hertz.Minimum = 1;
+            this.hertz.Name = "hertz";
+            this.hertz.Size = new System.Drawing.Size(351, 69);
+            this.hertz.TabIndex = 1;
+            this.hertz.Value = 1;
+            this.hertz.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
-            // label4
+            // hertzLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(270, 31);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(164, 20);
-            this.label4.TabIndex = 15;
-            this.label4.Text = "Additional Information";
-            // 
-            // computeJointAngles
-            // 
-            this.computeJointAngles.AutoSize = true;
-            this.computeJointAngles.Checked = true;
-            this.computeJointAngles.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.computeJointAngles.Location = new System.Drawing.Point(14, 116);
-            this.computeJointAngles.Name = "computeJointAngles";
-            this.computeJointAngles.Size = new System.Drawing.Size(189, 24);
-            this.computeJointAngles.TabIndex = 16;
-            this.computeJointAngles.Text = "Compute Joint angles";
-            this.computeJointAngles.UseVisualStyleBackColor = true;
+            this.hertzLabel.AutoSize = true;
+            this.hertzLabel.Location = new System.Drawing.Point(14, 283);
+            this.hertzLabel.Name = "hertzLabel";
+            this.hertzLabel.Size = new System.Drawing.Size(121, 20);
+            this.hertzLabel.TabIndex = 17;
+            this.hertzLabel.Text = "Frequency: 1Hz";
+            this.hertzLabel.Click += new System.EventHandler(this.label5_Click);
             // 
             // OpeningPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 513);
+            this.ClientSize = new System.Drawing.Size(568, 566);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
@@ -261,6 +288,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.Load += new System.EventHandler(this.OpeningPrompt_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hertz)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,5 +314,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private Label label3;
         public CheckBox computeJointAngles;
         private Label label4;
+        public TrackBar hertz;
+        private Label hertzLabel;
     }
 }

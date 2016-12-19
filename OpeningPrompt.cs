@@ -59,5 +59,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
 
         }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            int realValue = (hertz.Value - 1) *5;
+            if (realValue == 0) realValue = 1;
+            hertzLabel.Text = "Frequency: " + realValue + "Hz";
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

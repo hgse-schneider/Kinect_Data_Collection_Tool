@@ -26,6 +26,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_sound = false;
         public bool outputcsv = true;
         public bool outputxlsx = true;
+        public int frequency = 1;
+        public int current_sec = 0;
+        public int num_rows = 0;
         public string header = "";
         public string annotation = "";
         public string session;
@@ -48,6 +51,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             log_sound = openingPrompt.captureSounds.Checked;
             outputcsv = openingPrompt.outputCSV.Checked;
             outputxlsx = openingPrompt.outputXLSX.Checked;
+            frequency = (openingPrompt.hertz.Value - 1) *5;
+            if (frequency == 0) frequency = 1;
+            Console.WriteLine(frequency);
+            current_sec = DateTime.Now.Second;
 
             // define the logs filenames
             logFilename = string.Format(@"{0}-Kinect-Log-{1}.csv", session, this.getTimestamp("datetime"));
@@ -129,6 +136,20 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (recording)
             {
+                // check if we need to record this data
+                this.num_rows += 1;
+                Console.WriteLine("num rows: " + num_rows + ", freq:" + 30/frequency + ", " + this.num_rows % (30 / frequency));
+                if (DateTime.Now.Second != this.current_sec)
+                {
+                    this.current_sec = DateTime.Now.Second;
+                    this.num_rows = 0;
+                }
+                else
+                {
+                    if (this.num_rows % (30 / frequency) != 0) return;
+                }
+                
+
                 // ----- RECORDING BODY INFO ------- // 
 
                 // get the timestamp and creat the line for the log
