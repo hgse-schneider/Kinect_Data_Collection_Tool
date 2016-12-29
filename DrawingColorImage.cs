@@ -57,6 +57,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         }
 
+
         /// <summary>
         /// Handles the color frame data arriving from the sensor
         /// </summary>
@@ -86,8 +87,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                             this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
                         }
 
+                        
+
                         this.colorBitmap.Unlock();
+
+                        logger.writeFrameToVideo(colorBitmap, colorFrame);
                     }
+                    
                 }
             }
 

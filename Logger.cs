@@ -1,4 +1,5 @@
-﻿using Microsoft.Kinect;
+﻿using Emgu.CV;
+using Microsoft.Kinect;
 using Microsoft.Kinect.Face;
 using OfficeOpenXml;
 using System;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
@@ -16,7 +18,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     class Logger
     {
         /// <summary>
-        /// information for logging the data
+        /// information for logging the data from the interface
         /// </summary>
         public bool recording = false;
         public bool log_upperbody = false;
@@ -34,7 +36,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public string session;
         public string destination;
         public string logFilename;
+        public VideoWriter videowriter = null;
         public System.IO.StreamWriter logFile;
+        public OpeningPrompt openingPrompt;
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -42,6 +46,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public Logger(OpeningPrompt openingPrompt)
         {
             // retrieve data from the opening prompt
+            this.openingPrompt = openingPrompt;
             session = openingPrompt.SessionID.Text;
             destination = openingPrompt.savingDataPath.Text;
             log_upperbody = openingPrompt.captureUpperSkeletons.Checked;
@@ -111,6 +116,43 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             header += ", Posture";
             logFile.WriteLine(header);
         }
+
+        public void writeFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
+        {
+            if (this.openingPrompt.videoNo.Checked) return;
+
+            // get the scaling factor from the opening prompt
+            int scaleFactor = 1;
+            if (this.openingPrompt.videoMedium.Checked) scaleFactor = 2;
+            if (this.openingPrompt.videoSmall.Checked) scaleFactor = 4;
+
+            // resize the image if necessary
+            int width = colorBitmap.PixelWidth / scaleFactor;
+            int height = colorBitmap.PixelHeight / scaleFactor;
+            Size frameSize = new Size(width, height);
+            
+            // create the videowriter if it doesn't exist yet
+            if (videowriter == null)
+            {
+                String videoFilename = string.Format(@"{0}-Kinect-video-{1}.avi", session, this.getTimestamp("datetime"));
+
+                videoFilename = Path.Combine(this.destination, videoFilename);
+
+                videowriter = new VideoWriter(videoFilename, //File name
+                                        -1, //Video format -1 opens a dialogue window
+                                        15, //FPS
+                                        frameSize, //frame size
+                                        true); //Color
+            }
+
+            // convert the color frame into an EMGU mat and resize it
+            Image<Emgu.CV.Structure.Bgra, byte> img = Helpers.ToImage(frame);
+            Image<Emgu.CV.Structure.Bgra, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
+
+            // save the frame to the videowriter
+            videowriter.Write(cpimg.Mat);
+        }
+
 
         public String GetAngle(CameraSpacePoint a, CameraSpacePoint b, CameraSpacePoint c)
         {

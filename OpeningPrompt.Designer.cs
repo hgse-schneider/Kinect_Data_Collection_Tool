@@ -42,6 +42,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataLabel = new System.Windows.Forms.Label();
             this.savingDataPath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.hertzLabel = new System.Windows.Forms.Label();
+            this.hertz = new System.Windows.Forms.TrackBar();
             this.computeJointAngles = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -49,10 +51,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.outputCSV = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.captureSounds = new System.Windows.Forms.CheckBox();
-            this.hertz = new System.Windows.Forms.TrackBar();
-            this.hertzLabel = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.videoNo = new System.Windows.Forms.RadioButton();
+            this.videoSmall = new System.Windows.Forms.RadioButton();
+            this.videoMedium = new System.Windows.Forms.RadioButton();
+            this.videoLarge = new System.Windows.Forms.RadioButton();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).BeginInit();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // SessionID
@@ -179,6 +186,28 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log file";
             // 
+            // hertzLabel
+            // 
+            this.hertzLabel.AutoSize = true;
+            this.hertzLabel.Location = new System.Drawing.Point(14, 283);
+            this.hertzLabel.Name = "hertzLabel";
+            this.hertzLabel.Size = new System.Drawing.Size(121, 20);
+            this.hertzLabel.TabIndex = 17;
+            this.hertzLabel.Text = "Frequency: 1Hz";
+            this.hertzLabel.Click += new System.EventHandler(this.label5_Click);
+            // 
+            // hertz
+            // 
+            this.hertz.LargeChange = 1;
+            this.hertz.Location = new System.Drawing.Point(141, 283);
+            this.hertz.Maximum = 7;
+            this.hertz.Minimum = 1;
+            this.hertz.Name = "hertz";
+            this.hertz.Size = new System.Drawing.Size(351, 69);
+            this.hertz.TabIndex = 1;
+            this.hertz.Value = 1;
+            this.hertz.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
             // computeJointAngles
             // 
             this.computeJointAngles.AutoSize = true;
@@ -251,33 +280,79 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureSounds.Text = "Capture Sounds";
             this.captureSounds.UseVisualStyleBackColor = true;
             // 
-            // hertz
+            // groupBox2
             // 
-            this.hertz.LargeChange = 1;
-            this.hertz.Location = new System.Drawing.Point(141, 283);
-            this.hertz.Maximum = 7;
-            this.hertz.Minimum = 1;
-            this.hertz.Name = "hertz";
-            this.hertz.Size = new System.Drawing.Size(351, 69);
-            this.hertz.TabIndex = 1;
-            this.hertz.Value = 1;
-            this.hertz.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.groupBox2.Controls.Add(this.videoLarge);
+            this.groupBox2.Controls.Add(this.videoMedium);
+            this.groupBox2.Controls.Add(this.videoSmall);
+            this.groupBox2.Controls.Add(this.videoNo);
+            this.groupBox2.Location = new System.Drawing.Point(557, 91);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(193, 186);
+            this.groupBox2.TabIndex = 11;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Video";
+            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
-            // hertzLabel
+            // videoNo
             // 
-            this.hertzLabel.AutoSize = true;
-            this.hertzLabel.Location = new System.Drawing.Point(14, 283);
-            this.hertzLabel.Name = "hertzLabel";
-            this.hertzLabel.Size = new System.Drawing.Size(121, 20);
-            this.hertzLabel.TabIndex = 17;
-            this.hertzLabel.Text = "Frequency: 1Hz";
-            this.hertzLabel.Click += new System.EventHandler(this.label5_Click);
+            this.videoNo.AutoSize = true;
+            this.videoNo.Checked = true;
+            this.videoNo.Location = new System.Drawing.Point(17, 29);
+            this.videoNo.Name = "videoNo";
+            this.videoNo.Size = new System.Drawing.Size(150, 24);
+            this.videoNo.TabIndex = 0;
+            this.videoNo.TabStop = true;
+            this.videoNo.Text = "Don\'t save video";
+            this.videoNo.UseVisualStyleBackColor = true;
+            // 
+            // videoSmall
+            // 
+            this.videoSmall.AutoSize = true;
+            this.videoSmall.Location = new System.Drawing.Point(17, 59);
+            this.videoSmall.Name = "videoSmall";
+            this.videoSmall.Size = new System.Drawing.Size(135, 24);
+            this.videoSmall.TabIndex = 1;
+            this.videoSmall.Text = "small 480x270";
+            this.videoSmall.UseVisualStyleBackColor = true;
+            // 
+            // videoMedium
+            // 
+            this.videoMedium.AutoSize = true;
+            this.videoMedium.Location = new System.Drawing.Point(17, 89);
+            this.videoMedium.Name = "videoMedium";
+            this.videoMedium.Size = new System.Drawing.Size(155, 24);
+            this.videoMedium.TabIndex = 2;
+            this.videoMedium.Text = "Medium 960x540";
+            this.videoMedium.UseVisualStyleBackColor = true;
+            // 
+            // videoLarge
+            // 
+            this.videoLarge.AutoSize = true;
+            this.videoLarge.Location = new System.Drawing.Point(17, 119);
+            this.videoLarge.Name = "videoLarge";
+            this.videoLarge.Size = new System.Drawing.Size(158, 24);
+            this.videoLarge.TabIndex = 3;
+            this.videoLarge.Text = "Large 1920x1080";
+            this.videoLarge.UseVisualStyleBackColor = true;
+            this.videoLarge.CheckedChanged += new System.EventHandler(this.videoLarge_CheckedChanged);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Location = new System.Drawing.Point(557, 294);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(193, 220);
+            this.groupBox3.TabIndex = 12;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Audio";
             // 
             // OpeningPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(568, 566);
+            this.ClientSize = new System.Drawing.Size(767, 566);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
@@ -289,6 +364,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,5 +393,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private Label label4;
         public TrackBar hertz;
         private Label hertzLabel;
+        private GroupBox groupBox2;
+        public RadioButton videoNo;
+        public RadioButton videoLarge;
+        public RadioButton videoMedium;
+        public RadioButton videoSmall;
+        private GroupBox groupBox3;
     }
 }
