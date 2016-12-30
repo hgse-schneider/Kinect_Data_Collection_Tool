@@ -36,11 +36,19 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         private float beamAngle = 0;
 
+        /// <summary>
+        /// reference to the logger
+        /// </summary>
+        private Logger logger;
 
-        public Audio(KinectSensor kinectSensor)
+
+        public Audio(KinectSensor kinectSensor, Logger logger)
         {
             // save a reference to the kinect sensor object
             this.kinectSensor = kinectSensor;
+
+            // save a reference to the logger
+            this.logger = logger;
 
             if (this.kinectSensor != null)
             {
@@ -64,6 +72,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         public void Reader_AudioFrameArrived(object sender, AudioBeamFrameArrivedEventArgs e)
         {
+            // reset the list of people speaking
+            this.logger.trackingIDSpeaking = new List<ulong>();
+
             AudioBeamFrameReference frameReference = e.FrameReference;
             AudioBeamFrameList frameList = frameReference.AcquireBeamFrames();
 
@@ -96,12 +107,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         */
 
                         // Body tracking ID of the person speaking
-                        int numPerson = 0;
                         foreach (AudioBodyCorrelation abc in subFrame.AudioBodyCorrelations)
                         {
-                            numPerson++;
-                            ulong bodyId = abc.BodyTrackingId;
-                            //audioOutput += (", person= " + numPerson + ", bodyid=" + bodyId);
+                            this.logger.trackingIDSpeaking.Add(abc.BodyTrackingId);
                         }
                     }
                 }

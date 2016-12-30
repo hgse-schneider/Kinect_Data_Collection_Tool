@@ -194,7 +194,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private List<Pen> bodyColors;
 
         /// <summary>
-        /// Bitmap to display
+        /// reference to the logger
         /// </summary>
         private Logger logger;
 

@@ -94,7 +94,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.drawingBodies = new Bodies(this.kinectSensor, this.logger);
 
             // creates an object to manage the audio
-            this.audio = new Audio(this.kinectSensor);
+            this.audio = new Audio(this.kinectSensor, this.logger);
 
             // set IsAvailableChanged event notifier
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
@@ -219,6 +219,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // close the audio object
             this.audio.close();
+            
+            // make sure we finish writing our data to the file
+            this.logger.close_logger();
 
             // close the kinect sensor
             if (this.kinectSensor != null)
@@ -227,8 +230,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.kinectSensor = null;
             }
 
-            // make sure we finish writing our data to the file
-            this.logger.close_logger();
         }
         
         /// <summary>

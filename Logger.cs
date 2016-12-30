@@ -36,8 +36,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public string session;
         public string destination;
         public string logFilename;
+
         public VideoWriter videowriter = null;
         public System.IO.StreamWriter logFile;
+        public List<ulong> trackingIDSpeaking = new List<ulong>();
         public OpeningPrompt openingPrompt;
 
         /// <summary>
@@ -111,9 +113,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (log_face) header +=
                 "Happy, Engaged, WearingGlasses, LeftEyeClosed, RightEyeClosed," +
                 " MouthOpen, MouthMoved, LookingAway, " +
-                "FaceYaw, FacePitch, FacenRoll";
+                "FaceYaw, FacePitch, FacenRoll, ";
+            if (log_sound) header +=
+                "Talking, ";
 
-            header += ", Posture";
+            header += "Posture";
             logFile.WriteLine(header);
         }
 
@@ -153,7 +157,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             videowriter.Write(cpimg.Mat);
         }
 
-
+        /// <summary>
+        /// returns an angle between three 3D points
+        /// </summary>
         public String GetAngle(CameraSpacePoint a, CameraSpacePoint b, CameraSpacePoint c)
         {
             // b is the center point and becomes the origin
@@ -168,7 +174,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             double res = baNorm.X * bcNorm.X + baNorm.Y * bcNorm.Y + baNorm.Z * bcNorm.Z;
 
-            return Convert.ToString(Math.Acos(res) * 180.0 / 3.141592653589793);
+            return Convert.ToString(Math.Acos(res) * 180.0 / Math.PI);
         }
 
         /// <summary>
@@ -180,7 +186,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 // check if we need to record this data
                 this.num_rows += 1;
-                Console.WriteLine("num rows: " + num_rows + ", freq:" + 30/frequency + ", " + this.num_rows % (30 / frequency));
+
                 if (DateTime.Now.Second != this.current_sec)
                 {
                     this.current_sec = DateTime.Now.Second;
@@ -282,13 +288,22 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     {
                         int pitch, yaw, roll;
                         drawingBodies.ExtractFaceRotationInDegrees(faceResult.FaceRotationQuaternion, out pitch, out yaw, out roll);
-                        data += yaw + ", " + pitch + "," + roll;
+                        data += yaw + ", " + pitch + "," + roll + ", ";
                     }
 
                     data = data.Replace("Unknown", "");
                 }
 
-                data += ", " + this.annotation;
+                // ----- RECORDING AUDIO INFO ------- // 
+
+                if (log_face)
+                {
+                    if(this.trackingIDSpeaking.Contains(body.TrackingId))
+                        data += "1, ";
+                    else data += "0, ";
+                }
+
+                    data += this.annotation;
                 logFile.WriteLine(data);
             }
         }
@@ -307,6 +322,35 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             else
                 return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         }
+
+        /// <summary>
+        /// convert the csv file into an xslx file (with correct timestamp)
+        /// </summary>
+        public void convert_csv_to_xlsx()
+        {
+            // convert the csv file to xlsx
+            string csvFilePath = this.logFilename;
+            string excelFilePath = this.logFilename.Substring(0, this.logFilename.Length - 4) + ".xlsx";
+
+            string worksheetsName = "DATA";
+            bool firstRowIsHeader = true;
+
+            var excelTextFormat = new ExcelTextFormat();
+            excelTextFormat.Delimiter = ',';
+            excelTextFormat.EOL = "\r";
+
+            var excelFileInfo = new FileInfo(excelFilePath);
+            var csvFileInfo = new FileInfo(csvFilePath);
+
+            using (ExcelPackage package = new ExcelPackage(excelFileInfo))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(worksheetsName);
+                worksheet.Cells["A1"].LoadFromText(csvFileInfo, excelTextFormat, OfficeOpenXml.Table.TableStyles.Medium25, firstRowIsHeader);
+                worksheet.Column(1).Style.Numberformat.Format = "yyyy-mm-dd hh:mm:ss";
+                package.Save();
+            }
+
+        }
         
         /// <summary>
         /// get the current timestamp
@@ -317,27 +361,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             if (this.outputxlsx == true)
             {
-                // convert the csv file to xlsx
-                string csvFilePath = this.logFilename;
-                string excelFilePath = this.logFilename.Substring(0, this.logFilename.Length - 4) + ".xlsx";
-
-                string worksheetsName = "DATA";
-                bool firstRowIsHeader = true;
-
-                var excelTextFormat = new ExcelTextFormat();
-                excelTextFormat.Delimiter = ',';
-                excelTextFormat.EOL = "\r";
-
-                var excelFileInfo = new FileInfo(excelFilePath);
-                var csvFileInfo = new FileInfo(csvFilePath);
-
-                using (ExcelPackage package = new ExcelPackage(excelFileInfo))
-                {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(worksheetsName);
-                    worksheet.Cells["A1"].LoadFromText(csvFileInfo, excelTextFormat, OfficeOpenXml.Table.TableStyles.Medium25, firstRowIsHeader);
-                    worksheet.Column(1).Style.Numberformat.Format = "yyyy-mm-dd hh:mm:ss";
-                    package.Save();
-                }
+                convert_csv_to_xlsx();
             }
 
             if(this.outputcsv == false)
