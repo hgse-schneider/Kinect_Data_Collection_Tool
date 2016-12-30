@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
-    class DrawingColorImage
+    class ColorImage
     {
         /// <summary>
         /// Active Kinect sensor
@@ -37,7 +37,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Constructor
         /// </summary>
-        public DrawingColorImage(KinectSensor kinectSensor, Logger logger)
+        public ColorImage(KinectSensor kinectSensor, Logger logger)
         {
             // get a reference to the kinect sensor
             this.kinectSensor = kinectSensor;
@@ -86,17 +86,29 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                             this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
                         }
-
                         
-
                         this.colorBitmap.Unlock();
 
-                        logger.writeFrameToVideo(colorBitmap, colorFrame);
+                        logger.WriteFrameToVideo(colorBitmap, colorFrame);
                     }
                     
                 }
             }
 
+        }
+
+
+        /// <summary>
+        /// closes the color image reader
+        /// </summary>
+        public void close()
+        {
+            if (this.colorFrameReader != null)
+            {
+                // ColorFrameReder is IDisposable
+                this.colorFrameReader.Dispose();
+                this.colorFrameReader = null;
+            }
         }
     }
 }

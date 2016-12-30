@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
-    class DrawingDepthImage
+    class DepthImage
     {
         /// <summary>
         /// Map depth range to byte range
@@ -45,7 +45,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
-        public DrawingDepthImage(KinectSensor kinectSensor)
+        public DepthImage(KinectSensor kinectSensor)
         {
             // get the kinectSensor object
             this.kinectSensor = kinectSensor;
@@ -144,6 +144,20 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.depthPixels,
                 this.depthBitmap.PixelWidth,
                 0);
+        }
+
+
+        /// <summary>
+        /// closes the depth image reader
+        /// </summary>
+        public void close()
+        {
+            if (this.depthFrameReader != null)
+            {
+                // DepthFrameReader is IDisposable
+                this.depthFrameReader.Dispose();
+                this.depthFrameReader = null;
+            }
         }
     }
 }

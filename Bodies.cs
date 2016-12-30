@@ -13,7 +13,7 @@ using Microsoft.Kinect.Face;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
-    class DrawingBodies
+    class Bodies
     {
         /// <summary>
         /// Radius of drawn hand circles
@@ -199,9 +199,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private Logger logger;
 
         /// <summary>
-        /// Initializes a new instance of the MainWindow class.
+        /// Initializes a new instance of the Bodies class.
         /// </summary>
-        public DrawingBodies(KinectSensor kinectSensor, Logger logger)
+        public Bodies(KinectSensor kinectSensor, Logger logger)
         {
             // one sensor is currently supported
             this.kinectSensor = kinectSensor;
@@ -890,6 +890,35 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     Brushes.Red,
                     null,
                     new Rect(this.displayWidth - ClipBoundsThickness, 0, ClipBoundsThickness, this.displayHeight));
+            }
+        }
+        
+        /// <summary>
+        /// closes the body frame reader
+        /// </summary>
+        public void close()
+        {
+            for (int i = 0; i < this.bodyCount; i++)
+            {
+                if (this.faceFrameReaders[i] != null)
+                {
+                    // FaceFrameReader is IDisposable
+                    this.faceFrameReaders[i].Dispose();
+                    this.faceFrameReaders[i] = null;
+                }
+
+                if (this.faceFrameSources[i] != null)
+                {
+                    // FaceFrameSource is IDisposable
+                    this.faceFrameSources[i].Dispose();
+                    this.faceFrameSources[i] = null;
+                }
+            }
+
+            if (this.bodyFrameReader != null)
+            {
+                this.bodyFrameReader.Dispose();
+                this.bodyFrameReader = null;
             }
         }
 

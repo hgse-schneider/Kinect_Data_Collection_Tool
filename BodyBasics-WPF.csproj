@@ -213,10 +213,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Audio.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="DrawingDepthImage.cs" />
-    <Compile Include="DrawingColorImage.cs" />
-    <Compile Include="DrawingBodies.cs" />
+    <Compile Include="DepthImage.cs" />
+    <Compile Include="ColorImage.cs" />
+    <Compile Include="Bodies.cs" />
     <Compile Include="OpeningPrompt.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -117,7 +117,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             logFile.WriteLine(header);
         }
 
-        public void writeFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
+        public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
         {
             if (this.openingPrompt.videoNo.Checked) return;
 
@@ -174,7 +174,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// save data to file
         /// </summary>
-        public void saveData(DrawingBodies drawingBodies, int bodyIndex, Body body, Boolean faceTracked, FaceFrameResult faceResult)
+        public void saveData(Bodies drawingBodies, int bodyIndex, Body body, Boolean faceTracked, FaceFrameResult faceResult)
         {
             if (recording)
             {

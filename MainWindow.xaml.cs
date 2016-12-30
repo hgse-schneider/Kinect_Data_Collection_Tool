@@ -44,17 +44,22 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Bitmap to display
         /// </summary>
-        private DrawingColorImage drawingColorImage;
+        private ColorImage drawingColorImage;
 
         /// <summary>
         /// Bitmap to display
         /// </summary>
-        private DrawingDepthImage drawingDepthImage;
+        private DepthImage drawingDepthImage;
 
         /// <summary>
         /// Bitmap to display
         /// </summary>
-        private DrawingBodies drawingBodies;
+        private Bodies drawingBodies;
+        
+        /// <summary>
+        /// object to deal with audio
+        /// </summary>
+        private Audio audio;
 
         /// <summary>
         /// Current status text to display
@@ -80,13 +85,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.logger = new Logger(openingPrompt);
 
             // create an object to manage the color frames
-            this.drawingColorImage = new DrawingColorImage(this.kinectSensor, logger);
+            this.drawingColorImage = new ColorImage(this.kinectSensor, logger);
 
             // create an object to manage the color frames
-            this.drawingDepthImage = new DrawingDepthImage(this.kinectSensor);
+            this.drawingDepthImage = new DepthImage(this.kinectSensor);
 
             // create an object to manage the skeletons
-            this.drawingBodies = new DrawingBodies(this.kinectSensor, this.logger);
+            this.drawingBodies = new Bodies(this.kinectSensor, this.logger);
+
+            // creates an object to manage the audio
+            this.audio = new Audio(this.kinectSensor);
 
             // set IsAvailableChanged event notifier
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
@@ -129,10 +137,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public ImageSource DepthImageSource
         {
-            get
-            {
-                return this.drawingDepthImage.depthBitmap;
-            }
+            get { return this.drawingDepthImage.depthBitmap; }
         }
 
         /// <summary>
@@ -140,10 +145,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public ImageSource ColorImageSource
         {
-            get
-            {
-                return this.drawingColorImage.colorBitmap;
-            }
+            get { return this.drawingColorImage.colorBitmap; }
         }
 
         /// <summary>
@@ -151,10 +153,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public string StatusText
         {
-            get
-            {
-                return this.statusText;
-            }
+            get { return this.statusText; }
 
             set
             {
@@ -179,6 +178,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+
+            if (this.audio.reader != null)
+            {
+                // Subscribe to new audio frame arrived events
+                this.audio.reader.FrameArrived += this.audio.Reader_AudioFrameArrived;
+            }
+
             for (int i = 0; i < this.drawingBodies.bodyCount; i++)
             {
                 if (this.drawingBodies.faceFrameReaders[i] != null)
@@ -202,44 +208,19 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (this.drawingColorImage.colorFrameReader != null)
-            {
-                // ColorFrameReder is IDisposable
-                this.drawingColorImage.colorFrameReader.Dispose();
-                this.drawingColorImage.colorFrameReader = null;
-            }
+            // close the depth image reader
+            this.drawingDepthImage.close();
 
-            if (this.drawingDepthImage.depthFrameReader != null)
-            {
-                // DepthFrameReader is IDisposable
-                this.drawingDepthImage.depthFrameReader.Dispose();
-                this.drawingDepthImage.depthFrameReader = null;
-            }
+            // close the body frame reader
+            this.drawingBodies.close();
 
-            for (int i = 0; i < this.drawingBodies.bodyCount; i++)
-            {
-                if (this.drawingBodies.faceFrameReaders[i] != null)
-                {
-                    // FaceFrameReader is IDisposable
-                    this.drawingBodies.faceFrameReaders[i].Dispose();
-                    this.drawingBodies.faceFrameReaders[i] = null;
-                }
+            // close the color image reader
+            this.drawingColorImage.close();
 
-                if (this.drawingBodies.faceFrameSources[i] != null)
-                {
-                    // FaceFrameSource is IDisposable
-                    this.drawingBodies.faceFrameSources[i].Dispose();
-                    this.drawingBodies.faceFrameSources[i] = null;
-                }
-            }
+            // close the audio object
+            this.audio.close();
 
-            if (this.drawingBodies.bodyFrameReader != null)
-            {
-                // BodyFrameReader is IDisposable
-                this.drawingBodies.bodyFrameReader.Dispose();
-                this.drawingBodies.bodyFrameReader = null;
-            }
-
+            // close the kinect sensor
             if (this.kinectSensor != null)
             {
                 this.kinectSensor.Close();
