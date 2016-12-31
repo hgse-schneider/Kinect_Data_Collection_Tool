@@ -52,10 +52,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.label2 = new System.Windows.Forms.Label();
             this.captureSounds = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.videoNo = new System.Windows.Forms.RadioButton();
-            this.videoSmall = new System.Windows.Forms.RadioButton();
-            this.videoMedium = new System.Windows.Forms.RadioButton();
             this.videoLarge = new System.Windows.Forms.RadioButton();
+            this.videoMedium = new System.Windows.Forms.RadioButton();
+            this.videoSmall = new System.Windows.Forms.RadioButton();
+            this.videoNo = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).BeginInit();
@@ -294,27 +294,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox2.Text = "Video";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
-            // videoNo
+            // videoLarge
             // 
-            this.videoNo.AutoSize = true;
-            this.videoNo.Checked = true;
-            this.videoNo.Location = new System.Drawing.Point(17, 29);
-            this.videoNo.Name = "videoNo";
-            this.videoNo.Size = new System.Drawing.Size(150, 24);
-            this.videoNo.TabIndex = 0;
-            this.videoNo.TabStop = true;
-            this.videoNo.Text = "Don\'t save video";
-            this.videoNo.UseVisualStyleBackColor = true;
-            // 
-            // videoSmall
-            // 
-            this.videoSmall.AutoSize = true;
-            this.videoSmall.Location = new System.Drawing.Point(17, 59);
-            this.videoSmall.Name = "videoSmall";
-            this.videoSmall.Size = new System.Drawing.Size(135, 24);
-            this.videoSmall.TabIndex = 1;
-            this.videoSmall.Text = "small 480x270";
-            this.videoSmall.UseVisualStyleBackColor = true;
+            this.videoLarge.AutoSize = true;
+            this.videoLarge.Enabled = false;
+            this.videoLarge.Location = new System.Drawing.Point(17, 119);
+            this.videoLarge.Name = "videoLarge";
+            this.videoLarge.Size = new System.Drawing.Size(158, 24);
+            this.videoLarge.TabIndex = 3;
+            this.videoLarge.Text = "Large 1920x1080";
+            this.videoLarge.UseVisualStyleBackColor = true;
+            this.videoLarge.CheckedChanged += new System.EventHandler(this.videoLarge_CheckedChanged);
             // 
             // videoMedium
             // 
@@ -326,16 +316,27 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.videoMedium.Text = "Medium 960x540";
             this.videoMedium.UseVisualStyleBackColor = true;
             // 
-            // videoLarge
+            // videoSmall
             // 
-            this.videoLarge.AutoSize = true;
-            this.videoLarge.Location = new System.Drawing.Point(17, 119);
-            this.videoLarge.Name = "videoLarge";
-            this.videoLarge.Size = new System.Drawing.Size(158, 24);
-            this.videoLarge.TabIndex = 3;
-            this.videoLarge.Text = "Large 1920x1080";
-            this.videoLarge.UseVisualStyleBackColor = true;
-            this.videoLarge.CheckedChanged += new System.EventHandler(this.videoLarge_CheckedChanged);
+            this.videoSmall.AutoSize = true;
+            this.videoSmall.Location = new System.Drawing.Point(17, 59);
+            this.videoSmall.Name = "videoSmall";
+            this.videoSmall.Size = new System.Drawing.Size(135, 24);
+            this.videoSmall.TabIndex = 1;
+            this.videoSmall.Text = "small 480x270";
+            this.videoSmall.UseVisualStyleBackColor = true;
+            // 
+            // videoNo
+            // 
+            this.videoNo.AutoSize = true;
+            this.videoNo.Checked = true;
+            this.videoNo.Location = new System.Drawing.Point(17, 29);
+            this.videoNo.Name = "videoNo";
+            this.videoNo.Size = new System.Drawing.Size(150, 24);
+            this.videoNo.TabIndex = 0;
+            this.videoNo.TabStop = true;
+            this.videoNo.Text = "Don\'t save video";
+            this.videoNo.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 

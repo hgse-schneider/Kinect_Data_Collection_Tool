@@ -163,9 +163,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                     // notify any bound elements that the text has changed
                     if (this.PropertyChanged != null)
-                    {
                         this.PropertyChanged(this, new PropertyChangedEventArgs("StatusText"));
-                    }
                 }
             }
         }
@@ -178,7 +176,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
             if (this.audio.reader != null)
             {
                 // Subscribe to new audio frame arrived events
@@ -221,7 +218,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.audio.close();
             
             // make sure we finish writing our data to the file
-            this.logger.close_logger();
+            this.logger.close();
 
             // close the kinect sensor
             if (this.kinectSensor != null)

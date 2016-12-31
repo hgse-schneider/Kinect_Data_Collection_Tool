@@ -17,6 +17,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class Logger
     {
+        public int current_second;
+        public int current_frames;
         /// <summary>
         /// information for logging the data from the interface
         /// </summary>
@@ -47,6 +49,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public Logger(OpeningPrompt openingPrompt)
         {
+            this.current_frames = 0;
+            this.current_second = Int32.Parse(this.getTimestamp("second"));
+
             // retrieve data from the opening prompt
             this.openingPrompt = openingPrompt;
             session = openingPrompt.SessionID.Text;
@@ -123,6 +128,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
         {
+            if(Int32.Parse(this.getTimestamp("second")) != this.current_second)
+            {
+                Console.WriteLine(this.current_second + " " + this.current_frames);
+                this.current_second = Int32.Parse(this.getTimestamp("second"));
+                this.current_frames = 0;
+            }
+            this.current_frames += 1;
+
             if (this.openingPrompt.videoNo.Checked) return;
 
             // get the scaling factor from the opening prompt
@@ -319,6 +332,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 return DateTime.Now.ToString("yyyy-MM-dd");
             else if (type == "time")
                 return DateTime.Now.ToString("HH:mm:ss");
+            else if (type == "second")
+                return DateTime.Now.ToString("ss");
             else
                 return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         }
@@ -353,22 +368,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         }
         
         /// <summary>
-        /// get the current timestamp
+        /// close the data logger object
         /// </summary>
-        public void close_logger()
+        public void close()
         {
             logFile.Close();
 
             if (this.outputxlsx == true)
-            {
                 convert_csv_to_xlsx();
-            }
 
             if(this.outputcsv == false)
-            {
                 File.Delete(this.logFilename);
-            }
-
         }
     }
 }
