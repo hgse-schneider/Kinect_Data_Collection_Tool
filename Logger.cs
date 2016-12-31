@@ -17,8 +17,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     class Logger
     {
-        public int current_second;
-        public int current_frames;
         /// <summary>
         /// information for logging the data from the interface
         /// </summary>
@@ -49,9 +47,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public Logger(OpeningPrompt openingPrompt)
         {
-            this.current_frames = 0;
-            this.current_second = Int32.Parse(this.getTimestamp("second"));
-
             // retrieve data from the opening prompt
             this.openingPrompt = openingPrompt;
             session = openingPrompt.SessionID.Text;
@@ -127,15 +122,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         }
 
         public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
-        {
-            if(Int32.Parse(this.getTimestamp("second")) != this.current_second)
-            {
-                Console.WriteLine(this.current_second + " " + this.current_frames);
-                this.current_second = Int32.Parse(this.getTimestamp("second"));
-                this.current_frames = 0;
-            }
-            this.current_frames += 1;
-
+        {s
             if (this.openingPrompt.videoNo.Checked) return;
 
             // get the scaling factor from the opening prompt

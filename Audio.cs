@@ -1,4 +1,5 @@
 ﻿using Microsoft.Kinect;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,9 +18,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private KinectSensor kinectSensor = null;
 
         /// <summary>
-        /// Active Kinect sensor
+        /// Active audio source
         /// </summary>
         private AudioSource audioSource = null;
+        
+        /// <summary>
+        /// Will be allocated to save all the audio coming in 
+        /// </summary>
+        private WaveFileWriter mp3Buffered;
 
         /// <summary>
         /// Will be allocated a buffer to hold a single sub frame of audio data read from audio stream.
@@ -50,6 +56,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // save a reference to the logger
             this.logger = logger;
 
+            this.mp3Buffered = new WaveFileWriter(@"Test0001.wav", new WaveFormat(16000, 32, 4));
+
             if (this.kinectSensor != null)
             {
                 // Get its audio source
@@ -63,7 +71,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // Open the reader for the audio frames
                 this.reader = audioSource.OpenReader();
             }
-        }
+        }   
 
         /// <summary>
         /// Handles the audio frame data arriving from the sensor
@@ -86,6 +94,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // Loop over all sub frames, extract audio buffer and beam information
                 foreach (AudioBeamSubFrame subFrame in subFrameList)
                 {
+                    // Process audio buffer
+                    subFrame.CopyFrameDataToArray(this.audioBuffer);
+
+                    // copy bytes to the memory stream
+                    mp3Buffered.Write(this.audioBuffer, 0, this.audioBuffer.Length);
+                    mp3Buffered.Flush();
+
                     // Each time the noise angle change, obtain the new location and volume
                     if (subFrame.BeamAngle != this.beamAngle)
                     {
@@ -119,6 +134,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         public void close()
         {
+            mp3Buffered.Dispose();
+
             if (this.reader != null)
             {
                 // AudioBeamFrameReader is IDisposable
