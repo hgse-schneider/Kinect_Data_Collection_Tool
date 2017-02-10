@@ -43,11 +43,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public OpeningPrompt openingPrompt;
 
         /// <summary>
-        /// Initializes a new instance of the MainWindow class.
+        /// Initializes a new instance of the Logger class.
         /// </summary>
         public Logger(OpeningPrompt openingPrompt)
         {
-            // retrieve data from the opening prompt
+            // retrieve data from the opening prompt (because it vanishes as soon as the user closes the window)
             this.openingPrompt = openingPrompt;
             session = openingPrompt.SessionID.Text;
             destination = openingPrompt.savingDataPath.Text;
@@ -72,7 +72,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // start log files
             logFile = new System.IO.StreamWriter(logFilename, true);
 
-            // print headers
+            // print headers (ugly, should be re-written more cleanly)
             header = "Timestamp, BodyID, ";
 
             if (log_upperbody) header +=
@@ -122,7 +122,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         }
 
         public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
-        {s
+        {
             if (this.openingPrompt.videoNo.Checked) return;
 
             // get the scaling factor from the opening prompt
