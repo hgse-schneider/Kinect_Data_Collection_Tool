@@ -81,5 +81,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
 
         }
+
+        private void savingDataPath_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void outputCSV_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

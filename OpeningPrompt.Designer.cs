@@ -160,7 +160,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataPath.Name = "savingDataPath";
             this.savingDataPath.Size = new System.Drawing.Size(478, 26);
             this.savingDataPath.TabIndex = 9;
-            this.savingDataPath.Text = "C:\\Users\\schneibe\\OneDrive";
+            this.savingDataPath.Text = "C:\\Users\\schneibe";
+            this.savingDataPath.TextChanged += new System.EventHandler(this.savingDataPath_TextChanged);
             // 
             // groupBox1
             // 
@@ -242,8 +243,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // outputXLSX
             // 
             this.outputXLSX.AutoSize = true;
-            this.outputXLSX.Checked = true;
-            this.outputXLSX.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputXLSX.Location = new System.Drawing.Point(14, 385);
             this.outputXLSX.Name = "outputXLSX";
             this.outputXLSX.Size = new System.Drawing.Size(180, 24);
@@ -254,12 +253,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // outputCSV
             // 
             this.outputCSV.AutoSize = true;
+            this.outputCSV.Checked = true;
+            this.outputCSV.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputCSV.Location = new System.Drawing.Point(14, 355);
             this.outputCSV.Name = "outputCSV";
             this.outputCSV.Size = new System.Drawing.Size(62, 24);
             this.outputCSV.TabIndex = 12;
             this.outputCSV.Text = ".csv";
             this.outputCSV.UseVisualStyleBackColor = true;
+            this.outputCSV.CheckedChanged += new System.EventHandler(this.outputCSV_CheckedChanged);
             // 
             // label2
             // 
