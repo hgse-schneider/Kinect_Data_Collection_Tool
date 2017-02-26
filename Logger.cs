@@ -24,6 +24,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_upperbody = false;
         public bool log_lowerbody = false;
         public bool log_angles = false;
+        public bool log_movements = false;
         public bool log_pitch_yaw_roll = false;
         public bool log_mouth_eyes = false;
         public bool log_are_talking = false;
@@ -38,6 +39,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public string session;
         public string destination;
         public string logFilename;
+        public String previousLine = null;
 
         public VideoWriter videowriter = null;
         public System.IO.StreamWriter logFile;
@@ -49,16 +51,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public Logger(OpeningPrompt openingPrompt)
         {
-            // retrieve data from the opening prompt (because it vanishes as soon as the user closes the window)
+            // saves data from the opening prompt,
+            // (those values disappear as soon as the user closes the window)
             this.openingPrompt = openingPrompt;
             session = openingPrompt.SessionID.Text;
             destination = openingPrompt.savingDataPath.Text;
             log_upperbody = openingPrompt.captureUpperSkeletons.Checked;
             log_lowerbody = openingPrompt.captureLowerSkeleton.Checked;
+            log_angles = openingPrompt.computeJointAngles.Checked;
+            log_movements = openingPrompt.quantify_movements.Checked;
             log_pitch_yaw_roll = openingPrompt.pitch_yaw_roll.Checked;
             log_mouth_eyes = openingPrompt.mouth_eyes.Checked;
             log_are_talking = openingPrompt.are_talking.Checked;
-            log_angles = openingPrompt.computeJointAngles.Checked;
             log_sound = openingPrompt.are_talking.Checked;
             outputcsv = openingPrompt.outputCSV.Checked;
             outputxlsx = openingPrompt.outputXLSX.Checked;
@@ -123,6 +127,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 "Talking, ";
 
             header += "Posture";
+
+            // save header to the csv file
             logFile.WriteLine(header);
         }
 
@@ -200,7 +206,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 if (this.num_rows % (30 / frequency) != 0)
                     return true;
             }
-
             return false;
         }
 
@@ -210,7 +215,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public String record_body_data(String data, Bodies drawingBodies, int bodyIndex, Body body)
         {
-
             // get the joints
             IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
 
@@ -251,7 +255,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
 
             // ----- RECORDING ANGLES INFO ------- // 
-
             if (log_angles)
             {
                 data += GetAngle(joints[JointType.Head].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position) + ", "
@@ -273,9 +276,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                      // Hands (angle between thumb and hand tip)
                      + GetAngle(joints[JointType.HandTipLeft].Position, joints[JointType.HandLeft].Position, joints[JointType.ThumbLeft].Position) + ", "
                      + GetAngle(joints[JointType.HandTipRight].Position, joints[JointType.HandRight].Position, joints[JointType.ThumbRight].Position) + ", ";
-
             }
-
             return data;
         }
 
@@ -305,10 +306,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     drawingBodies.ExtractFaceRotationInDegrees(faceResult.FaceRotationQuaternion, out pitch, out yaw, out roll);
                     data += yaw + ", " + pitch + "," + roll + ", ";
                 }
-
                 data = data.Replace("Unknown", "");
             }
-
             return data;
         }
         
@@ -334,23 +333,29 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (recording)
             {
+                // depending on the sampling frequency, we might skip some data
                 if (skip_data()) return;
 
                 // get the timestamp and creat the line for the log
                 String data = getTimestamp(null).ToString() + ", " + bodyIndex + ", ";
 
-                // ----- RECORDING BODY INFO ------- // 
+                // ----- RECORD BODY INFO ------- // 
                 data = record_body_data(data, drawingBodies, bodyIndex, body);
 
-                // ----- RECORDING FACE INFO ------- // 
+                // ----- RECORD FACE INFO ------- // 
                 data = record_face_data(data, drawingBodies, faceTracked, faceResult);
 
-                // ----- RECORDING AUDIO INFO ------- // 
+                // ----- RECORD AUDIO INFO ------- // 
                 data = record_talk_data(data, body);
 
-                // add annotation (posture) and save the data to the log file
+                // add annotation (posture)
                 data += this.annotation;
+
+                // save the data to the log file
                 logFile.WriteLine(data);
+
+                // save the data
+                previousLine = data;
             }
         }
 

@@ -58,6 +58,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.videoSmall = new System.Windows.Forms.RadioButton();
             this.videoNo = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.quantify_movements = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -140,7 +141,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // chooseFolder
             // 
-            this.chooseFolder.Location = new System.Drawing.Point(14, 231);
+            this.chooseFolder.Location = new System.Drawing.Point(14, 249);
             this.chooseFolder.Name = "chooseFolder";
             this.chooseFolder.Size = new System.Drawing.Size(183, 31);
             this.chooseFolder.TabIndex = 7;
@@ -151,7 +152,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // savingDataLabel
             // 
             this.savingDataLabel.AutoSize = true;
-            this.savingDataLabel.Location = new System.Drawing.Point(10, 166);
+            this.savingDataLabel.Location = new System.Drawing.Point(10, 184);
             this.savingDataLabel.Name = "savingDataLabel";
             this.savingDataLabel.Size = new System.Drawing.Size(115, 20);
             this.savingDataLabel.TabIndex = 8;
@@ -159,7 +160,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // savingDataPath
             // 
-            this.savingDataPath.Location = new System.Drawing.Point(14, 199);
+            this.savingDataPath.Location = new System.Drawing.Point(14, 217);
             this.savingDataPath.Name = "savingDataPath";
             this.savingDataPath.Size = new System.Drawing.Size(478, 26);
             this.savingDataPath.TabIndex = 9;
@@ -168,6 +169,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.quantify_movements);
             this.groupBox1.Controls.Add(this.mouth_eyes);
             this.groupBox1.Controls.Add(this.hertzLabel);
             this.groupBox1.Controls.Add(this.hertz);
@@ -207,7 +209,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // hertzLabel
             // 
             this.hertzLabel.AutoSize = true;
-            this.hertzLabel.Location = new System.Drawing.Point(14, 283);
+            this.hertzLabel.Location = new System.Drawing.Point(10, 301);
             this.hertzLabel.Name = "hertzLabel";
             this.hertzLabel.Size = new System.Drawing.Size(121, 20);
             this.hertzLabel.TabIndex = 17;
@@ -217,7 +219,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // hertz
             // 
             this.hertz.LargeChange = 1;
-            this.hertz.Location = new System.Drawing.Point(141, 283);
+            this.hertz.Location = new System.Drawing.Point(141, 301);
             this.hertz.Maximum = 7;
             this.hertz.Minimum = 1;
             this.hertz.Name = "hertz";
@@ -368,6 +370,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Audio";
             // 
+            // quantify_movements
+            // 
+            this.quantify_movements.AutoSize = true;
+            this.quantify_movements.Checked = true;
+            this.quantify_movements.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.quantify_movements.Location = new System.Drawing.Point(14, 146);
+            this.quantify_movements.Name = "quantify_movements";
+            this.quantify_movements.Size = new System.Drawing.Size(180, 24);
+            this.quantify_movements.TabIndex = 19;
+            this.quantify_movements.Text = "Quantify Movements";
+            this.quantify_movements.UseVisualStyleBackColor = true;
+            // 
             // OpeningPrompt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -422,5 +436,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public RadioButton videoSmall;
         private GroupBox groupBox3;
         public CheckBox mouth_eyes;
+        public CheckBox quantify_movements;
     }
 }
