@@ -183,132 +183,173 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         }
 
         /// <summary>
+        /// depending on the sampling frequency, we might skip some data points
+        /// </summary>
+        public Boolean skip_data()
+        {
+            // check if we need to record this data
+            this.num_rows += 1;
+
+            if (DateTime.Now.Second != this.current_sec)
+            {
+                this.current_sec = DateTime.Now.Second;
+                this.num_rows = 0;
+            }
+            else
+            {
+                if (this.num_rows % (30 / frequency) != 0)
+                    return true;
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// saves skeleton data to the log file
+        /// </summary>
+        public String record_body_data(String data, Bodies drawingBodies, int bodyIndex, Body body)
+        {
+
+            // get the joints
+            IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
+
+            // Draw the joints
+            foreach (JointType jointType in joints.Keys)
+            {
+                String trackingStateBinary = "";
+
+                TrackingState trackingState = joints[jointType].TrackingState;
+
+                if (trackingState == TrackingState.Tracked)
+                {
+                    trackingStateBinary = "1";
+                }
+                else if (trackingState == TrackingState.Inferred)
+                {
+                    trackingStateBinary = "0";
+                }
+
+                if (this.header.Contains(jointType.ToString()))
+                    data += joints[jointType].Position.X.ToString() + ", "
+                         + joints[jointType].Position.Y.ToString() + ", "
+                         + joints[jointType].Position.Z.ToString() + ", "
+                         + trackingStateBinary + ", ";
+            }
+
+            if (this.log_upperbody)
+            {
+                data += body.HandLeftState + ", "
+                    + body.HandLeftConfidence + ", "
+                    + body.HandRightState + ", "
+                    + body.HandRightConfidence + ", ";
+
+                // Leaning left and rightd corresponds to X movement and leaning forward and back corresponds to Y movement.
+                data += body.Lean.X + ", "
+                    + body.Lean.Y + ", "
+                    + body.LeanTrackingState + ", ";
+            }
+
+            // ----- RECORDING ANGLES INFO ------- // 
+
+            if (log_angles)
+            {
+                data += GetAngle(joints[JointType.Head].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position) + ", "
+                     + GetAngle(joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position, joints[JointType.SpineMid].Position) + ", "
+                     + GetAngle(joints[JointType.HipRight].Position, joints[JointType.SpineBase].Position, joints[JointType.HipLeft].Position) + ", "
+
+                     // shoulders
+                     + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position) + ", "
+                     + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position) + ", "
+
+                     // Elbows
+                     + GetAngle(joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position) + ", "
+                     + GetAngle(joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position) + ", "
+
+                     // Wrists
+                     + GetAngle(joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position, joints[JointType.HandLeft].Position) + ", "
+                     + GetAngle(joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position, joints[JointType.HandRight].Position) + ", "
+
+                     // Hands (angle between thumb and hand tip)
+                     + GetAngle(joints[JointType.HandTipLeft].Position, joints[JointType.HandLeft].Position, joints[JointType.ThumbLeft].Position) + ", "
+                     + GetAngle(joints[JointType.HandTipRight].Position, joints[JointType.HandRight].Position, joints[JointType.ThumbRight].Position) + ", ";
+
+            }
+
+            return data;
+        }
+
+
+        /// <summary>
+        /// saves face information to the log file
+        /// </summary>
+        public String record_face_data(String data, Bodies drawingBodies, Boolean faceTracked, FaceFrameResult faceResult)
+        {
+            if (log_mouth_eyes || log_pitch_yaw_roll)
+            {
+                if (faceResult == null) return data;
+
+                // extract each face property information and store it in faceText
+                if (log_mouth_eyes && faceResult.FaceProperties != null)
+                {
+                    foreach (var item in faceResult.FaceProperties)
+                    {
+                        data += item.Value.ToString() + ", ";
+                    }
+                }
+
+                // extract face rotation in degrees as Euler angles
+                if (faceResult.FaceRotationQuaternion != null && log_pitch_yaw_roll)
+                {
+                    int pitch, yaw, roll;
+                    drawingBodies.ExtractFaceRotationInDegrees(faceResult.FaceRotationQuaternion, out pitch, out yaw, out roll);
+                    data += yaw + ", " + pitch + "," + roll + ", ";
+                }
+
+                data = data.Replace("Unknown", "");
+            }
+
+            return data;
+        }
+        
+        /// <summary>
+        /// checks whether the current body is talking
+        /// </summary>
+        public String record_talk_data(String data, Body body)
+        {
+            if (log_are_talking)
+            {
+                if (this.trackingIDSpeaking.Contains(body.TrackingId))
+                    data += "1, ";
+                else data += "0, ";
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// save data to file
         /// </summary>
         public void saveData(Bodies drawingBodies, int bodyIndex, Body body, Boolean faceTracked, FaceFrameResult faceResult)
         {
             if (recording)
             {
-                // check if we need to record this data
-                this.num_rows += 1;
-
-                if (DateTime.Now.Second != this.current_sec)
-                {
-                    this.current_sec = DateTime.Now.Second;
-                    this.num_rows = 0;
-                }
-                else
-                {
-                    if (this.num_rows % (30 / frequency) != 0) return;
-                }
-                
-
-                // ----- RECORDING BODY INFO ------- // 
+                if (skip_data()) return;
 
                 // get the timestamp and creat the line for the log
                 String data = getTimestamp(null).ToString() + ", " + bodyIndex + ", ";
 
-                // get the joints
-                IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
-
-                // Draw the joints
-                foreach (JointType jointType in joints.Keys)
-                {
-                    String trackingStateBinary = "";
-
-                    TrackingState trackingState = joints[jointType].TrackingState;
-
-                    if (trackingState == TrackingState.Tracked)
-                    {
-                        trackingStateBinary = "1";
-                    }
-                    else if (trackingState == TrackingState.Inferred)
-                    {
-                        trackingStateBinary = "0";
-                    }
-
-                    if (this.header.Contains(jointType.ToString()))
-                        data += joints[jointType].Position.X.ToString() + ", "
-                             + joints[jointType].Position.Y.ToString() + ", "
-                             + joints[jointType].Position.Z.ToString() + ", "
-                             + trackingStateBinary + ", ";
-                }
-                
-                if(this.log_upperbody)
-                {
-                    data += body.HandLeftState + ", "
-                        + body.HandLeftConfidence + ", "
-                        + body.HandRightState + ", "
-                        + body.HandRightConfidence + ", ";
-
-                    // Leaning left and rightd corresponds to X movement and leaning forward and back corresponds to Y movement.
-                    data += body.Lean.X + ", "
-                        + body.Lean.Y + ", "
-                        + body.LeanTrackingState + ", ";
-                }
-
-                // ----- RECORDING ANGLES INFO ------- // 
-
-                if (log_angles)
-                {
-                    data += GetAngle(joints[JointType.Head].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position) + ", "
-                         + GetAngle(joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position, joints[JointType.SpineMid].Position) + ", "
-                         + GetAngle(joints[JointType.HipRight].Position, joints[JointType.SpineBase].Position, joints[JointType.HipLeft].Position) + ", "
-
-                         // shoulders
-                         + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position) + ", "
-                         + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position) + ", "
-
-                         // Elbows
-                         + GetAngle(joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position) + ", "
-                         + GetAngle(joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position) + ", "
-
-                         // Wrists
-                         + GetAngle(joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position, joints[JointType.HandLeft].Position) + ", "
-                         + GetAngle(joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position, joints[JointType.HandRight].Position) + ", "
-
-                         // Hands (angle between thumb and hand tip)
-                         + GetAngle(joints[JointType.HandTipLeft].Position, joints[JointType.HandLeft].Position, joints[JointType.ThumbLeft].Position) + ", "
-                         + GetAngle(joints[JointType.HandTipRight].Position, joints[JointType.HandRight].Position, joints[JointType.ThumbRight].Position) + ", ";
-
-                }
+                // ----- RECORDING BODY INFO ------- // 
+                data = record_body_data(data, drawingBodies, bodyIndex, body);
 
                 // ----- RECORDING FACE INFO ------- // 
-
-                if (log_mouth_eyes || log_pitch_yaw_roll)
-                {
-                    if (faceResult == null) return;
-
-                    // extract each face property information and store it in faceText
-                    if (log_mouth_eyes && faceResult.FaceProperties != null)
-                    {
-                        foreach (var item in faceResult.FaceProperties)
-                        {
-                            data += item.Value.ToString() + ", ";
-                        }
-                    }
-
-                    // extract face rotation in degrees as Euler angles
-                    if (faceResult.FaceRotationQuaternion != null && log_pitch_yaw_roll)
-                    {
-                        int pitch, yaw, roll;
-                        drawingBodies.ExtractFaceRotationInDegrees(faceResult.FaceRotationQuaternion, out pitch, out yaw, out roll);
-                        data += yaw + ", " + pitch + "," + roll + ", ";
-                    }
-
-                    data = data.Replace("Unknown", "");
-                }
+                data = record_face_data(data, drawingBodies, faceTracked, faceResult);
 
                 // ----- RECORDING AUDIO INFO ------- // 
+                data = record_talk_data(data, body);
 
-                if (log_are_talking)
-                {
-                    if(this.trackingIDSpeaking.Contains(body.TrackingId))
-                        data += "1, ";
-                    else data += "0, ";
-                }
-
-                    data += this.annotation;
+                // add annotation (posture) and save the data to the log file
+                data += this.annotation;
                 logFile.WriteLine(data);
             }
         }

@@ -128,6 +128,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // captureLowerSkeleton
             // 
             this.captureLowerSkeleton.AutoSize = true;
+            this.captureLowerSkeleton.Checked = true;
+            this.captureLowerSkeleton.CheckState = System.Windows.Forms.CheckState.Checked;
             this.captureLowerSkeleton.Location = new System.Drawing.Point(14, 86);
             this.captureLowerSkeleton.Name = "captureLowerSkeleton";
             this.captureLowerSkeleton.Size = new System.Drawing.Size(179, 24);
@@ -260,9 +262,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.outputXLSX.AutoSize = true;
             this.outputXLSX.Location = new System.Drawing.Point(14, 385);
             this.outputXLSX.Name = "outputXLSX";
-            this.outputXLSX.Size = new System.Drawing.Size(180, 24);
+            this.outputXLSX.Size = new System.Drawing.Size(64, 24);
             this.outputXLSX.TabIndex = 13;
-            this.outputXLSX.Text = ".xlsx (recommended)";
+            this.outputXLSX.Text = ".xlsx";
             this.outputXLSX.UseVisualStyleBackColor = true;
             // 
             // outputCSV
