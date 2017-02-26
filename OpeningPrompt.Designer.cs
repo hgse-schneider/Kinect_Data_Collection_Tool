@@ -36,12 +36,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.captureUpperSkeletons = new System.Windows.Forms.CheckBox();
-            this.captureFaces = new System.Windows.Forms.CheckBox();
+            this.pitch_yaw_roll = new System.Windows.Forms.CheckBox();
             this.captureLowerSkeleton = new System.Windows.Forms.CheckBox();
             this.chooseFolder = new System.Windows.Forms.Button();
             this.savingDataLabel = new System.Windows.Forms.Label();
             this.savingDataPath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.mouth_eyes = new System.Windows.Forms.CheckBox();
             this.hertzLabel = new System.Windows.Forms.Label();
             this.hertz = new System.Windows.Forms.TrackBar();
             this.computeJointAngles = new System.Windows.Forms.CheckBox();
@@ -50,7 +51,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.outputXLSX = new System.Windows.Forms.CheckBox();
             this.outputCSV = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.captureSounds = new System.Windows.Forms.CheckBox();
+            this.are_talking = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.videoLarge = new System.Windows.Forms.RadioButton();
             this.videoMedium = new System.Windows.Forms.RadioButton();
@@ -111,18 +112,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureUpperSkeletons.Text = "Capture Upper Body";
             this.captureUpperSkeletons.UseVisualStyleBackColor = true;
             // 
-            // captureFaces
+            // pitch_yaw_roll
             // 
-            this.captureFaces.AutoSize = true;
-            this.captureFaces.Checked = true;
-            this.captureFaces.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureFaces.Location = new System.Drawing.Point(275, 56);
-            this.captureFaces.Name = "captureFaces";
-            this.captureFaces.Size = new System.Drawing.Size(217, 24);
-            this.captureFaces.TabIndex = 5;
-            this.captureFaces.Text = "Capture Face Information";
-            this.captureFaces.UseVisualStyleBackColor = true;
-            this.captureFaces.CheckedChanged += new System.EventHandler(this.captureFaces_CheckedChanged);
+            this.pitch_yaw_roll.AutoSize = true;
+            this.pitch_yaw_roll.Checked = true;
+            this.pitch_yaw_roll.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.pitch_yaw_roll.Location = new System.Drawing.Point(275, 56);
+            this.pitch_yaw_roll.Name = "pitch_yaw_roll";
+            this.pitch_yaw_roll.Size = new System.Drawing.Size(144, 24);
+            this.pitch_yaw_roll.TabIndex = 5;
+            this.pitch_yaw_roll.Text = "Pitch, Yaw, Roll";
+            this.pitch_yaw_roll.UseVisualStyleBackColor = true;
+            this.pitch_yaw_roll.CheckedChanged += new System.EventHandler(this.captureFaces_CheckedChanged);
             // 
             // captureLowerSkeleton
             // 
@@ -160,11 +161,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataPath.Name = "savingDataPath";
             this.savingDataPath.Size = new System.Drawing.Size(478, 26);
             this.savingDataPath.TabIndex = 9;
-            this.savingDataPath.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            this.savingDataPath.Text = "C:\\Users\\schneibe\\Desktop";
             this.savingDataPath.TextChanged += new System.EventHandler(this.savingDataPath_TextChanged);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.mouth_eyes);
             this.groupBox1.Controls.Add(this.hertzLabel);
             this.groupBox1.Controls.Add(this.hertz);
             this.groupBox1.Controls.Add(this.computeJointAngles);
@@ -173,10 +175,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.Controls.Add(this.outputXLSX);
             this.groupBox1.Controls.Add(this.outputCSV);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.captureSounds);
+            this.groupBox1.Controls.Add(this.are_talking);
             this.groupBox1.Controls.Add(this.captureUpperSkeletons);
             this.groupBox1.Controls.Add(this.savingDataPath);
-            this.groupBox1.Controls.Add(this.captureFaces);
+            this.groupBox1.Controls.Add(this.pitch_yaw_roll);
             this.groupBox1.Controls.Add(this.savingDataLabel);
             this.groupBox1.Controls.Add(this.chooseFolder);
             this.groupBox1.Controls.Add(this.captureLowerSkeleton);
@@ -186,6 +188,19 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log file";
+            // 
+            // mouth_eyes
+            // 
+            this.mouth_eyes.AutoSize = true;
+            this.mouth_eyes.Checked = true;
+            this.mouth_eyes.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mouth_eyes.Location = new System.Drawing.Point(274, 86);
+            this.mouth_eyes.Name = "mouth_eyes";
+            this.mouth_eyes.Size = new System.Drawing.Size(123, 24);
+            this.mouth_eyes.TabIndex = 18;
+            this.mouth_eyes.Text = "Mouth, Eyes";
+            this.mouth_eyes.UseVisualStyleBackColor = true;
+            this.mouth_eyes.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // hertzLabel
             // 
@@ -226,9 +241,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(270, 31);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(164, 20);
+            this.label4.Size = new System.Drawing.Size(45, 20);
             this.label4.TabIndex = 15;
-            this.label4.Text = "Additional Information";
+            this.label4.Text = "Face";
             // 
             // label3
             // 
@@ -272,15 +287,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.label2.TabIndex = 11;
             this.label2.Text = "File format:";
             // 
-            // captureSounds
+            // are_talking
             // 
-            this.captureSounds.AutoSize = true;
-            this.captureSounds.Location = new System.Drawing.Point(275, 86);
-            this.captureSounds.Name = "captureSounds";
-            this.captureSounds.Size = new System.Drawing.Size(151, 24);
-            this.captureSounds.TabIndex = 10;
-            this.captureSounds.Text = "Capture Sounds";
-            this.captureSounds.UseVisualStyleBackColor = true;
+            this.are_talking.AutoSize = true;
+            this.are_talking.Checked = true;
+            this.are_talking.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.are_talking.Location = new System.Drawing.Point(274, 116);
+            this.are_talking.Name = "are_talking";
+            this.are_talking.Size = new System.Drawing.Size(176, 24);
+            this.are_talking.TabIndex = 10;
+            this.are_talking.Text = "Are People Talking?";
+            this.are_talking.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -381,13 +398,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private System.Windows.Forms.Button ok;
         private System.Windows.Forms.Button cancel;
         public System.Windows.Forms.CheckBox captureUpperSkeletons;
-        public System.Windows.Forms.CheckBox captureFaces;
+        public System.Windows.Forms.CheckBox pitch_yaw_roll;
         public System.Windows.Forms.CheckBox captureLowerSkeleton;
         private System.Windows.Forms.Button chooseFolder;
         private System.Windows.Forms.Label savingDataLabel;
         public System.Windows.Forms.TextBox savingDataPath;
         private System.Windows.Forms.GroupBox groupBox1;
-        public System.Windows.Forms.CheckBox captureSounds;
+        public System.Windows.Forms.CheckBox are_talking;
         public System.Windows.Forms.CheckBox outputXLSX;
         public System.Windows.Forms.CheckBox outputCSV;
         private System.Windows.Forms.Label label2;
@@ -402,5 +419,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public RadioButton videoMedium;
         public RadioButton videoSmall;
         private GroupBox groupBox3;
+        public CheckBox mouth_eyes;
     }
 }

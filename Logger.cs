@@ -24,7 +24,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_upperbody = false;
         public bool log_lowerbody = false;
         public bool log_angles = false;
-        public bool log_face = false;
+        public bool log_pitch_yaw_roll = false;
+        public bool log_mouth_eyes = false;
+        public bool log_are_talking = false;
         public bool log_sound = false;
         public bool outputcsv = true;
         public bool outputxlsx = true;
@@ -53,9 +55,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             destination = openingPrompt.savingDataPath.Text;
             log_upperbody = openingPrompt.captureUpperSkeletons.Checked;
             log_lowerbody = openingPrompt.captureLowerSkeleton.Checked;
-            log_face = openingPrompt.captureFaces.Checked;
+            log_pitch_yaw_roll = openingPrompt.pitch_yaw_roll.Checked;
+            log_mouth_eyes = openingPrompt.mouth_eyes.Checked;
+            log_are_talking = openingPrompt.are_talking.Checked;
             log_angles = openingPrompt.computeJointAngles.Checked;
-            log_sound = openingPrompt.captureSounds.Checked;
+            log_sound = openingPrompt.are_talking.Checked;
             outputcsv = openingPrompt.outputCSV.Checked;
             outputxlsx = openingPrompt.outputXLSX.Checked;
             frequency = (openingPrompt.hertz.Value - 1) *5;
@@ -110,9 +114,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                  "ElbowL_angle, ElbowR_angle, " +
                  "WristL_angle, WristR_angle, " +
                  "HandL_angle, HandR_angle, ";
-            if (log_face) header +=
+            if (log_mouth_eyes) header +=
                 "Happy, Engaged, WearingGlasses, LeftEyeClosed, RightEyeClosed," +
-                " MouthOpen, MouthMoved, LookingAway, " +
+                " MouthOpen, MouthMoved, LookingAway, ";
+            if (log_pitch_yaw_roll) header +=
                 "FaceYaw, FacePitch, FacenRoll, ";
             if (log_sound) header +=
                 "Talking, ";
@@ -270,12 +275,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                 // ----- RECORDING FACE INFO ------- // 
 
-                if (log_face)
+                if (log_mouth_eyes || log_pitch_yaw_roll)
                 {
                     if (faceResult == null) return;
 
                     // extract each face property information and store it in faceText
-                    if (faceResult.FaceProperties != null)
+                    if (log_mouth_eyes && faceResult.FaceProperties != null)
                     {
                         foreach (var item in faceResult.FaceProperties)
                         {
@@ -284,7 +289,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     }
 
                     // extract face rotation in degrees as Euler angles
-                    if (faceResult.FaceRotationQuaternion != null)
+                    if (faceResult.FaceRotationQuaternion != null && log_pitch_yaw_roll)
                     {
                         int pitch, yaw, roll;
                         drawingBodies.ExtractFaceRotationInDegrees(faceResult.FaceRotationQuaternion, out pitch, out yaw, out roll);
@@ -296,7 +301,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                 // ----- RECORDING AUDIO INFO ------- // 
 
-                if (log_face)
+                if (log_are_talking)
                 {
                     if(this.trackingIDSpeaking.Contains(body.TrackingId))
                         data += "1, ";
