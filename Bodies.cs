@@ -179,6 +179,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private List<Tuple<JointType, JointType>> bones;
 
         /// <summary>
+        /// definition of lower body joints
+        /// </summary>
+        private List<JointType> lower_body_joints;
+
+        /// <summary>
         /// Width of display (depth space)
         /// </summary>
         private int displayWidth;
@@ -272,6 +277,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 Brushes.LightBlue,
                 Brushes.Yellow
             };
+
+            // populate the lower body joint list
+            this.lower_body_joints = new List<JointType>();
+            this.lower_body_joints.Add(JointType.HipLeft);
+            this.lower_body_joints.Add(JointType.HipRight);
+            this.lower_body_joints.Add(JointType.KneeLeft);
+            this.lower_body_joints.Add(JointType.KneeRight);
+            this.lower_body_joints.Add(JointType.AnkleLeft);
+            this.lower_body_joints.Add(JointType.AnkleRight);
+            this.lower_body_joints.Add(JointType.FootLeft);
+            this.lower_body_joints.Add(JointType.FootRight);
 
             // a bone defined as a line between two joints
             this.bones = new List<Tuple<JointType, JointType>>();
@@ -824,7 +840,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 drawPen = drawingPen;
             }
 
-            drawingContext.DrawLine(drawPen, jointPoints[jointType0], jointPoints[jointType1]);
+            // decide if we need to draw this bone
+            if (this.lower_body_joints.Contains(jointType0) || this.lower_body_joints.Contains(jointType1))
+            {
+                if(logger.log_lowerbody)
+                    drawingContext.DrawLine(drawPen, jointPoints[jointType0], jointPoints[jointType1]);
+            }
+            else
+                drawingContext.DrawLine(drawPen, jointPoints[jointType0], jointPoints[jointType1]);
         }
 
         /// <summary>
