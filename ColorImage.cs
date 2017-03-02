@@ -35,6 +35,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public WriteableBitmap colorBitmap = null;
 
         /// <summary>
+        /// was the last frame saved?
+        /// </summary>
+        public Boolean was_last_frame_saved = false;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public ColorImage(KinectSensor kinectSensor, Logger logger)
@@ -72,6 +77,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 {
                     FrameDescription colorFrameDescription = colorFrame.FrameDescription;
 
+                    // detects if we are running at 30 or 15 fps
+                    double fps = 1.0 / colorFrame.ColorCameraSettings.FrameInterval.TotalSeconds;
+
+                    // if we are running at 30 fps and the last frame was saved, we skip it
+                    if (was_last_frame_saved && fps > 30)
+                    {
+                        was_last_frame_saved = false;
+                        return;
+                    }
+
                     using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
                     {
                         this.colorBitmap.Lock();
@@ -90,6 +105,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         this.colorBitmap.Unlock();
 
                         logger.WriteFrameToVideo(colorBitmap, colorFrame);
+
+                        was_last_frame_saved = true;
                     }
                     
                 }
