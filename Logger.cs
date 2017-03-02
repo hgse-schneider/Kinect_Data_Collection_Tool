@@ -51,6 +51,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         // counters
         public int current_sec = 0;
         public int num_rows = 0;
+        public int num_count = 0;
 
         // header information
         public string header = "";
@@ -98,11 +99,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             logFile = new System.IO.StreamWriter(logFilename, true);
 
             // print headers (ugly,should be re-written more cleanly)
-            header = "Timestamp,BodyID,";
+            header = "Timestamp,Index,BodyID,";
 
             if (log_upperbody) header +=
                  "SpineBase_X,SpineBase_Y,SpineBase_Z,SpineBase_inferred," +
-                 "SpineShoulder_X,SpineShoulder_Y,SpineShoulder_Z,SpineShoulder_inferred," +
                  "SpineMid_X,SpineMid_Y,SpineMid_Z,SpineMid_inferred," +
                  "Neck_X,Neck_Y,Neck_Z,Neck_inferred," +
                  "Head_X,Head_Y,Head_Z,Head_inferred," +
@@ -116,6 +116,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                  "HandRight_X,HandRight_Y,HandRight_Z,HandRight_inferred," +
                  "HipLeft_X,HipLeft_Y,HipLeft_Z,HipLeft_inferred," +
                  "HipRight_X,HipRight_Y,HipRight_Z,HipRight_inferred," +
+                 "SpineShoulder_X,SpineShoulder_Y,SpineShoulder_Z,SpineShoulder_inferred," +
                 "HandTipLeft_X,HandTipLeft_Y,HandTipLeft_Z,HandTipLeft_inferred," +
                 "ThumbLeft_X,ThumbLeft_Y,ThumbLeft_Z,ThumbLeft_inferred," +
                 "HandTipRight_X,HandTipRight_Y,HandTipRight_Z,HandTipRight_inferred," +
@@ -130,7 +131,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (log_upperbody) header +=
                 "HandLeftState,HandLeftStateConfidence,HandRightState,HandRightStateConfidence," +
                 "Lean_X,Lean_Y,Lean_TrackingState,";
-            /*
             if (log_movements)
             {
                 if (log_upperbody)
@@ -140,7 +140,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     foreach (string joint in Helpers.lower_body_joints)
                         header += joint + "_movement,";
             }
-            */
             if (log_angles) header +=
                  "Neck_angle,Spine_angle,Hip_angle," +
                  "ShoulderL_angle,ShoulderR_angle," +
@@ -241,6 +240,27 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             return false;
         }
 
+        public string distance_between_joints(string joint, string[] cur, string[] pre)
+        {
+            int index = Array.IndexOf(this.header_array, joint + "_X");
+
+            double cur_x = Convert.ToDouble(cur[index]);
+            double cur_y = Convert.ToDouble(cur[index + 1]);
+            double cur_z = Convert.ToDouble(cur[index + 2]);
+            int cur_inferred = Int32.Parse((cur[index + 3]));
+
+            double pre_x = Convert.ToDouble(pre[index]);
+            double pre_y = Convert.ToDouble(pre[index + 1]);
+            double pre_z = Convert.ToDouble(pre[index + 2]);
+            int pre_inferred = Int32.Parse((pre[index + 3]));
+
+            if (cur_inferred == 1 || pre_inferred == 1) return "";
+
+            double total = Math.Sqrt(Math.Pow(cur_x - pre_x, 2) + Math.Pow(cur_y - pre_y, 2) + Math.Pow(cur_z - pre_z, 2));
+
+            return ""+total;
+        }
+
 
         /// <summary>
         /// saves skeleton data to the log file
@@ -259,11 +279,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                 if (trackingState == TrackingState.Tracked)
                 {
-                    trackingStateBinary = "1";
+                    trackingStateBinary = "0";
                 }
                 else if (trackingState == TrackingState.Inferred)
                 {
-                    trackingStateBinary = "0";
+                    trackingStateBinary = "1";
                 }
 
                 if (this.header.Contains(jointType.ToString()))
@@ -285,6 +305,37 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 data += body.Lean.X + ","
                     + body.Lean.Y + ","
                     + body.LeanTrackingState + ",";
+            }
+
+            // record joint movements
+            if (log_movements)
+            {
+                // skip if if null
+                if (previousLine == null)
+                {
+                    if (log_upperbody)
+                        foreach (string joint in Helpers.upper_body_joints)
+                            data += ',';
+                    if (log_lowerbody)
+                        foreach (string joint in Helpers.upper_body_joints)
+                            data += ',';
+                }
+                else
+                {
+                    string[] pre = this.previousLine.Split(',');
+                    string[] cur = data.Split(',');
+
+                    if (log_upperbody)
+                        foreach (string joint in Helpers.upper_body_joints)
+                        {
+                            data += distance_between_joints(joint, cur, pre) + ",";
+                        }
+                    if (log_lowerbody)
+                        foreach (string joint in Helpers.lower_body_joints)
+                        {
+                            data += distance_between_joints(joint, cur, pre) + ",";
+                        }
+                }
             }
 
             // ----- RECORDING ANGLES INFO ------- // 
@@ -368,9 +419,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 // depending on the sampling frequency, we might skip some data
                 if (skip_data()) return;
+                num_count += 1;
 
                 // get the timestamp and creat the line for the log
-                String data = getTimestamp(null).ToString() + "," + bodyIndex + ",";
+                String data = getTimestamp(null).ToString() + "," + this.num_count + "," + bodyIndex + ",";
 
                 // ----- RECORD BODY INFO ------- // 
                 data = record_body_data(data, drawingBodies, bodyIndex, body);
