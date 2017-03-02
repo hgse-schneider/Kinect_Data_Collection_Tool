@@ -87,6 +87,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         return;
                     }
 
+                    // grab the color frame
                     using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
                     {
                         this.colorBitmap.Lock();

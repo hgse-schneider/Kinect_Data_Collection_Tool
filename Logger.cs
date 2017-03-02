@@ -35,11 +35,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public int current_sec = 0;
         public int num_rows = 0;
         public string header = "";
+        public string[] header_array;
         public string annotation = "";
         public string session;
         public string destination;
         public string logFilename;
-        public String previousLine = null;
+        public string previousLine = null;
 
         public VideoWriter videowriter = null;
         public System.IO.StreamWriter logFile;
@@ -80,56 +81,59 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // start log files
             logFile = new System.IO.StreamWriter(logFilename, true);
 
-            // print headers (ugly, should be re-written more cleanly)
-            header = "Timestamp, BodyID, ";
+            // print headers (ugly,should be re-written more cleanly)
+            header = "Timestamp,BodyID,";
 
             if (log_upperbody) header +=
-                 "SpineBase_X, SpineBase_Y, SpineBase_Z, SpineBase_inferred, " +
-                 "SpineShoulder_X, SpineShoulder_Y, SpineShoulder_Z, SpineShoulder_inferred, " +
-                 "SpineMid_X, SpineMid_Y, SpineMid_Z, SpineMid_inferred, " +
-                 "Neck_X, Neck_Y, Neck_Z, Neck_inferred, " +
-                 "Head_X, Head_Y, Head_Z, Head_inferred, " +
-                 "ShoulderLeft_X, ShoulderLeft_Y, ShoulderLeft_Z, ShoulderLeft_inferred, " +
-                 "ElbowLeft_X, ElbowLeft_Y, ElbowLeft_Z, ElbowLeft_inferred, " +
-                 "WristLeft_X, WristLeft_Y, WristLeft_Z, WristLeft_inferred, " +
-                 "HandLeft_X, HandLeft_Y, HandLeft_Z, HandLeft_inferred, " +
-                 "ShoulderRight_X, ShoulderRight_Y, ShoulderRight_Z, ShoulderRight_inferred, " +
-                 "ElbowRight_X, ElbowRight_Y, ElbowRight_Z, ElbowRight_inferred, " +
-                 "WristRight_X, WristRight_Y, WristRight_Z, WristRight_inferred, " +
-                 "HandRight_X, HandRight_Y, HandRight_Z, HandRight_inferred, " +
-                 "HipLeft_X, HipLeft_Y, HipLeft_Z, HipLeft_inferred, " + 
-                 "HipRight_X, HipRight_Y, HipRight_Z, HipRight_inferred, " +
-                "HandTipLeft_X, HandTipLeft_Y, HandTipLeft_Z, HandTipLeft_inferred, " +
-                "ThumbLeft_X, ThumbLeft_Y, ThumbLeft_Z, ThumbLeft_inferred, " +
-                "HandTipRight_X, HandTipRight_Y, HandTipRight_Z, HandTipRight_inferred, " +
-                "ThumbRight_X, ThumbRight_Y, ThumbRight_Z, ThumbRight_inferred, " +
-                "HandLeftState, HandLeftStateConfidence, HandRightState, HandRightStateConfidence," +
-                "Lean_X, Lean_Y, Lean_TrackingState, ";
+                 "SpineBase_X,SpineBase_Y,SpineBase_Z,SpineBase_inferred," +
+                 "SpineShoulder_X,SpineShoulder_Y,SpineShoulder_Z,SpineShoulder_inferred," +
+                 "SpineMid_X,SpineMid_Y,SpineMid_Z,SpineMid_inferred," +
+                 "Neck_X,Neck_Y,Neck_Z,Neck_inferred," +
+                 "Head_X,Head_Y,Head_Z,Head_inferred," +
+                 "ShoulderLeft_X,ShoulderLeft_Y,ShoulderLeft_Z,ShoulderLeft_inferred," +
+                 "ElbowLeft_X,ElbowLeft_Y,ElbowLeft_Z,ElbowLeft_inferred," +
+                 "WristLeft_X,WristLeft_Y,WristLeft_Z,WristLeft_inferred," +
+                 "HandLeft_X,HandLeft_Y,HandLeft_Z,HandLeft_inferred," +
+                 "ShoulderRight_X,ShoulderRight_Y,ShoulderRight_Z,ShoulderRight_inferred," +
+                 "ElbowRight_X,ElbowRight_Y,ElbowRight_Z,ElbowRight_inferred," +
+                 "WristRight_X,WristRight_Y,WristRight_Z,WristRight_inferred," +
+                 "HandRight_X,HandRight_Y,HandRight_Z,HandRight_inferred," +
+                 "HipLeft_X,HipLeft_Y,HipLeft_Z,HipLeft_inferred," + 
+                 "HipRight_X,HipRight_Y,HipRight_Z,HipRight_inferred," +
+                "HandTipLeft_X,HandTipLeft_Y,HandTipLeft_Z,HandTipLeft_inferred," +
+                "ThumbLeft_X,ThumbLeft_Y,ThumbLeft_Z,ThumbLeft_inferred," +
+                "HandTipRight_X,HandTipRight_Y,HandTipRight_Z,HandTipRight_inferred," +
+                "ThumbRight_X,ThumbRight_Y,ThumbRight_Z,ThumbRight_inferred," +
+                "HandLeftState,HandLeftStateConfidence,HandRightState,HandRightStateConfidence," +
+                "Lean_X,Lean_Y,Lean_TrackingState,";
             if (log_lowerbody) header +=
-                 "KneeLeft_X, KneeLeft_Y, KneeLeft_Z, KneeLeft_inferred, " +
-                 "AnkleLeft_X, AnkleLeft_Y, AnkleLeft_Z, AnkleLeft_inferred, " +
-                 "FootLeft_X, FootLeft_Y, FootLeft_Z, FootLeft_inferred, " +
-                 "KneeRight_X, KneeRight_Y, KneeRight_Z, KneeRight_inferred, " +
-                 "AnkleRight_X, AnkleRight_Y, AnkleRight_Z, AnkleRight_inferred, " +
-                 "FootRight_X, FootRight_Y, FootRight_Z, FootRight_inferred, ";
+                 "KneeLeft_X,KneeLeft_Y,KneeLeft_Z,KneeLeft_inferred," +
+                 "AnkleLeft_X,AnkleLeft_Y,AnkleLeft_Z,AnkleLeft_inferred," +
+                 "FootLeft_X,FootLeft_Y,FootLeft_Z,FootLeft_inferred," +
+                 "KneeRight_X,KneeRight_Y,KneeRight_Z,KneeRight_inferred," +
+                 "AnkleRight_X,AnkleRight_Y,AnkleRight_Z,AnkleRight_inferred," +
+                 "FootRight_X,FootRight_Y,FootRight_Z,FootRight_inferred,";
             if (log_angles) header +=
-                 "Neck_angle, Spine_angle, Hip_angle, " +
-                 "ShoulderL_angle, ShoulderR_angle, " +
-                 "ElbowL_angle, ElbowR_angle, " +
-                 "WristL_angle, WristR_angle, " +
-                 "HandL_angle, HandR_angle, ";
+                 "Neck_angle,Spine_angle,Hip_angle," +
+                 "ShoulderL_angle,ShoulderR_angle," +
+                 "ElbowL_angle,ElbowR_angle," +
+                 "WristL_angle,WristR_angle," +
+                 "HandL_angle,HandR_angle,";
             if (log_mouth_eyes) header +=
-                "Happy, Engaged, WearingGlasses, LeftEyeClosed, RightEyeClosed," +
-                " MouthOpen, MouthMoved, LookingAway, ";
+                "Happy,Engaged,WearingGlasses,LeftEyeClosed,RightEyeClosed," +
+                "MouthOpen,MouthMoved,LookingAway,";
             if (log_pitch_yaw_roll) header +=
-                "FaceYaw, FacePitch, FacenRoll, ";
+                "FaceYaw,FacePitch,FacenRoll,";
             if (log_sound) header +=
-                "Talking, ";
+                "Talking,";
 
             header += "Posture";
 
             // save header to the csv file
             logFile.WriteLine(header);
+
+            this.header_array =  header.Split(',');
+
         }
 
         public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
@@ -235,47 +239,47 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 }
 
                 if (this.header.Contains(jointType.ToString()))
-                    data += joints[jointType].Position.X.ToString() + ", "
-                         + joints[jointType].Position.Y.ToString() + ", "
-                         + joints[jointType].Position.Z.ToString() + ", "
-                         + trackingStateBinary + ", ";
+                    data += joints[jointType].Position.X.ToString() + ","
+                         + joints[jointType].Position.Y.ToString() + ","
+                         + joints[jointType].Position.Z.ToString() + ","
+                         + trackingStateBinary + ",";
             }
 
             if (this.log_upperbody)
             {
-                data += body.HandLeftState + ", "
-                    + body.HandLeftConfidence + ", "
-                    + body.HandRightState + ", "
-                    + body.HandRightConfidence + ", ";
+                data += body.HandLeftState + ","
+                    + body.HandLeftConfidence + ","
+                    + body.HandRightState + ","
+                    + body.HandRightConfidence + ",";
 
                 // Leaning left and rightd corresponds to X movement and leaning forward and back corresponds to Y movement.
-                data += body.Lean.X + ", "
-                    + body.Lean.Y + ", "
-                    + body.LeanTrackingState + ", ";
+                data += body.Lean.X + ","
+                    + body.Lean.Y + ","
+                    + body.LeanTrackingState + ",";
             }
 
             // ----- RECORDING ANGLES INFO ------- // 
             if (log_angles)
             {
-                data += GetAngle(joints[JointType.Head].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position) + ", "
-                     + GetAngle(joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position, joints[JointType.SpineMid].Position) + ", "
-                     + GetAngle(joints[JointType.HipRight].Position, joints[JointType.SpineBase].Position, joints[JointType.HipLeft].Position) + ", "
+                data += GetAngle(joints[JointType.Head].Position, joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position) + ","
+                     + GetAngle(joints[JointType.Neck].Position, joints[JointType.SpineShoulder].Position, joints[JointType.SpineMid].Position) + ","
+                     + GetAngle(joints[JointType.HipRight].Position, joints[JointType.SpineBase].Position, joints[JointType.HipLeft].Position) + ","
 
                      // shoulders
-                     + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position) + ", "
-                     + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position) + ", "
+                     + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position) + ","
+                     + GetAngle(joints[JointType.SpineShoulder].Position, joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position) + ","
 
                      // Elbows
-                     + GetAngle(joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position) + ", "
-                     + GetAngle(joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position) + ", "
+                     + GetAngle(joints[JointType.ShoulderLeft].Position, joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position) + ","
+                     + GetAngle(joints[JointType.ShoulderRight].Position, joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position) + ","
 
                      // Wrists
-                     + GetAngle(joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position, joints[JointType.HandLeft].Position) + ", "
-                     + GetAngle(joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position, joints[JointType.HandRight].Position) + ", "
+                     + GetAngle(joints[JointType.ElbowLeft].Position, joints[JointType.WristLeft].Position, joints[JointType.HandLeft].Position) + ","
+                     + GetAngle(joints[JointType.ElbowRight].Position, joints[JointType.WristRight].Position, joints[JointType.HandRight].Position) + ","
 
                      // Hands (angle between thumb and hand tip)
-                     + GetAngle(joints[JointType.HandTipLeft].Position, joints[JointType.HandLeft].Position, joints[JointType.ThumbLeft].Position) + ", "
-                     + GetAngle(joints[JointType.HandTipRight].Position, joints[JointType.HandRight].Position, joints[JointType.ThumbRight].Position) + ", ";
+                     + GetAngle(joints[JointType.HandTipLeft].Position, joints[JointType.HandLeft].Position, joints[JointType.ThumbLeft].Position) + ","
+                     + GetAngle(joints[JointType.HandTipRight].Position, joints[JointType.HandRight].Position, joints[JointType.ThumbRight].Position) + ",";
             }
             return data;
         }
@@ -295,7 +299,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 {
                     foreach (var item in faceResult.FaceProperties)
                     {
-                        data += item.Value.ToString() + ", ";
+                        data += item.Value.ToString() + ",";
                     }
                 }
 
@@ -304,7 +308,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 {
                     int pitch, yaw, roll;
                     drawingBodies.ExtractFaceRotationInDegrees(faceResult.FaceRotationQuaternion, out pitch, out yaw, out roll);
-                    data += yaw + ", " + pitch + "," + roll + ", ";
+                    data += yaw + "," + pitch + "," + roll + ",";
                 }
                 data = data.Replace("Unknown", "");
             }
@@ -319,8 +323,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (log_are_talking)
             {
                 if (this.trackingIDSpeaking.Contains(body.TrackingId))
-                    data += "1, ";
-                else data += "0, ";
+                    data += "1,";
+                else data += "0,";
             }
 
             return data;
@@ -337,7 +341,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 if (skip_data()) return;
 
                 // get the timestamp and creat the line for the log
-                String data = getTimestamp(null).ToString() + ", " + bodyIndex + ", ";
+                String data = getTimestamp(null).ToString() + "," + bodyIndex + ",";
 
                 // ----- RECORD BODY INFO ------- // 
                 data = record_body_data(data, drawingBodies, bodyIndex, body);
