@@ -10,7 +10,37 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     public static class Helpers
     {
+        public static string[] upper_body_joints = {
+                 "SpineBase",
+                 "SpineShoulder",
+                 "SpineMid",
+                 "Neck",
+                 "Head",
+                 "ShoulderLeft",
+                 "ElbowLeft",
+                 "WristLeft",
+                 "HandLeft",
+                 "ShoulderRight",
+                 "ElbowRight",
+                 "WristRight",
+                 "HandRight",
+                 "HipLeft",
+                 "HipRight",
+                "HandTipLeft",
+                "ThumbLeft",
+                "HandTipRight",
+                "ThumbRight"
+                };
 
+        public static string[] lower_body_joints = {
+                 "KneeLeft",
+                 "AnkleLeft",
+                 "FootLeft",
+                 "KneeRight",
+                 "AnkleRight",
+                 "FootRight"
+                };
+        
         public static Image<Emgu.CV.Structure.Bgra, byte> ToImage(this ColorFrame frame)
         {
             int width = frame.FrameDescription.Width;

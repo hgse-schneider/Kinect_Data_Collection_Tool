@@ -20,7 +20,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// information for logging the data from the interface
         /// </summary>
+        public OpeningPrompt openingPrompt;
+
+        // general information
         public bool recording = false;
+        public string session;
+
+        // what do we need to log
         public bool log_upperbody = false;
         public bool log_lowerbody = false;
         public bool log_angles = false;
@@ -29,23 +35,34 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_mouth_eyes = false;
         public bool log_are_talking = false;
         public bool log_sound = false;
+
+        // frequency at which to save the data 
+        public int frequency = 1;
+
+        // type of output file
         public bool outputcsv = true;
         public bool outputxlsx = true;
-        public int frequency = 1;
-        public int current_sec = 0;
-        public int num_rows = 0;
-        public string header = "";
-        public string[] header_array;
-        public string annotation = "";
-        public string session;
+
+        // folder and filename for the log
         public string destination;
         public string logFilename;
+        public System.IO.StreamWriter logFile;
+
+        // counters
+        public int current_sec = 0;
+        public int num_rows = 0;
+
+        // header information
+        public string header = "";
+        public string[] header_array;
+
+        // annotation and previous data point
+        public string annotation = "";
         public string previousLine = null;
 
+        // video writer and list of people speaking
         public VideoWriter videowriter = null;
-        public System.IO.StreamWriter logFile;
         public List<ulong> trackingIDSpeaking = new List<ulong>();
-        public OpeningPrompt openingPrompt;
 
         /// <summary>
         /// Initializes a new instance of the Logger class.
@@ -69,7 +86,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             outputxlsx = openingPrompt.outputXLSX.Checked;
             frequency = (openingPrompt.hertz.Value - 1) *5;
             if (frequency == 0) frequency = 1;
-            Console.WriteLine(frequency);
             current_sec = DateTime.Now.Second;
 
             // define the logs filenames
@@ -98,14 +114,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                  "ElbowRight_X,ElbowRight_Y,ElbowRight_Z,ElbowRight_inferred," +
                  "WristRight_X,WristRight_Y,WristRight_Z,WristRight_inferred," +
                  "HandRight_X,HandRight_Y,HandRight_Z,HandRight_inferred," +
-                 "HipLeft_X,HipLeft_Y,HipLeft_Z,HipLeft_inferred," + 
+                 "HipLeft_X,HipLeft_Y,HipLeft_Z,HipLeft_inferred," +
                  "HipRight_X,HipRight_Y,HipRight_Z,HipRight_inferred," +
                 "HandTipLeft_X,HandTipLeft_Y,HandTipLeft_Z,HandTipLeft_inferred," +
                 "ThumbLeft_X,ThumbLeft_Y,ThumbLeft_Z,ThumbLeft_inferred," +
                 "HandTipRight_X,HandTipRight_Y,HandTipRight_Z,HandTipRight_inferred," +
-                "ThumbRight_X,ThumbRight_Y,ThumbRight_Z,ThumbRight_inferred," +
-                "HandLeftState,HandLeftStateConfidence,HandRightState,HandRightStateConfidence," +
-                "Lean_X,Lean_Y,Lean_TrackingState,";
+                "ThumbRight_X,ThumbRight_Y,ThumbRight_Z,ThumbRight_inferred,";
             if (log_lowerbody) header +=
                  "KneeLeft_X,KneeLeft_Y,KneeLeft_Z,KneeLeft_inferred," +
                  "AnkleLeft_X,AnkleLeft_Y,AnkleLeft_Z,AnkleLeft_inferred," +
@@ -113,6 +127,20 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                  "KneeRight_X,KneeRight_Y,KneeRight_Z,KneeRight_inferred," +
                  "AnkleRight_X,AnkleRight_Y,AnkleRight_Z,AnkleRight_inferred," +
                  "FootRight_X,FootRight_Y,FootRight_Z,FootRight_inferred,";
+            if (log_upperbody) header +=
+                "HandLeftState,HandLeftStateConfidence,HandRightState,HandRightStateConfidence," +
+                "Lean_X,Lean_Y,Lean_TrackingState,";
+            /*
+            if (log_movements)
+            {
+                if (log_upperbody)
+                    foreach (string joint in Helpers.upper_body_joints)
+                        header += joint + "_movement,";
+                if (log_lowerbody)
+                    foreach (string joint in Helpers.lower_body_joints)
+                        header += joint + "_movement,";
+            }
+            */
             if (log_angles) header +=
                  "Neck_angle,Spine_angle,Hip_angle," +
                  "ShoulderL_angle,ShoulderR_angle," +
@@ -245,6 +273,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                          + trackingStateBinary + ",";
             }
 
+            // in addition, if we log the upper body we also save information about hand states
             if (this.log_upperbody)
             {
                 data += body.HandLeftState + ","
@@ -252,7 +281,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     + body.HandRightState + ","
                     + body.HandRightConfidence + ",";
 
-                // Leaning left and rightd corresponds to X movement and leaning forward and back corresponds to Y movement.
+                // Leaning left and right corresponds to X movement and leaning forward and back corresponds to Y movement.
                 data += body.Lean.X + ","
                     + body.Lean.Y + ","
                     + body.LeanTrackingState + ",";
