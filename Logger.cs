@@ -415,7 +415,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public void saveData(Bodies drawingBodies, int bodyIndex, Body body, Boolean faceTracked, FaceFrameResult faceResult)
         {
-            Console.WriteLine(bodyIndex);
             if (recording)
             {
                 // depending on the sampling frequency, we might skip some data

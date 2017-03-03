@@ -42,6 +42,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataLabel = new System.Windows.Forms.Label();
             this.savingDataPath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.quantify_movements = new System.Windows.Forms.CheckBox();
             this.mouth_eyes = new System.Windows.Forms.CheckBox();
             this.hertzLabel = new System.Windows.Forms.Label();
             this.hertz = new System.Windows.Forms.TrackBar();
@@ -58,7 +59,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.videoSmall = new System.Windows.Forms.RadioButton();
             this.videoNo = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.quantify_movements = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -193,6 +193,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log file";
             // 
+            // quantify_movements
+            // 
+            this.quantify_movements.AutoSize = true;
+            this.quantify_movements.Checked = true;
+            this.quantify_movements.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.quantify_movements.Location = new System.Drawing.Point(14, 146);
+            this.quantify_movements.Name = "quantify_movements";
+            this.quantify_movements.Size = new System.Drawing.Size(180, 24);
+            this.quantify_movements.TabIndex = 19;
+            this.quantify_movements.Text = "Quantify Movements";
+            this.quantify_movements.UseVisualStyleBackColor = true;
+            // 
             // mouth_eyes
             // 
             this.mouth_eyes.AutoSize = true;
@@ -211,9 +223,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.hertzLabel.AutoSize = true;
             this.hertzLabel.Location = new System.Drawing.Point(10, 301);
             this.hertzLabel.Name = "hertzLabel";
-            this.hertzLabel.Size = new System.Drawing.Size(121, 20);
+            this.hertzLabel.Size = new System.Drawing.Size(130, 20);
             this.hertzLabel.TabIndex = 17;
-            this.hertzLabel.Text = "Frequency: 1Hz";
+            this.hertzLabel.Text = "Frequency: 15Hz";
             this.hertzLabel.Click += new System.EventHandler(this.label5_Click);
             // 
             // hertz
@@ -225,7 +237,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.hertz.Name = "hertz";
             this.hertz.Size = new System.Drawing.Size(351, 69);
             this.hertz.TabIndex = 1;
-            this.hertz.Value = 1;
+            this.hertz.Value = 4;
             this.hertz.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // computeJointAngles
@@ -369,18 +381,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Audio";
-            // 
-            // quantify_movements
-            // 
-            this.quantify_movements.AutoSize = true;
-            this.quantify_movements.Checked = true;
-            this.quantify_movements.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.quantify_movements.Location = new System.Drawing.Point(14, 146);
-            this.quantify_movements.Name = "quantify_movements";
-            this.quantify_movements.Size = new System.Drawing.Size(180, 24);
-            this.quantify_movements.TabIndex = 19;
-            this.quantify_movements.Text = "Quantify Movements";
-            this.quantify_movements.UseVisualStyleBackColor = true;
             // 
             // OpeningPrompt
             // 
