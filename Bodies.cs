@@ -671,7 +671,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 ExtractFaceRotationInDegrees(faceResult.FaceRotationQuaternion, out pitch, out yaw, out roll);
                 faceText += "FaceYaw : " + yaw + "\n" +
                             "FacePitch : " + pitch + "\n" +
-                            "FacenRoll : " + roll + "\n";
+                            "FacenRoll : " + roll + "\n" +
+                            "Body Index : " + faceIndex + "\n";
             }
 
             // render the face property and face rotation information
