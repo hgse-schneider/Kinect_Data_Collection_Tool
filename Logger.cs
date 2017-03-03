@@ -57,9 +57,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public string header = "";
         public string[] header_array;
 
-        // annotation and previous data point
+        // annotation and previous data point (index in the array is the Body ID)
         public string annotation = "";
-        public string[] previousLine = new string[] { "","","","","","","","" };
+        public string[] previousLine = new string[] { "","","","","","","","","","" };
 
         // video writer and list of people speaking
         public VideoWriter videowriter = null;
@@ -180,7 +180,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // create the videowriter if it doesn't exist yet
             if (videowriter == null)
             {
-                String videoFilename = string.Format(@"{0}-Kinect-video-{1}.avi", session, Helpers.getTimestamp("datetime"));
+                String videoFilename = string.Format(@"{0}-Kinect-video-{1}.avi", session, Helpers.getTimestamp("filename"));
 
                 videoFilename = Path.Combine(this.destination, videoFilename);
 
