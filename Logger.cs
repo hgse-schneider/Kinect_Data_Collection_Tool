@@ -59,7 +59,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         // annotation and previous data point
         public string annotation = "";
-        public string previousLine = null;
+        public string[] previousLine = new string[] { "","","","","","","","" };
 
         // video writer and list of people speaking
         public VideoWriter videowriter = null;
@@ -311,7 +311,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (log_movements)
             {
                 // skip if if null
-                if (previousLine == null)
+                if (previousLine[bodyIndex] == "")
                 {
                     if (log_upperbody)
                         foreach (string joint in Helpers.upper_body_joints)
@@ -322,7 +322,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 }
                 else
                 {
-                    string[] pre = this.previousLine.Split(',');
+                    string[] pre = this.previousLine[bodyIndex].Split(',');
                     string[] cur = data.Split(',');
 
                     if (log_upperbody)
@@ -415,6 +415,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public void saveData(Bodies drawingBodies, int bodyIndex, Body body, Boolean faceTracked, FaceFrameResult faceResult)
         {
+            Console.WriteLine(bodyIndex);
             if (recording)
             {
                 // depending on the sampling frequency, we might skip some data
@@ -440,7 +441,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 logFile.WriteLine(data);
 
                 // save the data
-                previousLine = data;
+                previousLine[bodyIndex] = data;
             }
         }
 
