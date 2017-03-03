@@ -64,10 +64,25 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             return img;
         }
 
-        public static Int32 getTimestamp()
+        /// <summary>
+        /// get the current timestamp
+        /// </summary>
+        public static string getTimestamp(String type)
         {
-            Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            return unixTimestamp;
+            if (type == "filename")
+                return DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
+            else if (type == "datetime")
+                return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+            else if (type == "date")
+                return DateTime.Now.ToString("yyyy-MM-dd");
+            else if (type == "time")
+                return DateTime.Now.ToString("HH:mm:ss");
+            else if (type == "second")
+                return DateTime.Now.ToString("ss");
+            else if (type == "unix")
+                return ""+(Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            else
+                return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.fff");
         }
 
     }

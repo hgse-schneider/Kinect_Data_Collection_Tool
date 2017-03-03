@@ -51,7 +51,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         // counters
         public int current_sec = 0;
         public int num_rows = 0;
-        public int num_count = 0;
+        public int row_count = 0;
 
         // header information
         public string header = "";
@@ -90,7 +90,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             current_sec = DateTime.Now.Second;
 
             // define the logs filenames
-            logFilename = string.Format(@"{0}-Kinect-Log-{1}.csv", session, this.getTimestamp("datetime"));
+            logFilename = string.Format(@"{0}-Kinect-Log-{1}.csv", session, Helpers.getTimestamp("filename"));
 
             // combine the path and the filenames
             logFilename = Path.Combine(destination, logFilename);
@@ -180,7 +180,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // create the videowriter if it doesn't exist yet
             if (videowriter == null)
             {
-                String videoFilename = string.Format(@"{0}-Kinect-video-{1}.avi", session, this.getTimestamp("datetime"));
+                String videoFilename = string.Format(@"{0}-Kinect-video-{1}.avi", session, Helpers.getTimestamp("datetime"));
 
                 videoFilename = Path.Combine(this.destination, videoFilename);
 
@@ -419,10 +419,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 // depending on the sampling frequency, we might skip some data
                 if (skip_data()) return;
-                num_count += 1;
+                row_count += 1;
 
                 // get the timestamp and creat the line for the log
-                String data = getTimestamp(null).ToString() + "," + this.num_count + "," + bodyIndex + ",";
+                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.row_count + "," + bodyIndex + ",";
 
                 // ----- RECORD BODY INFO ------- // 
                 data = record_body_data(data, drawingBodies, bodyIndex, body);
@@ -442,23 +442,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // save the data
                 previousLine = data;
             }
-        }
-
-        /// <summary>
-        /// get the current timestamp
-        /// </summary>
-        public string getTimestamp(String type)
-        {
-            if (type == "datetime")
-                return DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
-            else if (type == "date")
-                return DateTime.Now.ToString("yyyy-MM-dd");
-            else if (type == "time")
-                return DateTime.Now.ToString("HH:mm:ss");
-            else if (type == "second")
-                return DateTime.Now.ToString("ss");
-            else
-                return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         }
 
         /// <summary>
