@@ -19,6 +19,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
     using System.Windows.Media.Media3D;
     using Microsoft.Kinect;
     using Microsoft.Kinect.Face;
+    using System.Collections;
 
     /// <summary>
     /// Interaction logic for MainWindow

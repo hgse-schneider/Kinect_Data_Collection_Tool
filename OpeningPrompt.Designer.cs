@@ -59,9 +59,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.videoSmall = new System.Windows.Forms.RadioButton();
             this.videoNo = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.capture_dyad = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).BeginInit();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // SessionID
@@ -375,12 +377,25 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.capture_dyad);
             this.groupBox3.Location = new System.Drawing.Point(557, 294);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(193, 220);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Audio";
+            this.groupBox3.Text = "Dyads";
+            this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter);
+            // 
+            // capture_dyad
+            // 
+            this.capture_dyad.AutoSize = true;
+            this.capture_dyad.Location = new System.Drawing.Point(17, 25);
+            this.capture_dyad.Name = "capture_dyad";
+            this.capture_dyad.Size = new System.Drawing.Size(128, 24);
+            this.capture_dyad.TabIndex = 20;
+            this.capture_dyad.Text = "Capture data";
+            this.capture_dyad.UseVisualStyleBackColor = true;
+            this.capture_dyad.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
             // 
             // OpeningPrompt
             // 
@@ -402,6 +417,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -437,5 +454,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private GroupBox groupBox3;
         public CheckBox mouth_eyes;
         public CheckBox quantify_movements;
+        public CheckBox capture_dyad;
     }
 }

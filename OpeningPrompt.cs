@@ -96,5 +96,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
 
         }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

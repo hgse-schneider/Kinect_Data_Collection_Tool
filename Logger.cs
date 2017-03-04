@@ -3,6 +3,7 @@ using Microsoft.Kinect;
 using Microsoft.Kinect.Face;
 using OfficeOpenXml;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -34,6 +35,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_pitch_yaw_roll = false;
         public bool log_mouth_eyes = false;
         public bool log_are_talking = false;
+        public bool log_dyad = false;
         public bool log_sound = false;
 
         // frequency at which to save the data 
@@ -46,7 +48,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         // folder and filename for the log
         public string destination;
         public string logFilename;
-        public System.IO.StreamWriter logFile;
+        public System.IO.StreamWriter logFile = null;
+        public System.IO.StreamWriter logDyad = null;
 
         // counters
         public int current_sec = 0;
@@ -55,7 +58,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         // header information
         public string header = "";
-        public string[] header_array;
+        public Dictionary<string, int> header_dic = new Dictionary<string, int>();
 
         // annotation and previous data point (index in the array is the Body ID)
         public string annotation = "";
@@ -82,6 +85,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             log_pitch_yaw_roll = openingPrompt.pitch_yaw_roll.Checked;
             log_mouth_eyes = openingPrompt.mouth_eyes.Checked;
             log_are_talking = openingPrompt.are_talking.Checked;
+            log_dyad = openingPrompt.capture_dyad.Checked;
             log_sound = openingPrompt.are_talking.Checked;
             outputcsv = openingPrompt.outputCSV.Checked;
             outputxlsx = openingPrompt.outputXLSX.Checked;
@@ -89,13 +93,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (frequency == 0) frequency = 1;
             current_sec = DateTime.Now.Second;
 
-            // define the logs filenames
+            // define the logs filenames, the path, and start the log file
             logFilename = string.Format(@"{0}-Kinect-Log-{1}.csv", session, Helpers.getTimestamp("filename"));
-
-            // combine the path and the filenames
             logFilename = Path.Combine(destination, logFilename);
-
-            // start log files
             logFile = new System.IO.StreamWriter(logFilename, true);
 
             // print headers (ugly,should be re-written more cleanly)
@@ -159,8 +159,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // save header to the csv file
             logFile.WriteLine(header);
 
-            this.header_array =  header.Split(',');
-
+            // save the index information of each element
+            string[] header_array = header.Split(',');
+            for(int i = 0; i < header_array.Length; i++)
+            {
+                this.header_dic.Add(header_array[i], i);
+            }
         }
 
         public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
@@ -242,7 +246,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         public string distance_between_joints(string joint, string[] cur, string[] pre)
         {
-            int index = Array.IndexOf(this.header_array, joint + "_X");
+            int index = this.header_dic[joint + "_X"];
 
             double cur_x = Convert.ToDouble(cur[index]);
             double cur_y = Convert.ToDouble(cur[index + 1]);
@@ -317,7 +321,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         foreach (string joint in Helpers.upper_body_joints)
                             data += ',';
                     if (log_lowerbody)
-                        foreach (string joint in Helpers.upper_body_joints)
+                        foreach (string joint in Helpers.lower_body_joints)
                             data += ',';
                 }
                 else
@@ -361,6 +365,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                      + GetAngle(joints[JointType.HandTipLeft].Position, joints[JointType.HandLeft].Position, joints[JointType.ThumbLeft].Position) + ","
                      + GetAngle(joints[JointType.HandTipRight].Position, joints[JointType.HandRight].Position, joints[JointType.ThumbRight].Position) + ",";
             }
+
             return data;
         }
 
@@ -372,7 +377,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (log_mouth_eyes || log_pitch_yaw_roll)
             {
-                if (faceResult == null) return data;
+                if (faceResult == null)
+                {
+                    if (log_mouth_eyes) data += ",,,,,,,,";
+                    if (log_pitch_yaw_roll) data += ",,,";
+                    return data;
+                }
 
                 // extract each face property information and store it in faceText
                 if (log_mouth_eyes && faceResult.FaceProperties != null)
@@ -380,6 +390,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     foreach (var item in faceResult.FaceProperties)
                     {
                         data += item.Value.ToString() + ",";
+
+                        if(item.Key.ToString() == "Happy")
+                            Console.WriteLine(item);
                     }
                 }
 
@@ -415,7 +428,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public void saveData(Bodies drawingBodies, int bodyIndex, Body body, Boolean faceTracked, FaceFrameResult faceResult)
         {
-            if (recording)
+            if (recording)  
             {
                 // depending on the sampling frequency, we might skip some data
                 if (skip_data()) return;
@@ -437,11 +450,32 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 data += this.annotation;
 
                 // save the data to the log file
-                logFile.WriteLine(data);
+                this.logFile.WriteLine(data);
 
                 // save the data
-                previousLine[bodyIndex] = data;
+                this.previousLine[bodyIndex] = data;
+
+                // saving dyadic data, if necessary
+                if (this.log_dyad) save_dyadic_data(drawingBodies);
             }
+        }
+
+        public void save_dyadic_data(Bodies drawingBodies)
+        {
+            // skip if we have less than two bodies
+            if (drawingBodies.bodyCount < 2) return;
+
+            // initialize the log file and find the two skeletons
+            if (this.logDyad == null)
+            {
+                string filename = string.Format(@"{0}-Dyad-Log-{1}.csv", session, Helpers.getTimestamp("filename"));
+                this.logDyad = new System.IO.StreamWriter(Path.Combine(destination, filename), true);
+
+                // write header
+                this.logDyad.WriteLine("Timestamp,Body_1,Body_2,Talking_1,Talking_2");
+            }
+
+            // 
         }
 
         /// <summary>
