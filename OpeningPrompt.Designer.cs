@@ -389,6 +389,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // capture_dyad
             // 
             this.capture_dyad.AutoSize = true;
+            this.capture_dyad.Checked = true;
+            this.capture_dyad.CheckState = System.Windows.Forms.CheckState.Checked;
             this.capture_dyad.Location = new System.Drawing.Point(17, 25);
             this.capture_dyad.Name = "capture_dyad";
             this.capture_dyad.Size = new System.Drawing.Size(128, 24);

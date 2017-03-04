@@ -53,8 +53,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         // counters
         public int current_sec = 0;
-        public int num_rows = 0;
+        public int row_index = 0;
         public int row_count = 0;
+        public int row_count_dyad = 0;
+        public int bodies_tracked = 0;
 
         // header information
         public string header = "";
@@ -62,7 +64,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         // annotation and previous data point (index in the array is the Body ID)
         public string annotation = "";
-        public string[] previousLine = new string[] { "","","","","","","","","","" };
+        public string[] faceInfo = new string[] { "", "", "", "", "", "", "", "", "", "" };
+        public string[] previousLine = new string[] { "", "", "", "", "", "", "", "", "", "" };
 
         // video writer and list of people speaking
         public VideoWriter videowriter = null;
@@ -229,22 +232,54 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public Boolean skip_data()
         {
             // check if we need to record this data
-            this.num_rows += 1;
+            this.row_index += 1;
 
             if (DateTime.Now.Second != this.current_sec)
             {
                 this.current_sec = DateTime.Now.Second;
-                this.num_rows = 0;
+                this.row_index = 0;
             }
             else
             {
-                if (this.num_rows % (30 / frequency) != 0)
+                if (this.row_index % (30 / frequency) != 0)
                     return true;
             }
             return false;
         }
 
-        public string distance_between_joints(string joint, string[] cur, string[] pre)
+        public Tuple<double,double> left_rightmost_points(Body b1)
+        {
+            double left = 9999.9999;
+            double right = -9999.9999;
+            
+            foreach (JointType jointType in b1.Joints.Keys)
+            {
+                // easier access
+                Joint j = b1.Joints[jointType];
+
+                // skip inferred joints
+                if(j.TrackingState == TrackingState.Inferred) continue;
+
+                // update the doubles
+                if (j.Position.X < left) left = j.Position.X;
+                if (j.Position.X > right) right = j.Position.X;
+            }
+
+            return new Tuple<double, double>(left, right);
+        }
+
+        public double distance_between_3D_points(double x1, double y1, double z1, double x2, double y2, double z2)
+        {
+            return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2) + Math.Pow(z1 - z2, 2));
+        }
+
+        public double distance_between_kinect_joints(Joint j1, Joint j2)
+        {
+            return distance_between_3D_points(j1.Position.X, j1.Position.Y, j1.Position.Z, 
+                j2.Position.X, j2.Position.Y, j2.Position.Z);
+        }
+
+        public string distance_between_string_joints(string joint, string[] cur, string[] pre)
         {
             int index = this.header_dic[joint + "_X"];
 
@@ -260,7 +295,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             if (cur_inferred == 1 || pre_inferred == 1) return "";
 
-            double total = Math.Sqrt(Math.Pow(cur_x - pre_x, 2) + Math.Pow(cur_y - pre_y, 2) + Math.Pow(cur_z - pre_z, 2));
+            double total = distance_between_3D_points(cur_x, cur_y, cur_z, pre_z, pre_y, pre_z);
 
             return ""+total;
         }
@@ -332,12 +367,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     if (log_upperbody)
                         foreach (string joint in Helpers.upper_body_joints)
                         {
-                            data += distance_between_joints(joint, cur, pre) + ",";
+                            data += distance_between_string_joints(joint, cur, pre) + ",";
                         }
                     if (log_lowerbody)
                         foreach (string joint in Helpers.lower_body_joints)
                         {
-                            data += distance_between_joints(joint, cur, pre) + ",";
+                            data += distance_between_string_joints(joint, cur, pre) + ",";
                         }
                 }
             }
@@ -373,14 +408,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// saves face information to the log file
         /// </summary>
-        public String record_face_data(String data, Bodies drawingBodies, Boolean faceTracked, FaceFrameResult faceResult)
+        public String record_face_data(String data, Bodies drawingBodies, int bodyIndex, 
+            Boolean faceTracked, FaceFrameResult faceResult)
         {
             if (log_mouth_eyes || log_pitch_yaw_roll)
             {
                 if (faceResult == null)
                 {
-                    if (log_mouth_eyes) data += ",,,,,,,,";
+                    if (log_mouth_eyes) data += ",,,,,,,,"; // check size of header
                     if (log_pitch_yaw_roll) data += ",,,";
+                    this.faceInfo[bodyIndex] = ",,";
                     return data;
                 }
 
@@ -390,9 +427,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     foreach (var item in faceResult.FaceProperties)
                     {
                         data += item.Value.ToString() + ",";
-
-                        if(item.Key.ToString() == "Happy")
-                            Console.WriteLine(item);
                     }
                 }
 
@@ -402,6 +436,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     int pitch, yaw, roll;
                     drawingBodies.ExtractFaceRotationInDegrees(faceResult.FaceRotationQuaternion, out pitch, out yaw, out roll);
                     data += yaw + "," + pitch + "," + roll + ",";
+                    this.faceInfo[bodyIndex] = yaw + "," + pitch + "," + roll;
                 }
                 data = data.Replace("Unknown", "");
             }
@@ -411,16 +446,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// checks whether the current body is talking
         /// </summary>
-        public String record_talk_data(String data, Body body)
+        public int is_body_speaking(Body body)
         {
-            if (log_are_talking)
-            {
-                if (this.trackingIDSpeaking.Contains(body.TrackingId))
-                    data += "1,";
-                else data += "0,";
-            }
+            if (this.trackingIDSpeaking.Contains(body.TrackingId))
+                return 1;
+            else return 0;
+        }
 
-            return data;
+        public int count_bodies(Bodies drawingBodies)
+        {
+            int count = 0;
+
+            foreach (Body body in drawingBodies.bodies)
+                if (body.IsTracked) count += 1;
+
+            return count;
         }
 
         /// <summary>
@@ -434,6 +474,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 if (skip_data()) return;
                 row_count += 1;
 
+                // count the number of bodies
+                this.bodies_tracked = count_bodies(drawingBodies);
+
                 // get the timestamp and creat the line for the log
                 String data = Helpers.getTimestamp("datetime").ToString() + "," + this.row_count + "," + bodyIndex + ",";
 
@@ -441,10 +484,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 data = record_body_data(data, drawingBodies, bodyIndex, body);
 
                 // ----- RECORD FACE INFO ------- // 
-                data = record_face_data(data, drawingBodies, faceTracked, faceResult);
+                data = record_face_data(data, drawingBodies, bodyIndex, faceTracked, faceResult);
 
                 // ----- RECORD AUDIO INFO ------- // 
-                data = record_talk_data(data, body);
+                if(this.log_are_talking) data += is_body_speaking(body);
 
                 // add annotation (posture)
                 data += this.annotation;
@@ -462,20 +505,68 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         public void save_dyadic_data(Bodies drawingBodies)
         {
-            // skip if we have less than two bodies
-            if (drawingBodies.bodyCount < 2) return;
+            // save and sort the bodies based on their proximity to the sensor
+            List<int> listBodies = new List<int>();
+            //foreach (Body body in drawingBodies.bodies)
+            //    if (body.IsTracked) listBodies.Add(body);
+            for(int i=0; i< drawingBodies.bodies.Length; i++)
+                if (drawingBodies.bodies[i].IsTracked) listBodies.Add(i);
+            listBodies = listBodies.OrderBy(o => drawingBodies.bodies[o].Joints[JointType.Head].Position.Z).ToList(); //OrderByDescending
 
-            // initialize the log file and find the two skeletons
+            // skip if we don't have enough bodies
+            if (listBodies.Count < 2) return;
+
+            // initialize the log file
             if (this.logDyad == null)
             {
-                string filename = string.Format(@"{0}-Dyad-Log-{1}.csv", session, Helpers.getTimestamp("filename"));
-                this.logDyad = new System.IO.StreamWriter(Path.Combine(destination, filename), true);
+                string tmp = string.Format(@"{0}-Dyad-Log-{1}.csv", session, Helpers.getTimestamp("filename"));
+                this.logDyad = new System.IO.StreamWriter(Path.Combine(this.destination, tmp), true);
 
                 // write header
-                this.logDyad.WriteLine("Timestamp,Body_1,Body_2,Talking_1,Talking_2");
+                this.logDyad.WriteLine("Timestamp,Index,"
+                    +"Body1_leftSide,Body2_rightSide,Talking1,Talking2,"
+                    +"LeanX1,LeanY1,LeanX2,LeanY2,"
+                    + "Pitch1,Yaw1,Roll1,Pitch2,Yaw2,Roll2,"
+                    + "leftmost1,rightmost1,leftmost2,rightmost2,"
+                    + "dist_heads,dist_spine,dist_max,dist_min");
             }
 
-            // 
+            // body 1 is on the left side, body 2 on the right side
+            int id1 = listBodies[0];
+            int id2 = listBodies[1];
+            if (drawingBodies.bodies[id1].Joints[JointType.Head].Position.X > 
+                drawingBodies.bodies[id2].Joints[JointType.Head].Position.X)
+            {
+                id1 = listBodies[1];
+                id2 = listBodies[0];
+            }
+
+            // for easier referrencing
+            Body b1 = drawingBodies.bodies[id1];
+            Body b2 = drawingBodies.bodies[id2];
+
+            // save basic data
+            this.row_count_dyad += 1;
+            String data = Helpers.getTimestamp("datetime").ToString()
+                + "," + this.row_count_dyad + "," + id1 + "," + id2
+                + "," + is_body_speaking(b1) + "," + is_body_speaking(b2)
+                + "," + b1.Lean.X + "," + b1.Lean.Y + "," + b2.Lean.X + "," + b2.Lean.Y
+                + "," + this.faceInfo[id1] + "," + this.faceInfo[id2] + ",";
+
+            // get the leftmost and rightmost positions
+            Tuple<double, double> rightleftmost1 = left_rightmost_points(b1);
+            Tuple<double, double> rightleftmost2 = left_rightmost_points(b2);
+            data += rightleftmost1.Item1 + "," + rightleftmost1.Item2 + ","
+                + rightleftmost2.Item1 + "," + rightleftmost2.Item2 + ",";
+
+            // compute the distance between people
+            data += distance_between_kinect_joints(b1.Joints[JointType.Head], b2.Joints[JointType.Head]) + "," 
+                + distance_between_kinect_joints(b1.Joints[JointType.SpineMid], b2.Joints[JointType.SpineMid]) + ","
+                + Math.Abs(rightleftmost1.Item1 - rightleftmost2.Item2) + ","
+                + Math.Abs(rightleftmost1.Item2 - rightleftmost2.Item1);
+
+            // save to file
+            this.logDyad.WriteLine(data);
         }
 
         /// <summary>
@@ -512,7 +603,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public void close()
         {
-            logFile.Close();
+            if (this.logFile != null)
+                this.logFile.Close();
+
+            if (this.logDyad != null)
+                this.logDyad.Close();
 
             if (this.outputxlsx == true)
                 convert_csv_to_xlsx();
