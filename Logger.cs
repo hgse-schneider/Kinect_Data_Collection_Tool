@@ -528,7 +528,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     +"LeanX1,LeanY1,LeanX2,LeanY2,"
                     + "Pitch1,Yaw1,Roll1,Pitch2,Yaw2,Roll2,"
                     + "leftmost1,rightmost1,leftmost2,rightmost2,"
-                    + "dist_heads,dist_spine,dist_max,dist_min");
+                    + "dist_heads,dist_spine,dist_max,dist_min"
+                    + "joint_attention");
             }
 
             // body 1 is on the left side, body 2 on the right side
@@ -563,7 +564,30 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             data += distance_between_kinect_joints(b1.Joints[JointType.Head], b2.Joints[JointType.Head]) + "," 
                 + distance_between_kinect_joints(b1.Joints[JointType.SpineMid], b2.Joints[JointType.SpineMid]) + ","
                 + Math.Abs(rightleftmost1.Item1 - rightleftmost2.Item2) + ","
-                + Math.Abs(rightleftmost1.Item2 - rightleftmost2.Item1);
+                + Math.Abs(rightleftmost1.Item2 - rightleftmost2.Item1) + ",";
+
+            // does the pitch change when people are leaning forward?
+            double jva_probability = 0.5;
+            jva_probability += (Math.Abs(b1.Lean.Y - b2.Lean.Y) -1 ) / 10.0;
+            if(this.faceInfo[id1].Length > 5 && this.faceInfo[id2].Length > 5)
+            {
+                string[] face1 = this.faceInfo[id1].Split(',');
+                int pitch1 = Int32.Parse(face1[0]);
+                int yaw1 = Int32.Parse(face1[1]);
+                string[] face2 = this.faceInfo[id2].Split(',');
+                int pitch2 = Int32.Parse(face1[0]);
+                int yaw2 = Int32.Parse(face1[1]);
+                // information from pitch
+                if (Math.Abs(pitch1 - pitch2) < 10)
+                    jva_probability += 0.1;
+                else jva_probability -= 0.1;
+                // information from yaw
+                if (yaw1 < 0 && yaw2 > 0) // good!
+                    jva_probability += 0.2 - (Math.Abs(yaw1 - yaw2)) / 450;
+                else jva_probability -= 0.2;
+            }
+            jva_probability += (Math.Abs(b1.Lean.Y - b2.Lean.Y) - 1) / 10.0;
+            data += jva_probability;
 
             // save to file
             this.logDyad.WriteLine(data);
