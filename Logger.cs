@@ -270,12 +270,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         public double distance_between_3D_points(double x1, double y1, double z1, double x2, double y2, double z2)
         {
-            return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2) + Math.Pow(z1 - z2, 2));
+            double deltaX = x1 - x2;
+            double deltaY = y1 - y2;
+            double deltaZ = z1 - z2;
+
+            double distance = (double)Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+            return distance;
+
+            //return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2) + Math.Pow(z1 - z2, 2));
         }
 
         public double distance_between_kinect_joints(Joint j1, Joint j2)
         {
-            return distance_between_3D_points(j1.Position.X, j1.Position.Y, j1.Position.Z, 
+            return distance_between_3D_points(
+                j1.Position.X, j1.Position.Y, j1.Position.Z, 
                 j2.Position.X, j2.Position.Y, j2.Position.Z);
         }
 
@@ -293,9 +302,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             double pre_z = Convert.ToDouble(pre[index + 2]);
             int pre_inferred = Int32.Parse((pre[index + 3]));
 
+            if (joint.Contains("HandRight") && false)
+            {
+                Console.WriteLine("Current: " + cur_x + ", " + cur_y + ", " + cur_z);
+                Console.WriteLine("Previous:" + pre_x + ", " + pre_y + ", " + pre_z);
+                Console.WriteLine("====");
+            }
+
             if (cur_inferred == 1 || pre_inferred == 1) return "";
 
-            double total = distance_between_3D_points(cur_x, cur_y, cur_z, pre_z, pre_y, pre_z);
+            double total = distance_between_3D_points(cur_x, cur_y, cur_z, pre_x, pre_y, pre_z);
 
             return ""+total;
         }
@@ -368,6 +384,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         foreach (string joint in Helpers.upper_body_joints)
                         {
                             data += distance_between_string_joints(joint, cur, pre) + ",";
+                            if (joint == "HandRight") Console.WriteLine(distance_between_string_joints(joint, cur, pre));
                         }
                     if (log_lowerbody)
                         foreach (string joint in Helpers.lower_body_joints)
@@ -514,7 +531,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             listBodies = listBodies.OrderBy(o => drawingBodies.bodies[o].Joints[JointType.Head].Position.Z).ToList(); //OrderByDescending
 
             // skip if we don't have enough bodies
-            if (listBodies.Count < 2) return;
+            //if (listBodies.Count < 2) return;
 
             // initialize the log file
             if (this.logDyad == null)
@@ -527,14 +544,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     +"Body1_leftSide,Body2_rightSide,Talking1,Talking2,"
                     +"LeanX1,LeanY1,LeanX2,LeanY2,"
                     + "Pitch1,Yaw1,Roll1,Pitch2,Yaw2,Roll2,"
-                    + "leftmost1,rightmost1,leftmost2,rightmost2,"
-                    + "dist_heads,dist_spine,dist_max,dist_min"
-                    + "joint_attention");
+                    + "leftmostX1,rightmostX1,leftmostX2,rightmostX2,"
+                    + "dist_heads,dist_spine,dist_max,dist_min,"
+                    //+ "joint_attention"
+                    );
             }
 
             // body 1 is on the left side, body 2 on the right side
             int id1 = listBodies[0];
-            int id2 = listBodies[1];
+            int id2 = listBodies[0];
             if (drawingBodies.bodies[id1].Joints[JointType.Head].Position.X > 
                 drawingBodies.bodies[id2].Joints[JointType.Head].Position.X)
             {
@@ -587,7 +605,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 else jva_probability -= 0.2;
             }
             jva_probability += (Math.Abs(b1.Lean.Y - b2.Lean.Y) - 1) / 10.0;
-            data += jva_probability;
+            //data += jva_probability+",";
 
             // save to file
             this.logDyad.WriteLine(data);
