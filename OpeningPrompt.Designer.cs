@@ -166,7 +166,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataPath.Name = "savingDataPath";
             this.savingDataPath.Size = new System.Drawing.Size(478, 26);
             this.savingDataPath.TabIndex = 9;
-            this.savingDataPath.Text = "C:\\Users\\schneibe\\Desktop";
+            this.savingDataPath.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             this.savingDataPath.TextChanged += new System.EventHandler(this.savingDataPath_TextChanged);
             // 
             // groupBox1
