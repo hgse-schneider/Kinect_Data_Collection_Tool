@@ -47,8 +47,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         // folder and filename for the log
         public string destination;
-        public string logFilename;
-        public System.IO.StreamWriter logFile = null;
+        public string[] logFilename = new string[] { "", "", "", "", "", "", "", "", "", "" };
+        public System.IO.StreamWriter[] logFile = new System.IO.StreamWriter[] { null, null, null, null, null, null, null, null, null, null };
         public System.IO.StreamWriter logDyad = null;
 
         // counters
@@ -95,11 +95,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             frequency = (openingPrompt.hertz.Value - 1) *5;
             if (frequency == 0) frequency = 1;
             current_sec = DateTime.Now.Second;
-
-            // define the logs filenames, the path, and start the log file
-            logFilename = string.Format(@"{0}-Kinect-Log-{1}.csv", session, Helpers.getTimestamp("filename"));
-            logFilename = Path.Combine(destination, logFilename);
-            logFile = new System.IO.StreamWriter(logFilename, true);
 
             // print headers (ugly,should be re-written more cleanly)
             header = "Timestamp,Session,Index,BodyID,";
@@ -159,15 +154,25 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             header += "Posture";
 
-            // save header to the csv file
-            logFile.WriteLine(header);
-
             // save the index information of each element
             string[] header_array = header.Split(',');
             for(int i = 0; i < header_array.Length; i++)
             {
                 this.header_dic.Add(header_array[i], i);
             }
+        }
+
+        public System.IO.StreamWriter logFileWriterForBody(int bodyIndex)
+        {
+            // define the logs filenames, the path, and start the log file
+            logFilename[bodyIndex] = string.Format(@"{0}-{1}-Kinect-Log-{2}.csv", session, bodyIndex, Helpers.getTimestamp("filename"));
+            logFilename[bodyIndex] = Path.Combine(destination, logFilename[bodyIndex]);
+            System.IO.StreamWriter logFile = new System.IO.StreamWriter(logFilename[bodyIndex], true);
+
+            // save header to the csv file
+            logFile.WriteLine(header);
+
+            return logFile;
         }
 
         public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
@@ -479,6 +484,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (recording)  
             {
+                // if there is no log file writer for this body, we create it
+                if (this.logFile[bodyIndex] == null) this.logFile[bodyIndex] = logFileWriterForBody(bodyIndex);
+
                 // depending on the sampling frequency, we might skip some data
                 if (skip_data(bodyIndex)) return;
 
@@ -506,7 +514,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 data += this.annotation;
 
                 // save the data to the log file
-                this.logFile.WriteLine(data);
+                this.logFile[bodyIndex].WriteLine(data);
 
                 // save the data
                 this.previousLine[bodyIndex] = data;
@@ -610,11 +618,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// convert the csv file into an xslx file (with correct timestamp)
         /// </summary>
-        public void convert_csv_to_xlsx()
+        public void convert_csv_to_xlsx(int bodyIndex)
         {
             // convert the csv file to xlsx
-            string csvFilePath = this.logFilename;
-            string excelFilePath = this.logFilename.Substring(0, this.logFilename.Length - 4) + ".xlsx";
+            string csvFilePath = this.logFilename[bodyIndex];
+            string excelFilePath = csvFilePath.Substring(0, csvFilePath.Length - 4) + ".xlsx";
 
             string worksheetsName = "DATA";
             bool firstRowIsHeader = true;
@@ -641,17 +649,28 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public void close()
         {
-            if (this.logFile != null)
-                this.logFile.Close();
+            for(int i=0; i<this.logFile.Length; i++)
+            {
+                if (this.logFile[i] != null)
+                    this.logFile[i].Close();
+            }
 
             if (this.logDyad != null)
                 this.logDyad.Close();
 
             if (this.outputxlsx == true)
-                convert_csv_to_xlsx();
+                for (int i = 0; i < this.logFile.Length; i++)
+                {
+                    if (this.logFile[i] != null)
+                        convert_csv_to_xlsx(i);
+                }
 
             if(this.outputcsv == false)
-                File.Delete(this.logFilename);
+                for (int i = 0; i < this.logFile.Length; i++)
+                {
+                    if (this.logFile[i] != null)
+                        File.Delete(this.logFilename[i]);
+                }
         }
     }
 }
