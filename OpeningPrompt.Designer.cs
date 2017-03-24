@@ -23,6 +23,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             base.Dispose(disposing);
         }
 
+        // for random numbers
+        public Random rnd = new Random();
+
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -73,7 +76,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.SessionID.Name = "SessionID";
             this.SessionID.Size = new System.Drawing.Size(243, 31);
             this.SessionID.TabIndex = 0;
-            this.SessionID.Text = "Default";
+            this.SessionID.Text = "Default" + rnd.Next(1, 99);
             // 
             // label1
             // 
