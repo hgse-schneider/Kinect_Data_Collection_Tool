@@ -53,8 +53,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         // counters
         public int current_sec = 0;
-        public int row_index = 0;
-        public int row_count = 0;
+        public int[] row_index = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public int[] row_count = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         public int row_count_dyad = 0;
         public int bodies_tracked = 0;
 
@@ -229,19 +229,19 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// depending on the sampling frequency, we might skip some data points
         /// </summary>
-        public Boolean skip_data()
+        public Boolean skip_data(int bodyIndex)
         {
             // check if we need to record this data
-            this.row_index += 1;
+            this.row_index[bodyIndex] += 1;
 
             if (DateTime.Now.Second != this.current_sec)
             {
                 this.current_sec = DateTime.Now.Second;
-                this.row_index = 0;
+                this.row_index[bodyIndex] = 0;
             }
             else
             {
-                if (this.row_index % (30 / frequency) != 0)
+                if (this.row_index[bodyIndex] % (30 / frequency) != 0)
                     return true;
             }
             return false;
@@ -301,13 +301,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             double pre_y = Convert.ToDouble(pre[index + 1]);
             double pre_z = Convert.ToDouble(pre[index + 2]);
             int pre_inferred = Int32.Parse((pre[index + 3]));
-
-            if (joint.Contains("HandRight") && false)
-            {
-                Console.WriteLine("Current: " + cur_x + ", " + cur_y + ", " + cur_z);
-                Console.WriteLine("Previous:" + pre_x + ", " + pre_y + ", " + pre_z);
-                Console.WriteLine("====");
-            }
 
             if (cur_inferred == 1 || pre_inferred == 1) return "";
 
@@ -384,7 +377,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         foreach (string joint in Helpers.upper_body_joints)
                         {
                             data += distance_between_string_joints(joint, cur, pre) + ",";
-                            if (joint == "HandRight") Console.WriteLine(distance_between_string_joints(joint, cur, pre));
                         }
                     if (log_lowerbody)
                         foreach (string joint in Helpers.lower_body_joints)
@@ -488,14 +480,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (recording)  
             {
                 // depending on the sampling frequency, we might skip some data
-                if (skip_data()) return;
-                row_count += 1;
+                if (skip_data(bodyIndex)) return;
+                row_count[bodyIndex] += 1;
 
                 // count the number of bodies
                 this.bodies_tracked = count_bodies(drawingBodies);
 
                 // get the timestamp and creat the line for the log
-                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.row_count + "," + bodyIndex + ",";
+                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.row_count[bodyIndex] + "," + bodyIndex + ",";
 
                 // ----- RECORD BODY INFO ------- // 
                 data = record_body_data(data, drawingBodies, bodyIndex, body);
