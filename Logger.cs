@@ -38,7 +38,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_dyad = false;
         public bool log_sound = false;
 
-        // frequency at which to save the data 
+        // frequency at which to save the data
         public int frequency = 1;
 
         // type of output file
@@ -102,7 +102,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             logFile = new System.IO.StreamWriter(logFilename, true);
 
             // print headers (ugly,should be re-written more cleanly)
-            header = "Timestamp,Index,BodyID,";
+            header = "Timestamp,Session,Index,BodyID,";
 
             if (log_upperbody) header +=
                  "SpineBase_X,SpineBase_Y,SpineBase_Z,SpineBase_inferred," +
@@ -481,13 +481,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 // depending on the sampling frequency, we might skip some data
                 if (skip_data(bodyIndex)) return;
+
+                // increment the counter for the number of observations for this body
+                if (row_count[bodyIndex] == 0 && row_count.Max() == 0) row_count[bodyIndex] = 0;
+                if (row_count[bodyIndex] == 0 && row_count.Max() > 0) row_count[bodyIndex] = row_count.Max() - 1; // to sync with the previous body
                 row_count[bodyIndex] += 1;
 
                 // count the number of bodies
                 this.bodies_tracked = count_bodies(drawingBodies);
 
                 // get the timestamp and creat the line for the log
-                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.row_count[bodyIndex] + "," + bodyIndex + ",";
+                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + "," + bodyIndex + ",";
 
                 // ----- RECORD BODY INFO ------- // 
                 data = record_body_data(data, drawingBodies, bodyIndex, body);
