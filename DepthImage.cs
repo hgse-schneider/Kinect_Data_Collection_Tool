@@ -154,7 +154,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (this.depthFrameReader != null)
             {
-                // DepthFrameReader is IDisposable
                 this.depthFrameReader.Dispose();
                 this.depthFrameReader = null;
             }

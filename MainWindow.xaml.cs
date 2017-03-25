@@ -89,7 +89,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.drawingColorImage = new ColorImage(this.kinectSensor, logger);
 
             // create an object to manage the color frames
-            this.drawingDepthImage = new DepthImage(this.kinectSensor);
+            //this.drawingDepthImage = new DepthImage(this.kinectSensor);
 
             // create an object to manage the skeletons
             this.drawingBodies = new Bodies(this.kinectSensor, this.logger);
@@ -127,19 +127,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public ImageSource ImageSource
         {
-            get
-            {
-                return this.drawingBodies.imageSource;
-            }
+            get { return this.drawingBodies.imageSource; }
         }
 
         /// <summary>
         /// Gets the bitmap to display
         /// </summary>
+       /*
         public ImageSource DepthImageSource
         {
             get { return this.drawingDepthImage.depthBitmap; }
         }
+        */
 
         /// <summary>
         /// Gets the bitmap to display
@@ -207,7 +206,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             // close the depth image reader
-            this.drawingDepthImage.close();
+            //this.drawingDepthImage.close();
 
             // close the body frame reader
             this.drawingBodies.close();
