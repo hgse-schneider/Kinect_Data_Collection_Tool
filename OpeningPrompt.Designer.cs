@@ -23,9 +23,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             base.Dispose(disposing);
         }
 
-        // for random numbers
-        public Random rnd = new Random();
-
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -72,11 +69,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // SessionID
             // 
             this.SessionID.Location = new System.Drawing.Point(39, 56);
-            this.SessionID.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.SessionID.Margin = new System.Windows.Forms.Padding(4);
             this.SessionID.Name = "SessionID";
             this.SessionID.Size = new System.Drawing.Size(243, 31);
             this.SessionID.TabIndex = 0;
-            this.SessionID.Text = "Default" + rnd.Next(1, 99);
+            this.SessionID.Text = "Default";
             // 
             // label1
             // 
@@ -91,7 +88,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // ok
             // 
             this.ok.Location = new System.Drawing.Point(39, 650);
-            this.ok.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ok.Margin = new System.Windows.Forms.Padding(4);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(100, 42);
             this.ok.TabIndex = 2;
@@ -102,7 +99,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // cancel
             // 
             this.cancel.Location = new System.Drawing.Point(165, 650);
-            this.cancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cancel.Margin = new System.Windows.Forms.Padding(4);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(117, 42);
             this.cancel.TabIndex = 3;
@@ -116,7 +113,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureUpperSkeletons.Checked = true;
             this.captureUpperSkeletons.CheckState = System.Windows.Forms.CheckState.Checked;
             this.captureUpperSkeletons.Location = new System.Drawing.Point(19, 70);
-            this.captureUpperSkeletons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.captureUpperSkeletons.Margin = new System.Windows.Forms.Padding(4);
             this.captureUpperSkeletons.Name = "captureUpperSkeletons";
             this.captureUpperSkeletons.Size = new System.Drawing.Size(239, 29);
             this.captureUpperSkeletons.TabIndex = 4;
@@ -129,7 +126,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.pitch_yaw_roll.Checked = true;
             this.pitch_yaw_roll.CheckState = System.Windows.Forms.CheckState.Checked;
             this.pitch_yaw_roll.Location = new System.Drawing.Point(367, 70);
-            this.pitch_yaw_roll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pitch_yaw_roll.Margin = new System.Windows.Forms.Padding(4);
             this.pitch_yaw_roll.Name = "pitch_yaw_roll";
             this.pitch_yaw_roll.Size = new System.Drawing.Size(195, 29);
             this.pitch_yaw_roll.TabIndex = 5;
@@ -143,7 +140,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureLowerSkeleton.Checked = true;
             this.captureLowerSkeleton.CheckState = System.Windows.Forms.CheckState.Checked;
             this.captureLowerSkeleton.Location = new System.Drawing.Point(19, 108);
-            this.captureLowerSkeleton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.captureLowerSkeleton.Margin = new System.Windows.Forms.Padding(4);
             this.captureLowerSkeleton.Name = "captureLowerSkeleton";
             this.captureLowerSkeleton.Size = new System.Drawing.Size(239, 29);
             this.captureLowerSkeleton.TabIndex = 6;
@@ -154,7 +151,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // chooseFolder
             // 
             this.chooseFolder.Location = new System.Drawing.Point(19, 311);
-            this.chooseFolder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chooseFolder.Margin = new System.Windows.Forms.Padding(4);
             this.chooseFolder.Name = "chooseFolder";
             this.chooseFolder.Size = new System.Drawing.Size(244, 39);
             this.chooseFolder.TabIndex = 7;
@@ -175,7 +172,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // savingDataPath
             // 
             this.savingDataPath.Location = new System.Drawing.Point(19, 271);
-            this.savingDataPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.savingDataPath.Margin = new System.Windows.Forms.Padding(4);
             this.savingDataPath.Name = "savingDataPath";
             this.savingDataPath.Size = new System.Drawing.Size(636, 31);
             this.savingDataPath.TabIndex = 9;
@@ -202,9 +199,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.Controls.Add(this.chooseFolder);
             this.groupBox1.Controls.Add(this.captureLowerSkeleton);
             this.groupBox1.Location = new System.Drawing.Point(39, 114);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox1.Size = new System.Drawing.Size(677, 529);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
@@ -216,7 +213,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.quantify_movements.Checked = true;
             this.quantify_movements.CheckState = System.Windows.Forms.CheckState.Checked;
             this.quantify_movements.Location = new System.Drawing.Point(19, 182);
-            this.quantify_movements.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.quantify_movements.Margin = new System.Windows.Forms.Padding(4);
             this.quantify_movements.Name = "quantify_movements";
             this.quantify_movements.Size = new System.Drawing.Size(241, 29);
             this.quantify_movements.TabIndex = 19;
@@ -229,7 +226,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.mouth_eyes.Checked = true;
             this.mouth_eyes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.mouth_eyes.Location = new System.Drawing.Point(365, 108);
-            this.mouth_eyes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mouth_eyes.Margin = new System.Windows.Forms.Padding(4);
             this.mouth_eyes.Name = "mouth_eyes";
             this.mouth_eyes.Size = new System.Drawing.Size(164, 29);
             this.mouth_eyes.TabIndex = 18;
@@ -252,7 +249,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             this.hertz.LargeChange = 1;
             this.hertz.Location = new System.Drawing.Point(188, 376);
-            this.hertz.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.hertz.Margin = new System.Windows.Forms.Padding(4);
             this.hertz.Maximum = 7;
             this.hertz.Minimum = 1;
             this.hertz.Name = "hertz";
@@ -267,7 +264,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.computeJointAngles.Checked = true;
             this.computeJointAngles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.computeJointAngles.Location = new System.Drawing.Point(19, 145);
-            this.computeJointAngles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.computeJointAngles.Margin = new System.Windows.Forms.Padding(4);
             this.computeJointAngles.Name = "computeJointAngles";
             this.computeJointAngles.Size = new System.Drawing.Size(252, 29);
             this.computeJointAngles.TabIndex = 16;
@@ -298,8 +295,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // outputXLSX
             // 
             this.outputXLSX.AutoSize = true;
+            this.outputXLSX.Enabled = false;
             this.outputXLSX.Location = new System.Drawing.Point(19, 481);
-            this.outputXLSX.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.outputXLSX.Margin = new System.Windows.Forms.Padding(4);
             this.outputXLSX.Name = "outputXLSX";
             this.outputXLSX.Size = new System.Drawing.Size(88, 29);
             this.outputXLSX.TabIndex = 13;
@@ -312,7 +310,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.outputCSV.Checked = true;
             this.outputCSV.CheckState = System.Windows.Forms.CheckState.Checked;
             this.outputCSV.Location = new System.Drawing.Point(19, 444);
-            this.outputCSV.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.outputCSV.Margin = new System.Windows.Forms.Padding(4);
             this.outputCSV.Name = "outputCSV";
             this.outputCSV.Size = new System.Drawing.Size(83, 29);
             this.outputCSV.TabIndex = 12;
@@ -336,7 +334,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.are_talking.Checked = true;
             this.are_talking.CheckState = System.Windows.Forms.CheckState.Checked;
             this.are_talking.Location = new System.Drawing.Point(365, 145);
-            this.are_talking.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.are_talking.Margin = new System.Windows.Forms.Padding(4);
             this.are_talking.Name = "are_talking";
             this.are_talking.Size = new System.Drawing.Size(238, 29);
             this.are_talking.TabIndex = 10;
@@ -350,9 +348,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox2.Controls.Add(this.videoSmall);
             this.groupBox2.Controls.Add(this.videoNo);
             this.groupBox2.Location = new System.Drawing.Point(743, 114);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox2.Size = new System.Drawing.Size(257, 232);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
@@ -364,7 +362,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.videoLarge.AutoSize = true;
             this.videoLarge.Enabled = false;
             this.videoLarge.Location = new System.Drawing.Point(23, 149);
-            this.videoLarge.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.videoLarge.Margin = new System.Windows.Forms.Padding(4);
             this.videoLarge.Name = "videoLarge";
             this.videoLarge.Size = new System.Drawing.Size(211, 29);
             this.videoLarge.TabIndex = 3;
@@ -376,7 +374,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             this.videoMedium.AutoSize = true;
             this.videoMedium.Location = new System.Drawing.Point(23, 111);
-            this.videoMedium.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.videoMedium.Margin = new System.Windows.Forms.Padding(4);
             this.videoMedium.Name = "videoMedium";
             this.videoMedium.Size = new System.Drawing.Size(208, 29);
             this.videoMedium.TabIndex = 2;
@@ -387,7 +385,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             this.videoSmall.AutoSize = true;
             this.videoSmall.Location = new System.Drawing.Point(23, 74);
-            this.videoSmall.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.videoSmall.Margin = new System.Windows.Forms.Padding(4);
             this.videoSmall.Name = "videoSmall";
             this.videoSmall.Size = new System.Drawing.Size(182, 29);
             this.videoSmall.TabIndex = 1;
@@ -399,7 +397,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.videoNo.AutoSize = true;
             this.videoNo.Checked = true;
             this.videoNo.Location = new System.Drawing.Point(23, 36);
-            this.videoNo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.videoNo.Margin = new System.Windows.Forms.Padding(4);
             this.videoNo.Name = "videoNo";
             this.videoNo.Size = new System.Drawing.Size(202, 29);
             this.videoNo.TabIndex = 0;
@@ -411,9 +409,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             this.groupBox3.Controls.Add(this.capture_dyad);
             this.groupBox3.Location = new System.Drawing.Point(743, 368);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox3.Size = new System.Drawing.Size(257, 275);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
@@ -425,7 +423,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.capture_dyad.AutoSize = true;
             this.capture_dyad.Enabled = false;
             this.capture_dyad.Location = new System.Drawing.Point(23, 31);
-            this.capture_dyad.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.capture_dyad.Margin = new System.Windows.Forms.Padding(4);
             this.capture_dyad.Name = "capture_dyad";
             this.capture_dyad.Size = new System.Drawing.Size(168, 29);
             this.capture_dyad.TabIndex = 20;
@@ -445,7 +443,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.Controls.Add(this.ok);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.SessionID);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "OpeningPrompt";
             this.Text = "Kinect Data Collection Tool";
             this.Load += new System.EventHandler(this.OpeningPrompt_Load);

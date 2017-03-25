@@ -144,6 +144,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private DrawingGroup drawingGroup;
 
         /// <summary>
+        /// reference to the color image
+        /// </summary>
+        public CheckBox displayBodies;
+
+        /// <summary>
         /// Drawing image that we will display
         /// </summary>
         public DrawingImage imageSource;
@@ -406,6 +411,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     dc.DrawRectangle(Brushes.Transparent, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
 
                     int penIndex = 0;
+                    int number_of_bodies = 0;
 
                     for (int i = 0; i < this.bodyCount; i++)
                     {
@@ -415,6 +421,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                         if (body.IsTracked)
                         {
+                            number_of_bodies += 1; 
+
                             this.DrawClippedEdges(body, dc);
 
                             IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
@@ -436,11 +444,19 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            this.DrawBody(body, joints, jointPoints, dc, drawPen, i);
+                            if(this.displayBodies.IsChecked.Value)
+                            {
+                                this.DrawBody(body, joints, jointPoints, dc, drawPen, i);
 
-                            this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
-                            this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
+                                this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
+                                this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
+
+                            }
                         }
+
+                        // update the display
+                        String label = this.displayBodies.Content.ToString();
+                        this.displayBodies.Content = label.Remove(label.Length - 3) + "(" + number_of_bodies + ")";
                     }
 
                     bool drawFaceResult = false;
@@ -619,6 +635,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="drawingContext">drawing context to render to</param>
         private void DrawFaceFrameResults(int faceIndex, FaceFrameResult faceResult, DrawingContext drawingContext)
         {
+            // don't display if we are recording
+            if (!this.displayBodies.IsChecked.Value) return;
+
             // choose the brush based on the face index
             Brush drawingBrush = this.faceBrush[0];
             if (faceIndex < this.bodyCount)

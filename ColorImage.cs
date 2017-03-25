@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Controls;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
@@ -18,6 +19,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// Active Kinect sensor
         /// </summary>
         public KinectSensor kinectSensor = null;
+        public CheckBox displayImage;
 
         /// <summary>
         /// Logger
@@ -38,6 +40,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// was the last frame saved?
         /// </summary>
         public Boolean was_last_frame_saved = false;
+        public double fps;
+
+        /// <summary>
+        /// counter for the number of images displayed
+        /// </summary>
+        public int counter = 0;
 
         /// <summary>
         /// Constructor
@@ -70,15 +78,22 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         private void Reader_ColorFrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
+            // increment the counter
+            counter += 1;
+
+            // we skip this frame if we don't need it
+            //if (logger.videowriter == null && this.counter % logger.frequency != 0) return;
+
             // ColorFrame is IDisposable
             using (ColorFrame colorFrame = e.FrameReference.AcquireFrame())
             {
+
                 if (colorFrame != null)
                 {
                     FrameDescription colorFrameDescription = colorFrame.FrameDescription;
 
                     // detects if we are running at 30 or 15 fps
-                    double fps = 1.0 / colorFrame.ColorCameraSettings.FrameInterval.TotalSeconds;
+                    this.fps = 1.0 / colorFrame.ColorCameraSettings.FrameInterval.TotalSeconds;
 
                     // if we are running at 30 fps and the last frame was saved, we skip it
                     if (was_last_frame_saved && fps > 30)
@@ -100,7 +115,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                 (uint)(colorFrameDescription.Width * colorFrameDescription.Height * 4),
                                 ColorImageFormat.Bgra);
 
-                            this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
+                            if(this.displayImage.IsChecked.Value)
+                                this.colorBitmap.AddDirtyRect(new Int32Rect(0, 0, this.colorBitmap.PixelWidth, this.colorBitmap.PixelHeight));
                         }
                         
                         this.colorBitmap.Unlock();
@@ -112,7 +128,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     
                 }
             }
-
         }
 
 

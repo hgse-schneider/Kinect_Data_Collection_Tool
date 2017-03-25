@@ -23,6 +23,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public OpeningPrompt openingPrompt;
 
+        // for random numbers
+        public Random rnd = new Random();
+
         // general information
         public bool recording = false;
         public string session;
@@ -95,6 +98,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             frequency = (openingPrompt.hertz.Value - 1) *5;
             if (frequency == 0) frequency = 1;
             current_sec = DateTime.Now.Second;
+
+            // create a unique ID for the session if Default
+            if (session == "Default") session += rnd.Next(1, 99);
 
             // print headers (ugly,should be re-written more cleanly)
             header = "Timestamp,Session,Index,BodyID,";

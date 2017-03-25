@@ -50,7 +50,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Bitmap to display
         /// </summary>
-        private DepthImage drawingDepthImage;
+        //private DepthImage drawingDepthImage;
 
         /// <summary>
         /// Bitmap to display
@@ -115,6 +115,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // change the display
             this.savingTo.Content += openingPrompt.savingDataPath.Text;
+
+            // update reference to objects
+            this.drawingColorImage.displayImage = this.displayImage;
+            this.drawingBodies.displayBodies = this.displayBodies;
         }
 
         /// <summary>
@@ -253,12 +257,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 logger.recording = false;
                 this.startRecording.Content = "Not Recording";
                 this.startRecording.Background = Brushes.Red;
+
+                this.displayBodies.IsChecked = true;
+                this.displayImage.IsChecked = true;
             }
             else if(!logger.recording)
             {
                 logger.recording = true;
                 this.startRecording.Content = "Recording !";
                 this.startRecording.Background = Brushes.LightGreen;
+
+                this.displayBodies.IsChecked = false;
+                this.displayImage.IsChecked = false;
             }
         }
 
