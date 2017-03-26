@@ -176,7 +176,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.savingDataPath.Name = "savingDataPath";
             this.savingDataPath.Size = new System.Drawing.Size(636, 31);
             this.savingDataPath.TabIndex = 9;
-            this.savingDataPath.Text = "C:\\Users\\SchneiderBertrand\\Desktop";
+            this.savingDataPath.Text = "";
             this.savingDataPath.TextChanged += new System.EventHandler(this.savingDataPath_TextChanged);
             // 
             // groupBox1

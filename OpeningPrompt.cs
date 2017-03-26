@@ -30,7 +30,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         private void ok_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if(this.savingDataPath.Text == "")
+                MessageBox.Show("please choose the folder where you would like to save your data", "No folder selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            else
+                this.Close();
         }
 
         private void chooseFolderClick(object sender, EventArgs e)
