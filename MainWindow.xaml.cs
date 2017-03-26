@@ -258,8 +258,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.startRecording.Content = "Not Recording";
                 this.startRecording.Background = Brushes.Red;
 
-                this.displayBodies.IsChecked = true;
-                this.displayImage.IsChecked = true;
+                //this.displayBodies.IsChecked = true;
+                //this.displayImage.IsChecked = true;
             }
             else if(!logger.recording)
             {
@@ -267,8 +267,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.startRecording.Content = "Recording !";
                 this.startRecording.Background = Brushes.LightGreen;
 
-                this.displayBodies.IsChecked = false;
-                this.displayImage.IsChecked = false;
+                //this.displayBodies.IsChecked = false;
+                //this.displayImage.IsChecked = false;
             }
         }
 
@@ -276,6 +276,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             Label label = (Label) this.postures.SelectedItem;
             logger.annotation = label.Content.ToString();
+        }
+
+        private void displayImage_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

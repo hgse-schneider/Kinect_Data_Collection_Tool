@@ -51,7 +51,7 @@
             <Label x:Name="headRest" Content="Head rest"/>
             <Label x:Name="handsHidden" Content="Hands hidden"/>
         </ComboBox>
-        <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" />
+        <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" Checked="displayImage_Checked" />
         <CheckBox x:Name="displayBodies" Content="Display Bodies (0)" HorizontalAlignment="Left" Margin="667,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="126" IsChecked="True" />
     </Grid>
 </Window>
