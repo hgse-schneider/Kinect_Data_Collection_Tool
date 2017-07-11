@@ -691,7 +691,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 faceText += "FaceYaw : " + yaw + "\n" +
                             "FacePitch : " + pitch + "\n" +
                             "FacenRoll : " + roll + "\n" +
-                            "Body Index : " + faceIndex + "\n";
+                            "Body Index : " + faceIndex + "\n" + 
+                            "Talking : " + this.logger.is_body_speaking(this.bodies[faceIndex]) + "\n";
             }
 
             // render the face property and face rotation information
