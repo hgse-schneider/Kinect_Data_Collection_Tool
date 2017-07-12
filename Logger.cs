@@ -65,8 +65,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public string header = "";
         public Dictionary<string, int> header_dic = new Dictionary<string, int>();
 
-        // annotation and previous data point (index in the array is the Body ID)
-        public string annotation = "";
+        // previous data point (index in the array is the Body ID)
         public string[] faceInfo = new string[] { "", "", "", "", "", "", "", "", "", "" };
         public string[] previousLine = new string[] { "", "", "", "", "", "", "", "", "", "" };
 
@@ -157,8 +156,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 "FaceYaw,FacePitch,FacenRoll,";
             if (log_sound) header +=
                 "Talking,";
-
-            header += "Posture";
 
             // save the index information of each element
             string[] header_array = header.Split(',');
@@ -515,9 +512,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                 // ----- RECORD AUDIO INFO ------- // 
                 if(this.log_are_talking) data += is_body_speaking(body);
-
-                // add annotation (posture)
-                data += this.annotation;
 
                 // save the data to the log file
                 this.logFile[bodyIndex].WriteLine(data);

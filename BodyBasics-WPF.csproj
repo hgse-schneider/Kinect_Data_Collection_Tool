@@ -219,6 +219,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Audio.cs" />
+    <Compile Include="AwarenessImage.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="DepthImage.cs" />
     <Compile Include="ColorImage.cs" />

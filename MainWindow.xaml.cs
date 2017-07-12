@@ -45,6 +45,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Bitmap to display
         /// </summary>
+        private AwarenessImage awarenessImage;
+
+        /// <summary>
+        /// Bitmap to display
+        /// </summary>
         private ColorImage drawingColorImage;
 
         /// <summary>
@@ -88,6 +93,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // create an object to manage the color frames
             this.drawingColorImage = new ColorImage(this.kinectSensor, logger);
 
+            // create an object to manage the awareness frames
+            this.awarenessImage = new AwarenessImage(this.kinectSensor, drawingBodies, this.displayTalk);
+
             // create an object to manage the color frames
             //this.drawingDepthImage = new DepthImage(this.kinectSensor);
 
@@ -116,9 +124,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // change the display
             this.savingTo.Content += openingPrompt.savingDataPath.Text;
 
-            // update reference to objects
+            // update reference to interface elements
             this.drawingColorImage.displayImage = this.displayImage;
             this.drawingBodies.displayBodies = this.displayBodies;
+            this.awarenessImage.displayTalk = this.displayTalk;
         }
 
         /// <summary>
@@ -150,6 +159,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public ImageSource ColorImageSource
         {
             get { return this.drawingColorImage.colorBitmap; }
+        }
+
+        /// <summary>
+        /// Gets the bitmap to display
+        /// </summary>
+        public ImageSource AwarenessImageSource
+        {
+            get { return this.awarenessImage.imageSource; }
         }
 
         /// <summary>
@@ -272,15 +289,20 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
         }
 
-        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Label label = (Label) this.postures.SelectedItem;
-            logger.annotation = label.Content.ToString();
-        }
-
         private void displayImage_Checked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void DisplayTalk_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            this.displayTalk.IsChecked = false;
+            this.displayBodies.IsChecked = false;
         }
     }
 }

@@ -4,7 +4,8 @@
         Title="Body Basics" 
         Height="768" Width="1024" 
         Loaded="MainWindow_Loaded"
-        Closing="MainWindow_Closing">
+        Closing="MainWindow_Closing"
+        KeyDown="Window_KeyDown" >
     <Window.Resources>
         <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e" />
         <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f" />
@@ -17,10 +18,16 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <Viewbox>
+            <Image Source="{Binding AwarenessImageSource}" Stretch="UniformToFill" Opacity="0.5"/>
+        </Viewbox>
+
+        <!--
         <Image Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5" />
         <TextBlock Grid.Row="0" Margin="0,0,-0.667,0.333" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18" Width="244" Text="Kinect Data Collection Tool"/>
         <Image Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="124,5,823.6,0.2" />
-
+        -->
+        
         <Viewbox Grid.Row="1" HorizontalAlignment="Center">
             <Image Source="{Binding ColorImageSource}" Stretch="UniformToFill" />
         </Viewbox>
@@ -43,15 +50,8 @@
         <Label x:Name="depthImagelabel" Content="Show Depth Image" HorizontalAlignment="Left" Margin="423,5,0,0" VerticalAlignment="Top"/>
         -->
         <Viewbox HorizontalAlignment="Left" Margin="31,10.333,0,-0.333" VerticalAlignment="Top" Width="157" Height="22" Grid.Row="2" Stretch="Fill"/>
-        <ComboBox x:Name="postures" HorizontalAlignment="Left" Margin="867,4.333,0,0" Grid.Row="2" VerticalAlignment="Top" Width="120" SelectionChanged="comboBox_SelectionChanged">
-            <Label x:Name="neutral" Content=""/>
-            <Label x:Name="holdingHead" Content="Holding head"/>
-            <Label x:Name="armsCrossed" Content="Arms crossed"/>
-            <Label x:Name="handsJoined" Content="Hands Joined"/>
-            <Label x:Name="headRest" Content="Head rest"/>
-            <Label x:Name="handsHidden" Content="Hands hidden"/>
-        </ComboBox>
         <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" Checked="displayImage_Checked" />
         <CheckBox x:Name="displayBodies" Content="Display Bodies (0)" HorizontalAlignment="Left" Margin="667,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="126" IsChecked="True" />
+        <CheckBox x:Name="displayTalk" Content="Display Talk" HorizontalAlignment="Left" Margin="798,9.333,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="126" Checked="DisplayTalk_Checked" />
     </Grid>
 </Window>

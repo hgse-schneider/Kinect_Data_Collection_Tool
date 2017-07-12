@@ -136,8 +136,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// List of brushes for each face tracked
         /// </summary>
         private List<Brush> faceBrush;
-
-
+        
         /// <summary>
         /// Drawing group for body rendering output
         /// </summary>
