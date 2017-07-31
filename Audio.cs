@@ -182,10 +182,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <param name="e">event arguments</param>
         public void Reader_FrameArrived(object sender, AudioBeamFrameArrivedEventArgs e)
         {
+            // clear up the list of people talking
+            this.trackingIDSpeaking.Clear();
+
+            // acquire the frames
             AudioBeamFrameReference frameReference = e.FrameReference;
             AudioBeamFrameList frameList = frameReference.AcquireBeamFrames();
-
-            this.trackingIDSpeaking.Clear();
 
             if (frameList != null)
             {
