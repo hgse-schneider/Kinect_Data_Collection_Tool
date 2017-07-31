@@ -41,7 +41,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Last observed audio beam angle in radians, in the range [-pi/2, +pi/2]
         /// </summary>
-        private float beamAngle = 0;
+        public float beamAngle = 0;
         
         /// <summary>
         /// saves the volume of the current audio frame
@@ -138,6 +138,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public List<ulong> trackingIDSpeaking = new List<ulong>();
 
+        private WaveFileWriter waveWriter;
 
         public Audio(KinectSensor kinectSensor, Logger logger)
         {
@@ -171,6 +172,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 audioSource.AudioBeams[0].AudioBeamMode = AudioBeamMode.Manual;
                 audioSource.AudioBeams[0].BeamAngle = 0;
                 */
+            }
+
+            // defining the wav header
+            if(logger.log_audio)
+            {
+                WaveFormat ulawFormat = new WaveFormat(16000, 32, 1);
+                waveWriter = new WaveFileWriter(@"C:\Users\schneibe\Desktop\output.wav", ulawFormat);
             }
         }
 
@@ -234,6 +242,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         // Process audio buffer
                         subFrame.CopyFrameDataToArray(this.audioBuffer);
 
+                        // save the audio
+
+                        if (logger.log_audio)
+                        {
+                            this.waveWriter.Write(this.audioBuffer, 0, this.audioBuffer.Length);
+                        }
+
                         for (int i = 0; i < this.audioBuffer.Length; i += BytesPerSample)
                         {
                             // Extract the 32-bit IEEE float sample from the byte array
@@ -278,6 +293,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     }
                 }
             }
+
+
+
 
             //Console.WriteLine(DateTime.Now.ToString("hh.mm.ss.ffffff \t" + this.trackingIDSpeaking.Count + "\t" + volume));
         }
@@ -324,6 +342,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // AudioBeamFrameReader is IDisposable
                 this.reader.Dispose();
                 this.reader = null;
+            }
+
+            if (logger.log_audio)
+            {
+                this.waveWriter.Flush();
             }
         }
     }

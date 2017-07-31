@@ -59,7 +59,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.videoSmall = new System.Windows.Forms.RadioButton();
             this.videoNo = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.capture_dyad = new System.Windows.Forms.CheckBox();
+            this.saveWav = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -68,29 +68,26 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // SessionID
             // 
-            this.SessionID.Location = new System.Drawing.Point(39, 56);
-            this.SessionID.Margin = new System.Windows.Forms.Padding(4);
+            this.SessionID.Location = new System.Drawing.Point(29, 45);
             this.SessionID.Name = "SessionID";
-            this.SessionID.Size = new System.Drawing.Size(243, 31);
+            this.SessionID.Size = new System.Drawing.Size(183, 26);
             this.SessionID.TabIndex = 0;
             this.SessionID.Text = "Default";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(33, 28);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(25, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(151, 25);
+            this.label1.Size = new System.Drawing.Size(112, 20);
             this.label1.TabIndex = 1;
             this.label1.Text = "Session Name";
             // 
             // ok
             // 
-            this.ok.Location = new System.Drawing.Point(39, 650);
-            this.ok.Margin = new System.Windows.Forms.Padding(4);
+            this.ok.Location = new System.Drawing.Point(29, 520);
             this.ok.Name = "ok";
-            this.ok.Size = new System.Drawing.Size(100, 42);
+            this.ok.Size = new System.Drawing.Size(75, 34);
             this.ok.TabIndex = 2;
             this.ok.Text = "Ok";
             this.ok.UseVisualStyleBackColor = true;
@@ -98,10 +95,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(165, 650);
-            this.cancel.Margin = new System.Windows.Forms.Padding(4);
+            this.cancel.Location = new System.Drawing.Point(124, 520);
             this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(117, 42);
+            this.cancel.Size = new System.Drawing.Size(88, 34);
             this.cancel.TabIndex = 3;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
@@ -112,10 +108,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureUpperSkeletons.AutoSize = true;
             this.captureUpperSkeletons.Checked = true;
             this.captureUpperSkeletons.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureUpperSkeletons.Location = new System.Drawing.Point(19, 70);
-            this.captureUpperSkeletons.Margin = new System.Windows.Forms.Padding(4);
+            this.captureUpperSkeletons.Location = new System.Drawing.Point(14, 56);
             this.captureUpperSkeletons.Name = "captureUpperSkeletons";
-            this.captureUpperSkeletons.Size = new System.Drawing.Size(239, 29);
+            this.captureUpperSkeletons.Size = new System.Drawing.Size(180, 24);
             this.captureUpperSkeletons.TabIndex = 4;
             this.captureUpperSkeletons.Text = "Capture Upper Body";
             this.captureUpperSkeletons.UseVisualStyleBackColor = true;
@@ -125,10 +120,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.pitch_yaw_roll.AutoSize = true;
             this.pitch_yaw_roll.Checked = true;
             this.pitch_yaw_roll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.pitch_yaw_roll.Location = new System.Drawing.Point(367, 70);
-            this.pitch_yaw_roll.Margin = new System.Windows.Forms.Padding(4);
+            this.pitch_yaw_roll.Location = new System.Drawing.Point(275, 56);
             this.pitch_yaw_roll.Name = "pitch_yaw_roll";
-            this.pitch_yaw_roll.Size = new System.Drawing.Size(195, 29);
+            this.pitch_yaw_roll.Size = new System.Drawing.Size(144, 24);
             this.pitch_yaw_roll.TabIndex = 5;
             this.pitch_yaw_roll.Text = "Pitch, Yaw, Roll";
             this.pitch_yaw_roll.UseVisualStyleBackColor = true;
@@ -139,10 +133,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.captureLowerSkeleton.AutoSize = true;
             this.captureLowerSkeleton.Checked = true;
             this.captureLowerSkeleton.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.captureLowerSkeleton.Location = new System.Drawing.Point(19, 108);
-            this.captureLowerSkeleton.Margin = new System.Windows.Forms.Padding(4);
+            this.captureLowerSkeleton.Location = new System.Drawing.Point(14, 86);
             this.captureLowerSkeleton.Name = "captureLowerSkeleton";
-            this.captureLowerSkeleton.Size = new System.Drawing.Size(239, 29);
+            this.captureLowerSkeleton.Size = new System.Drawing.Size(179, 24);
             this.captureLowerSkeleton.TabIndex = 6;
             this.captureLowerSkeleton.Text = "Capture Lower Body";
             this.captureLowerSkeleton.UseVisualStyleBackColor = true;
@@ -150,10 +143,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // chooseFolder
             // 
-            this.chooseFolder.Location = new System.Drawing.Point(19, 311);
-            this.chooseFolder.Margin = new System.Windows.Forms.Padding(4);
+            this.chooseFolder.Location = new System.Drawing.Point(14, 249);
             this.chooseFolder.Name = "chooseFolder";
-            this.chooseFolder.Size = new System.Drawing.Size(244, 39);
+            this.chooseFolder.Size = new System.Drawing.Size(183, 31);
             this.chooseFolder.TabIndex = 7;
             this.chooseFolder.Text = "Choose Folder";
             this.chooseFolder.UseVisualStyleBackColor = true;
@@ -162,21 +154,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // savingDataLabel
             // 
             this.savingDataLabel.AutoSize = true;
-            this.savingDataLabel.Location = new System.Drawing.Point(13, 230);
-            this.savingDataLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.savingDataLabel.Location = new System.Drawing.Point(10, 184);
             this.savingDataLabel.Name = "savingDataLabel";
-            this.savingDataLabel.Size = new System.Drawing.Size(156, 25);
+            this.savingDataLabel.Size = new System.Drawing.Size(115, 20);
             this.savingDataLabel.TabIndex = 8;
             this.savingDataLabel.Text = "Saving data to:";
             // 
             // savingDataPath
             // 
-            this.savingDataPath.Location = new System.Drawing.Point(19, 271);
-            this.savingDataPath.Margin = new System.Windows.Forms.Padding(4);
+            this.savingDataPath.Location = new System.Drawing.Point(14, 217);
             this.savingDataPath.Name = "savingDataPath";
-            this.savingDataPath.Size = new System.Drawing.Size(636, 31);
+            this.savingDataPath.Size = new System.Drawing.Size(478, 26);
             this.savingDataPath.TabIndex = 9;
-            this.savingDataPath.Text = "";
             this.savingDataPath.TextChanged += new System.EventHandler(this.savingDataPath_TextChanged);
             // 
             // groupBox1
@@ -198,11 +187,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox1.Controls.Add(this.savingDataLabel);
             this.groupBox1.Controls.Add(this.chooseFolder);
             this.groupBox1.Controls.Add(this.captureLowerSkeleton);
-            this.groupBox1.Location = new System.Drawing.Point(39, 114);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Location = new System.Drawing.Point(29, 91);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox1.Size = new System.Drawing.Size(677, 529);
+            this.groupBox1.Size = new System.Drawing.Size(508, 423);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log file";
@@ -212,10 +199,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.quantify_movements.AutoSize = true;
             this.quantify_movements.Checked = true;
             this.quantify_movements.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.quantify_movements.Location = new System.Drawing.Point(19, 182);
-            this.quantify_movements.Margin = new System.Windows.Forms.Padding(4);
+            this.quantify_movements.Location = new System.Drawing.Point(14, 146);
             this.quantify_movements.Name = "quantify_movements";
-            this.quantify_movements.Size = new System.Drawing.Size(241, 29);
+            this.quantify_movements.Size = new System.Drawing.Size(180, 24);
             this.quantify_movements.TabIndex = 19;
             this.quantify_movements.Text = "Quantify Movements";
             this.quantify_movements.UseVisualStyleBackColor = true;
@@ -225,10 +211,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.mouth_eyes.AutoSize = true;
             this.mouth_eyes.Checked = true;
             this.mouth_eyes.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.mouth_eyes.Location = new System.Drawing.Point(365, 108);
-            this.mouth_eyes.Margin = new System.Windows.Forms.Padding(4);
+            this.mouth_eyes.Location = new System.Drawing.Point(274, 86);
             this.mouth_eyes.Name = "mouth_eyes";
-            this.mouth_eyes.Size = new System.Drawing.Size(164, 29);
+            this.mouth_eyes.Size = new System.Drawing.Size(123, 24);
             this.mouth_eyes.TabIndex = 18;
             this.mouth_eyes.Text = "Mouth, Eyes";
             this.mouth_eyes.UseVisualStyleBackColor = true;
@@ -237,10 +222,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // hertzLabel
             // 
             this.hertzLabel.AutoSize = true;
-            this.hertzLabel.Location = new System.Drawing.Point(13, 376);
-            this.hertzLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.hertzLabel.Location = new System.Drawing.Point(10, 301);
             this.hertzLabel.Name = "hertzLabel";
-            this.hertzLabel.Size = new System.Drawing.Size(176, 25);
+            this.hertzLabel.Size = new System.Drawing.Size(130, 20);
             this.hertzLabel.TabIndex = 17;
             this.hertzLabel.Text = "Frequency: 15Hz";
             this.hertzLabel.Click += new System.EventHandler(this.label5_Click);
@@ -248,12 +232,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // hertz
             // 
             this.hertz.LargeChange = 1;
-            this.hertz.Location = new System.Drawing.Point(188, 376);
-            this.hertz.Margin = new System.Windows.Forms.Padding(4);
+            this.hertz.Location = new System.Drawing.Point(141, 301);
             this.hertz.Maximum = 7;
             this.hertz.Minimum = 1;
             this.hertz.Name = "hertz";
-            this.hertz.Size = new System.Drawing.Size(468, 90);
+            this.hertz.Size = new System.Drawing.Size(351, 69);
             this.hertz.TabIndex = 1;
             this.hertz.Value = 4;
             this.hertz.Scroll += new System.EventHandler(this.trackBar1_Scroll);
@@ -263,10 +246,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.computeJointAngles.AutoSize = true;
             this.computeJointAngles.Checked = true;
             this.computeJointAngles.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.computeJointAngles.Location = new System.Drawing.Point(19, 145);
-            this.computeJointAngles.Margin = new System.Windows.Forms.Padding(4);
+            this.computeJointAngles.Location = new System.Drawing.Point(14, 116);
             this.computeJointAngles.Name = "computeJointAngles";
-            this.computeJointAngles.Size = new System.Drawing.Size(252, 29);
+            this.computeJointAngles.Size = new System.Drawing.Size(189, 24);
             this.computeJointAngles.TabIndex = 16;
             this.computeJointAngles.Text = "Compute Joint angles";
             this.computeJointAngles.UseVisualStyleBackColor = true;
@@ -274,20 +256,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(360, 39);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Location = new System.Drawing.Point(270, 31);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(60, 25);
+            this.label4.Size = new System.Drawing.Size(45, 20);
             this.label4.TabIndex = 15;
             this.label4.Text = "Face";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 39);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(10, 31);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 25);
+            this.label3.Size = new System.Drawing.Size(72, 20);
             this.label3.TabIndex = 14;
             this.label3.Text = "Skeleton";
             this.label3.Click += new System.EventHandler(this.label3_Click);
@@ -296,10 +276,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             this.outputXLSX.AutoSize = true;
             this.outputXLSX.Enabled = false;
-            this.outputXLSX.Location = new System.Drawing.Point(19, 481);
-            this.outputXLSX.Margin = new System.Windows.Forms.Padding(4);
+            this.outputXLSX.Location = new System.Drawing.Point(14, 385);
             this.outputXLSX.Name = "outputXLSX";
-            this.outputXLSX.Size = new System.Drawing.Size(88, 29);
+            this.outputXLSX.Size = new System.Drawing.Size(64, 24);
             this.outputXLSX.TabIndex = 13;
             this.outputXLSX.Text = ".xlsx";
             this.outputXLSX.UseVisualStyleBackColor = true;
@@ -309,10 +288,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.outputCSV.AutoSize = true;
             this.outputCSV.Checked = true;
             this.outputCSV.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.outputCSV.Location = new System.Drawing.Point(19, 444);
-            this.outputCSV.Margin = new System.Windows.Forms.Padding(4);
+            this.outputCSV.Location = new System.Drawing.Point(14, 355);
             this.outputCSV.Name = "outputCSV";
-            this.outputCSV.Size = new System.Drawing.Size(83, 29);
+            this.outputCSV.Size = new System.Drawing.Size(62, 24);
             this.outputCSV.TabIndex = 12;
             this.outputCSV.Text = ".csv";
             this.outputCSV.UseVisualStyleBackColor = true;
@@ -321,10 +299,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 415);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(10, 332);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(119, 25);
+            this.label2.Size = new System.Drawing.Size(88, 20);
             this.label2.TabIndex = 11;
             this.label2.Text = "File format:";
             // 
@@ -333,10 +310,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.are_talking.AutoSize = true;
             this.are_talking.Checked = true;
             this.are_talking.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.are_talking.Location = new System.Drawing.Point(365, 145);
-            this.are_talking.Margin = new System.Windows.Forms.Padding(4);
+            this.are_talking.Location = new System.Drawing.Point(274, 116);
             this.are_talking.Name = "are_talking";
-            this.are_talking.Size = new System.Drawing.Size(238, 29);
+            this.are_talking.Size = new System.Drawing.Size(176, 24);
             this.are_talking.TabIndex = 10;
             this.are_talking.Text = "Are People Talking?";
             this.are_talking.UseVisualStyleBackColor = true;
@@ -347,11 +323,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox2.Controls.Add(this.videoMedium);
             this.groupBox2.Controls.Add(this.videoSmall);
             this.groupBox2.Controls.Add(this.videoNo);
-            this.groupBox2.Location = new System.Drawing.Point(743, 114);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox2.Location = new System.Drawing.Point(557, 91);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(257, 232);
+            this.groupBox2.Size = new System.Drawing.Size(193, 186);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Video";
@@ -361,10 +335,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             this.videoLarge.AutoSize = true;
             this.videoLarge.Enabled = false;
-            this.videoLarge.Location = new System.Drawing.Point(23, 149);
-            this.videoLarge.Margin = new System.Windows.Forms.Padding(4);
+            this.videoLarge.Location = new System.Drawing.Point(17, 119);
             this.videoLarge.Name = "videoLarge";
-            this.videoLarge.Size = new System.Drawing.Size(211, 29);
+            this.videoLarge.Size = new System.Drawing.Size(158, 24);
             this.videoLarge.TabIndex = 3;
             this.videoLarge.Text = "Large 1920x1080";
             this.videoLarge.UseVisualStyleBackColor = true;
@@ -373,10 +346,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // videoMedium
             // 
             this.videoMedium.AutoSize = true;
-            this.videoMedium.Location = new System.Drawing.Point(23, 111);
-            this.videoMedium.Margin = new System.Windows.Forms.Padding(4);
+            this.videoMedium.Location = new System.Drawing.Point(17, 89);
             this.videoMedium.Name = "videoMedium";
-            this.videoMedium.Size = new System.Drawing.Size(208, 29);
+            this.videoMedium.Size = new System.Drawing.Size(155, 24);
             this.videoMedium.TabIndex = 2;
             this.videoMedium.Text = "Medium 960x540";
             this.videoMedium.UseVisualStyleBackColor = true;
@@ -384,10 +356,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // videoSmall
             // 
             this.videoSmall.AutoSize = true;
-            this.videoSmall.Location = new System.Drawing.Point(23, 74);
-            this.videoSmall.Margin = new System.Windows.Forms.Padding(4);
+            this.videoSmall.Location = new System.Drawing.Point(17, 59);
             this.videoSmall.Name = "videoSmall";
-            this.videoSmall.Size = new System.Drawing.Size(182, 29);
+            this.videoSmall.Size = new System.Drawing.Size(135, 24);
             this.videoSmall.TabIndex = 1;
             this.videoSmall.Text = "small 480x270";
             this.videoSmall.UseVisualStyleBackColor = true;
@@ -396,10 +367,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             this.videoNo.AutoSize = true;
             this.videoNo.Checked = true;
-            this.videoNo.Location = new System.Drawing.Point(23, 36);
-            this.videoNo.Margin = new System.Windows.Forms.Padding(4);
+            this.videoNo.Location = new System.Drawing.Point(17, 29);
             this.videoNo.Name = "videoNo";
-            this.videoNo.Size = new System.Drawing.Size(202, 29);
+            this.videoNo.Size = new System.Drawing.Size(150, 24);
             this.videoNo.TabIndex = 0;
             this.videoNo.TabStop = true;
             this.videoNo.Text = "Don\'t save video";
@@ -407,35 +377,31 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.capture_dyad);
-            this.groupBox3.Location = new System.Drawing.Point(743, 368);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox3.Controls.Add(this.saveWav);
+            this.groupBox3.Location = new System.Drawing.Point(557, 294);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox3.Size = new System.Drawing.Size(257, 275);
+            this.groupBox3.Size = new System.Drawing.Size(193, 220);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Dyads";
+            this.groupBox3.Text = "Audio";
             this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter);
             // 
-            // capture_dyad
+            // saveWav
             // 
-            this.capture_dyad.AutoSize = true;
-            this.capture_dyad.Enabled = false;
-            this.capture_dyad.Location = new System.Drawing.Point(23, 31);
-            this.capture_dyad.Margin = new System.Windows.Forms.Padding(4);
-            this.capture_dyad.Name = "capture_dyad";
-            this.capture_dyad.Size = new System.Drawing.Size(168, 29);
-            this.capture_dyad.TabIndex = 20;
-            this.capture_dyad.Text = "Capture data";
-            this.capture_dyad.UseVisualStyleBackColor = true;
-            this.capture_dyad.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
+            this.saveWav.AutoSize = true;
+            this.saveWav.Location = new System.Drawing.Point(17, 25);
+            this.saveWav.Name = "saveWav";
+            this.saveWav.Size = new System.Drawing.Size(130, 24);
+            this.saveWav.TabIndex = 0;
+            this.saveWav.Text = "Save Wav file";
+            this.saveWav.UseVisualStyleBackColor = true;
+            this.saveWav.CheckedChanged += new System.EventHandler(this.saveWav_CheckedChanged);
             // 
             // OpeningPrompt
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1023, 708);
+            this.ClientSize = new System.Drawing.Size(767, 566);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -443,7 +409,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.Controls.Add(this.ok);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.SessionID);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "OpeningPrompt";
             this.Text = "Kinect Data Collection Tool";
             this.Load += new System.EventHandler(this.OpeningPrompt_Load);
@@ -489,6 +454,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private GroupBox groupBox3;
         public CheckBox mouth_eyes;
         public CheckBox quantify_movements;
-        public CheckBox capture_dyad;
+        public CheckBox saveWav;
     }
 }

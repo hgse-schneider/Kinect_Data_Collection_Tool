@@ -238,7 +238,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.drawingColorImage.close();
 
             // close the audio object
-            //this.audio.close();
+            this.audio.close();
             
             // make sure we finish writing our data to the file
             this.logger.close();

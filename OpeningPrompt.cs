@@ -109,5 +109,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
 
         }
+
+        private void saveWav_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

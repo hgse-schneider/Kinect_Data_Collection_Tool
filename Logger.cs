@@ -39,6 +39,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_mouth_eyes = false;
         public bool log_are_talking = false;
         public bool log_dyad = false;
+        public bool log_audio = false;
         public bool log_sound = false;
 
         // frequency at which to save the data
@@ -95,7 +96,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             log_pitch_yaw_roll = openingPrompt.pitch_yaw_roll.Checked;
             log_mouth_eyes = openingPrompt.mouth_eyes.Checked;
             log_are_talking = openingPrompt.are_talking.Checked;
-            log_dyad = openingPrompt.capture_dyad.Checked;
+            log_audio = openingPrompt.saveWav.Checked;
             log_sound = openingPrompt.are_talking.Checked;
             outputcsv = openingPrompt.outputCSV.Checked;
             outputxlsx = openingPrompt.outputXLSX.Checked;
@@ -160,7 +161,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (log_pitch_yaw_roll) header +=
                 "FaceYaw,FacePitch,FacenRoll,";
             if (log_sound) header +=
-                "Talking,";
+                "Talking,Volume,Angle";
 
             // save the index information of each element
             string[] header_array = header.Split(',');
@@ -468,11 +469,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// checks whether the current body is talking
         /// </summary>
-        public int is_body_speaking(Body body)
+        public String is_body_speaking(Body body)
         {
             if (this.main.audio.trackingIDSpeaking.Contains(body.TrackingId))
-                return 1;
-            else return 0;
+            {
+                return "1," + this.main.audio.volume + "," + this.main.audio.beamAngle;
+
+            }
+            else return "0,0,0";
         }
 
         public int count_bodies(Bodies drawingBodies)
