@@ -65,12 +65,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// object to deal with audio
         /// </summary>
-        private Audio audio;
+        public Audio audio;
 
         /// <summary>
         /// Current status text to display
         /// </summary>
         private string statusText = null;
+        
+
 
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
@@ -83,18 +85,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // one sensor is currently supported
             this.kinectSensor = KinectSensor.GetDefault();
-            
+
+            // create an object that will manage the log files
+            this.logger = new Logger(openingPrompt, this);
+
             // get the coordinate mapper
             this.coordinateMapper = this.kinectSensor.CoordinateMapper;
 
-            // create an object that will manage the log files
-            this.logger = new Logger(openingPrompt);
-
             // create an object to manage the color frames
             this.drawingColorImage = new ColorImage(this.kinectSensor, logger);
-
-            // create an object to manage the awareness frames
-            this.awarenessImage = new AwarenessImage(this.kinectSensor, drawingBodies, this.displayTalk);
 
             // create an object to manage the color frames
             //this.drawingDepthImage = new DepthImage(this.kinectSensor);
@@ -102,13 +101,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // create an object to manage the skeletons
             this.drawingBodies = new Bodies(this.kinectSensor, this.logger);
 
+            // create an object to manage the awareness frames
+            this.awarenessImage = new AwarenessImage(this.kinectSensor, drawingBodies, this.displayTalk);
+
             // creates an object to manage the audio
             this.audio = new Audio(this.kinectSensor, this.logger);
 
             // set IsAvailableChanged event notifier
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
-
-            // open the sensor
+            
+            // Open the sensor
             this.kinectSensor.Open();
 
             // set the status text
@@ -200,7 +202,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (this.audio.reader != null)
             {
                 // Subscribe to new audio frame arrived events
-                this.audio.reader.FrameArrived += this.audio.Reader_AudioFrameArrived;
+                this.audio.reader.FrameArrived += this.audio.Reader_FrameArrived;
             }
 
             for (int i = 0; i < this.drawingBodies.bodyCount; i++)
@@ -236,7 +238,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.drawingColorImage.close();
 
             // close the audio object
-            this.audio.close();
+            //this.audio.close();
             
             // make sure we finish writing our data to the file
             this.logger.close();
@@ -247,9 +249,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.kinectSensor.Close();
                 this.kinectSensor = null;
             }
-
         }
         
+
         /// <summary>
         /// Handles the event which the sensor becomes unavailable (E.g. paused, closed, unplugged).
         /// </summary>

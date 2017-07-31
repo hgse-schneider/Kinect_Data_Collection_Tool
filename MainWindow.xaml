@@ -6,20 +6,31 @@
         Loaded="MainWindow_Loaded"
         Closing="MainWindow_Closing"
         KeyDown="Window_KeyDown" >
+    
     <Window.Resources>
         <SolidColorBrush x:Key="MediumGreyBrush" Color="#ff6e6e6e" />
         <SolidColorBrush x:Key="KinectPurpleBrush" Color="#ff52318f" />
         <SolidColorBrush x:Key="KinectBlueBrush" Color="#ff00BCF2" />
+        
+        <Style TargetType="{x:Type Image}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+        </Style>
+        <Color x:Key="KinectPurpleColor">#ff52318f</Color>
     </Window.Resources>
-    <Grid Margin="10 0 10 0">
+    
+    <Grid Name="mainGrid" Margin="10 0 10 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <!--
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            -->
         </Grid.RowDefinitions>
 
         <Viewbox>
-            <Image Source="{Binding AwarenessImageSource}" Stretch="UniformToFill" Opacity="0.5"/>
+            <Image Source="{Binding AwarenessImageSource}" Stretch="None" Opacity="0.5"/>
         </Viewbox>
 
         <!--
@@ -27,7 +38,7 @@
         <TextBlock Grid.Row="0" Margin="0,0,-0.667,0.333" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18" Width="244" Text="Kinect Data Collection Tool"/>
         <Image Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="124,5,823.6,0.2" />
         -->
-        
+
         <Viewbox Grid.Row="1" HorizontalAlignment="Center">
             <Image Source="{Binding ColorImageSource}" Stretch="UniformToFill" />
         </Viewbox>
@@ -52,6 +63,73 @@
         <Viewbox HorizontalAlignment="Left" Margin="31,10.333,0,-0.333" VerticalAlignment="Top" Width="157" Height="22" Grid.Row="2" Stretch="Fill"/>
         <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" Checked="displayImage_Checked" />
         <CheckBox x:Name="displayBodies" Content="Display Bodies (0)" HorizontalAlignment="Left" Margin="667,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="126" IsChecked="True" />
-        <CheckBox x:Name="displayTalk" Content="Display Talk" HorizontalAlignment="Left" Margin="798,9.333,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="126" Checked="DisplayTalk_Checked" />
+        <CheckBox x:Name="displayTalk" Content="Display Talk" HorizontalAlignment="Left" Margin="798,9.333,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="90" Checked="DisplayTalk_Checked" />
+        
+        
+        <!--
+        <Viewbox Grid.Row="3" Stretch="Uniform">
+            <Canvas Width="1" Height="0.52">
+                <Image Width="0.74" Height="0.185" x:Name="waveDisplay" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Image.RenderTransform>
+                        <TranslateTransform X="0.13" Y="0.0353"/>
+                    </Image.RenderTransform>
+                </Image>
+                <Path Data="M 0.1503,0.2832 L 0.228,0.2203 A 0.35,0.35 102 0 0 0.772,0.2203 L 0.8497,0.2832 A 0.45,0.45 102 0 1 0.1503,0.2832 Z">
+                    <Path.Fill>
+                        <RadialGradientBrush Center="0.5 -0.32" RadiusX="0.65" RadiusY="1.1">
+                            <RadialGradientBrush.GradientStops>
+                                <GradientStop Color="LightGray" Offset="0"/>
+                                <GradientStop Color="LightGray" Offset="0.4"/>
+                                <GradientStop Color="WhiteSmoke" Offset="0.6"/>
+                                <GradientStop Color="WhiteSmoke" Offset="1"/>
+                            </RadialGradientBrush.GradientStops>
+                        </RadialGradientBrush>
+                    </Path.Fill>
+                </Path>
+                <Path Data="M 0.1270,0.3021 L 0.1503,0.2832 A 0.45,0.45 102 0 0 0.8497,0.2832 L 0.8730,0.3021 A 0.48,0.48 102 0 1 0.1270,0.3021 Z">
+                    <Path.Fill>
+                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStop x:Name="beamBarGsStart"  Color="White"   Offset="0" />
+                                <GradientStop x:Name="beamBarGsPre"    Color="White"   Offset="0.45" />
+                                <GradientStop x:Name="beamBarGsMain"   Color="{StaticResource KinectPurpleColor}"  Offset="0.5" />
+                                <GradientStop x:Name="beamBarGsPost"   Color="White"   Offset="0.55" />
+                                <GradientStop x:Name="beamBarGsEnd"    Color="White"   Offset="1" />
+                            </LinearGradientBrush.GradientStops>
+                            <LinearGradientBrush.Transform>
+                                <RotateTransform x:Name="beamBarRotation" CenterX="0.5" CenterY="0.0" Angle="0"></RotateTransform>
+                            </LinearGradientBrush.Transform>
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+                <Path Data="M 0.495,0.35 L 0.505,0.35 L 0.5,0.44 Z">
+                    <Path.RenderTransform>
+                        <RotateTransform x:Name="beamNeedleRotation"  CenterX="0.5" CenterY="0.0" Angle="0"/>
+                    </Path.RenderTransform>
+                    <Path.Fill>
+                        <LinearGradientBrush>
+                            <GradientStop Color="LightGray" Offset="0"/>
+                            <GradientStop Color="{StaticResource KinectPurpleColor}" Offset="0.5"/>
+                            <GradientStop Color="{StaticResource KinectPurpleColor}" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Path.Fill>
+                </Path>
+                <Path Data="M 0.1270,0.3021 L 0.228,0.2203 A 0.35,0.35 102 0 0 0.772,0.2203 L 0.8730,0.3021 A 0.48,0.48 102 0 1 0.1270,0.3021 Z"  StrokeThickness="0.001" Stroke="LightGray"/>
+                <Path Data="M 0.2280,0.2203 L 0.13,0.2203 L 0.13,0.0353 L 0.15,0.0353" StrokeThickness="0.001" Stroke="LightGray"/>
+                <Path Data="M 0.7720,0.2203 L 0.87,0.2203 L 0.87,0.0353 L 0.85,0.0353" StrokeThickness="0.001" Stroke="LightGray"/>
+            </Canvas>
+        </Viewbox>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="1" Name="beamAngleText" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Center" IsReadOnly="True" BorderThickness="0">Beam Angle = 0 deg.</TextBox>
+            <TextBox Grid.Column="2" Name="beamConfidenceText" FontSize="14" FontFamily="Segoe" HorizontalAlignment="Center" IsReadOnly="True" BorderThickness="0">Beam Angle Confidence = 0.00</TextBox>
+        </Grid>
+        -->
+        
     </Grid>
 </Window>

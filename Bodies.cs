@@ -13,7 +13,7 @@ using Microsoft.Kinect.Face;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
-    class Bodies
+    public class Bodies
     {
         /// <summary>
         /// Radius of drawn hand circles

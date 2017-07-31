@@ -16,7 +16,7 @@ using System.Windows.Media.Media3D;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
-    class Logger
+    public class Logger
     {
         /// <summary>
         /// information for logging the data from the interface
@@ -71,13 +71,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         // video writer and list of people speaking
         public VideoWriter videowriter = null;
-        public List<ulong> trackingIDSpeaking = new List<ulong>();
+
+        // get a reference to the main window
+        private MainWindow main;
 
         /// <summary>
         /// Initializes a new instance of the Logger class.
         /// </summary>
-        public Logger(OpeningPrompt openingPrompt)
+        public Logger(OpeningPrompt openingPrompt, MainWindow main)
         {
+            // get a reference to the main window 
+            this.main = main;
+
             // saves data from the opening prompt,
             // (those values disappear as soon as the user closes the window)
             this.openingPrompt = openingPrompt;
@@ -465,7 +470,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public int is_body_speaking(Body body)
         {
-            if (this.trackingIDSpeaking.Contains(body.TrackingId))
+            if (this.main.audio.trackingIDSpeaking.Contains(body.TrackingId))
                 return 1;
             else return 0;
         }

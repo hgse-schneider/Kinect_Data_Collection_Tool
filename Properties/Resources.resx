@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+
+  <data name="BeamAngle" xml:space="preserve">
+    <value>Beam Angle = {0} deg.</value>
+  </data>
+  <data name="BeamAngleConfidence" xml:space="preserve">
+    <value>Beam Angle Confidence = {0}</value>
+  </data>
+  
   <data name="FailedScreenshotStatusTextFormat" xml:space="preserve">
     <value>Failed to write screenshot to {0}</value>
   </data>

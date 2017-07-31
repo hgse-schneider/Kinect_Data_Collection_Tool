@@ -105,35 +105,39 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 }
 
                 // swap the bodies if necessary (right becomes left, left becomes right)
-                if (left.Joints[JointType.Head].Position.X > right.Joints[JointType.Head].Position.X)
-                {
-                    Body tmp = left;
-                    left = right;
-                    right = tmp;
-                }
+                if(left != null && right != null)
+                    if (left.Joints[JointType.Head].Position.X > right.Joints[JointType.Head].Position.X)
+                    {
+                        Body tmp = left;
+                        left = right;
+                        right = tmp;
+                    }
             }
         }
 
         private void updateAwarenessImage(object sender, BodyFrameArrivedEventArgs e)
         {
             // we don't do anything if we have less than 2 bodies
-            if (this.bodies == null || this.bodies.bodyCount < 2) return;
+            if (this.bodies == null) return;
 
-            // we display the image
+            // we display the image if the checkbox is checked
             if (this.displayTalk.IsChecked.Value)
             {
-                if (this.right == null || this.left == null) findBodies();
+                // define who's on which side
+                if (this.right == null && this.left == null) findBodies();
 
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
-                    Pen drawingPen = new Pen(Brushes.Green, 10);
-                    dc.DrawRectangle(Brushes.Green, drawingPen, new Rect(0, 0, 10000, 10000));
-
                     if((Application.Current.MainWindow) != null)
                     {
                         var h = ((Panel)Application.Current.MainWindow.Content).ActualHeight;
                         var w = ((Panel)Application.Current.MainWindow.Content).ActualWidth;
+                        Rect displayRect = new Rect(0, 0, w, h);
 
+                        Pen drawingPen = new Pen(Brushes.Green, 10);
+                        dc.DrawRectangle(Brushes.Green, drawingPen, new Rect(0, 0, 1, 1));
+
+                        this.drawingGroup.ClipGeometry = new RectangleGeometry(displayRect);
                     }
                 }
             }

@@ -61,6 +61,24 @@ namespace Microsoft.Samples.Kinect.BodyBasics.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Beam Angle = {0} deg..
+        /// </summary>
+        internal static string BeamAngle {
+            get {
+                return ResourceManager.GetString("BeamAngle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Beam Angle Confidence = {0}.
+        /// </summary>
+        internal static string BeamAngleConfidence {
+            get {
+                return ResourceManager.GetString("BeamAngleConfidence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to write screenshot to {0}.
         /// </summary>
         internal static string FailedScreenshotStatusTextFormat {
