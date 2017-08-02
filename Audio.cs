@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
+
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
     public class Audio
@@ -56,7 +57,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Number of bytes in each Kinect audio stream sample (32-bit IEEE float).
         /// </summary>
-        private const int BytesPerSample = sizeof(float);
+        private const int BytesPerSample = 4;// sizeof(float);
 
         /// <summary>
         /// Number of audio samples represented by each column of pixels in wave bitmap.
@@ -137,8 +138,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// public reference to the body IDs speaking in the current frame
         /// </summary>
         public List<ulong> trackingIDSpeaking = new List<ulong>();
-
-        private WaveFileWriter waveWriter;
+        
+        /// <summary>
+        /// audio source and files for saving audio
+        /// </summary>
+        public Dictionary<int, string> recordingDevices = new Dictionary<int, string>();
+        public Dictionary<int, WaveIn> recordingSource = new Dictionary<int, WaveIn>();
+        public Dictionary<int, WaveFileWriter> recordingWav = new Dictionary<int, WaveFileWriter>();
 
         public Audio(KinectSensor kinectSensor, Logger logger)
         {
@@ -176,9 +182,71 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // defining the wav header
             if(logger.log_audio)
+                initializeAudioFiles();
+        }
+
+        void initializeAudioFiles()
+        {
+            int waveInDevices = WaveIn.DeviceCount;
+
+            // iterate through all the recording devices
+            for (int waveInDevice = 0; waveInDevice < waveInDevices; waveInDevice++)
             {
-                WaveFormat ulawFormat = new WaveFormat(16000, 32, 1);
-                waveWriter = new WaveFileWriter(@"C:\Users\schneibe\Desktop\output.wav", ulawFormat);
+                WaveInCapabilities deviceInfo = WaveIn.GetCapabilities(waveInDevice);
+                //Console.WriteLine("Device {0}: {1}, {2} channels", waveInDevice, deviceInfo.ProductName, deviceInfo.Channels);
+
+                // if we find a kinect recording device, we use it to record sound
+                if(deviceInfo.ProductName.Contains("Xbox") || 
+                   deviceInfo.ProductName.Contains("Kinect") ||
+                   deviceInfo.ProductName.Contains("NUI"))
+                {
+                    recordingDevices.Add(waveInDevice, deviceInfo.ProductName);
+                    recordingSource.Add(waveInDevice, new WaveIn());
+                    recordingWav.Add(waveInDevice, new WaveFileWriter(@"C:\Users\schneibe\Desktop\kinect.wav", new WaveFormat(44100, 1)));
+                }
+                else // record through the built-in microphone
+                {
+                    recordingDevices.Add(waveInDevice, deviceInfo.ProductName);
+                    recordingSource.Add(waveInDevice, new WaveIn());
+                    recordingWav.Add(waveInDevice, new WaveFileWriter(@"C:\Users\schneibe\Desktop\builtin.wav", new WaveFormat(44100, 1)));
+
+                }
+
+                recordingSource[waveInDevice].DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
+                recordingSource[waveInDevice].RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
+
+                recordingSource[waveInDevice].StartRecording();
+            }
+
+        }
+
+        void waveSource_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            WaveIn tmp = (WaveIn)sender;
+
+            Console.WriteLine(tmp.DeviceNumber);
+
+            if (recordingWav[tmp.DeviceNumber] != null)
+            {
+                recordingWav[tmp.DeviceNumber].Write(e.Buffer, 0, e.BytesRecorded);
+                recordingWav[tmp.DeviceNumber].Flush();
+            }
+        }
+
+        void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
+        {
+            WaveIn tmp = (WaveIn)sender;
+
+            if (recordingSource[tmp.DeviceNumber] != null)
+            {
+                recordingSource[tmp.DeviceNumber].Dispose();
+                recordingSource[tmp.DeviceNumber] = null;
+            }
+
+            if (recordingWav[tmp.DeviceNumber] != null)
+            {
+                recordingWav[tmp.DeviceNumber].Dispose();
+                recordingWav[tmp.DeviceNumber] = null;
             }
         }
 
@@ -202,13 +270,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // AudioBeamFrameList is IDisposable
                 using (frameList)
                 {
+
                     // Only one audio beam is supported. Get the sub frame list for this beam
                     IReadOnlyList<AudioBeamSubFrame> subFrameList = frameList[0].SubFrames;
 
                     // Loop over all sub frames, extract audio buffer and beam information
                     foreach (AudioBeamSubFrame subFrame in subFrameList)
                     {
-
                         if (subFrame.BeamAngle != this.beamAngle)
                         {
                             // Audio angle
@@ -234,21 +302,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                             }
                         }
 
+
                         if (subFrame.BeamAngleConfidence != this.beamAngleConfidence)
                         {
                             this.beamAngleConfidence = subFrame.BeamAngleConfidence;
                         }
-
-                        // Process audio buffer
+                        
                         subFrame.CopyFrameDataToArray(this.audioBuffer);
-
-                        // save the audio
-
-                        if (logger.log_audio)
-                        {
-                            this.waveWriter.Write(this.audioBuffer, 0, this.audioBuffer.Length);
-                        }
-
+                        
                         for (int i = 0; i < this.audioBuffer.Length; i += BytesPerSample)
                         {
                             // Extract the 32-bit IEEE float sample from the byte array
@@ -289,18 +350,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                             this.accumulatedSquareSum = 0;
                             this.accumulatedSampleCount = 0;
-                        }
+                        } 
                     }
+
                 }
             }
-
-
-
-
-            //Console.WriteLine(DateTime.Now.ToString("hh.mm.ss.ffffff \t" + this.trackingIDSpeaking.Count + "\t" + volume));
         }
         
-
+        
         /// <summary>
         /// Handles rendering energy visualization into a bitmap.
         /// </summary>
@@ -342,11 +399,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // AudioBeamFrameReader is IDisposable
                 this.reader.Dispose();
                 this.reader = null;
-            }
-
-            if (logger.log_audio)
-            {
-                this.waveWriter.Flush();
             }
         }
     }
