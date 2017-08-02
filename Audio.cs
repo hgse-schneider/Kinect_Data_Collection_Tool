@@ -142,9 +142,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// audio source and files for saving audio
         /// </summary>
-        public Dictionary<int, string> recordingDevices = new Dictionary<int, string>();
-        public Dictionary<int, WaveIn> recordingSource = new Dictionary<int, WaveIn>();
-        public Dictionary<int, WaveFileWriter> recordingWav = new Dictionary<int, WaveFileWriter>();
+        public WaveIn kinectSource = null;
+        public WaveFileWriter kinectWav = null;
+        public WaveIn builtinSource = null;
+        public WaveFileWriter builtinWav = null;
+
 
         public Audio(KinectSensor kinectSensor, Logger logger)
         {
@@ -200,53 +202,79 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                    deviceInfo.ProductName.Contains("Kinect") ||
                    deviceInfo.ProductName.Contains("NUI"))
                 {
-                    recordingDevices.Add(waveInDevice, deviceInfo.ProductName);
-                    recordingSource.Add(waveInDevice, new WaveIn());
-                    recordingWav.Add(waveInDevice, new WaveFileWriter(@"C:\Users\schneibe\Desktop\kinect.wav", new WaveFormat(44100, 1)));
+                    kinectSource = new WaveIn();
+                    kinectSource.DeviceNumber = waveInDevice;
+                    kinectSource.WaveFormat = new WaveFormat(44100, 1);
+
+                    kinectSource.DataAvailable += new EventHandler<WaveInEventArgs>(kinectSource_DataAvailable);
+                    kinectSource.RecordingStopped += new EventHandler<StoppedEventArgs>(kinectSource_RecordingStopped);
+
+                    kinectWav = new WaveFileWriter(@"C:\Users\schneibe\Desktop\kinect.wav", kinectSource.WaveFormat);
+
+                    kinectSource.StartRecording();
                 }
-                else // record through the built-in microphone
+                else // record through the builtin microphone
                 {
-                    recordingDevices.Add(waveInDevice, deviceInfo.ProductName);
-                    recordingSource.Add(waveInDevice, new WaveIn());
-                    recordingWav.Add(waveInDevice, new WaveFileWriter(@"C:\Users\schneibe\Desktop\builtin.wav", new WaveFormat(44100, 1)));
+                    builtinSource = new WaveIn();
+                    builtinSource.DeviceNumber = waveInDevice;
+                    builtinSource.WaveFormat = new WaveFormat(44100, 1);
 
+                    builtinSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
+                    builtinSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
+
+                    builtinWav = new WaveFileWriter(@"C:\Users\schneibe\Desktop\builtin.wav", builtinSource.WaveFormat);
+
+                    builtinSource.StartRecording();
                 }
-
-                recordingSource[waveInDevice].DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
-                recordingSource[waveInDevice].RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
-
-                recordingSource[waveInDevice].StartRecording();
             }
 
         }
 
+        void kinectSource_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (kinectWav != null)
+            {
+                kinectWav.Write(e.Buffer, 0, e.BytesRecorded);
+                kinectWav.Flush();
+            }
+        }
+
+        void kinectSource_RecordingStopped(object sender, StoppedEventArgs e)
+        {
+            if (kinectSource != null)
+            {
+                kinectSource.Dispose();
+                kinectSource = null;
+            }
+
+            if (kinectWav != null)
+            {
+                kinectWav.Dispose();
+                kinectWav = null;
+            }
+        }
+
         void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
-            WaveIn tmp = (WaveIn)sender;
-
-            Console.WriteLine(tmp.DeviceNumber);
-
-            if (recordingWav[tmp.DeviceNumber] != null)
+            if (builtinWav != null)
             {
-                recordingWav[tmp.DeviceNumber].Write(e.Buffer, 0, e.BytesRecorded);
-                recordingWav[tmp.DeviceNumber].Flush();
+                builtinWav.Write(e.Buffer, 0, e.BytesRecorded);
+                builtinWav.Flush();
             }
         }
 
         void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
         {
-            WaveIn tmp = (WaveIn)sender;
-
-            if (recordingSource[tmp.DeviceNumber] != null)
+            if (builtinSource != null)
             {
-                recordingSource[tmp.DeviceNumber].Dispose();
-                recordingSource[tmp.DeviceNumber] = null;
+                builtinSource.Dispose();
+                builtinSource = null;
             }
 
-            if (recordingWav[tmp.DeviceNumber] != null)
+            if (builtinWav != null)
             {
-                recordingWav[tmp.DeviceNumber].Dispose();
-                recordingWav[tmp.DeviceNumber] = null;
+                builtinWav.Dispose();
+                builtinWav = null;
             }
         }
 
