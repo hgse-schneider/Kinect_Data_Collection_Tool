@@ -121,7 +121,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         
                         this.colorBitmap.Unlock();
 
-                        logger.WriteFrameToVideo(colorBitmap, colorFrame);
+                        if(logger.log_video && logger.recording)
+                            logger.WriteFrameToVideo(colorBitmap, colorFrame);
 
                         was_last_frame_saved = true;
                     }

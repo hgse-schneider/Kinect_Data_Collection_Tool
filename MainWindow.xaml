@@ -52,9 +52,9 @@
         <Label x:Name="depthImagelabel" Content="Show Depth Image" HorizontalAlignment="Left" Margin="423,5,0,0" VerticalAlignment="Top"/>
         -->
         <Viewbox HorizontalAlignment="Left" Margin="31,10.333,0,-0.333" VerticalAlignment="Top" Width="157" Height="22" Grid.Row="2" Stretch="Fill"/>
-        <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" Checked="displayImage_Checked" />
+        <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" />
         <CheckBox x:Name="displayBodies" Content="Display Bodies (0)" HorizontalAlignment="Left" Margin="667,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="126" IsChecked="True" />
-        <CheckBox x:Name="displayTalk" Content="Display Talk" HorizontalAlignment="Left" Margin="798,9.333,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="90" Checked="DisplayTalk_Checked" />
+        <CheckBox x:Name="displayTalk" Content="Display Talk" HorizontalAlignment="Left" Margin="798,9.333,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="90"/>
         
         
     </Grid>

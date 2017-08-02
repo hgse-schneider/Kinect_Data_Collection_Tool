@@ -131,8 +131,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // captureLowerSkeleton
             // 
             this.captureLowerSkeleton.AutoSize = true;
-            this.captureLowerSkeleton.Checked = true;
-            this.captureLowerSkeleton.CheckState = System.Windows.Forms.CheckState.Checked;
             this.captureLowerSkeleton.Location = new System.Drawing.Point(14, 86);
             this.captureLowerSkeleton.Name = "captureLowerSkeleton";
             this.captureLowerSkeleton.Size = new System.Drawing.Size(179, 24);
@@ -197,8 +195,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // quantify_movements
             // 
             this.quantify_movements.AutoSize = true;
-            this.quantify_movements.Checked = true;
-            this.quantify_movements.CheckState = System.Windows.Forms.CheckState.Checked;
             this.quantify_movements.Location = new System.Drawing.Point(14, 146);
             this.quantify_movements.Name = "quantify_movements";
             this.quantify_movements.Size = new System.Drawing.Size(180, 24);
@@ -244,8 +240,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // computeJointAngles
             // 
             this.computeJointAngles.AutoSize = true;
-            this.computeJointAngles.Checked = true;
-            this.computeJointAngles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.computeJointAngles.Location = new System.Drawing.Point(14, 116);
             this.computeJointAngles.Name = "computeJointAngles";
             this.computeJointAngles.Size = new System.Drawing.Size(189, 24);
@@ -346,10 +340,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // videoMedium
             // 
             this.videoMedium.AutoSize = true;
+            this.videoMedium.Checked = true;
             this.videoMedium.Location = new System.Drawing.Point(17, 89);
             this.videoMedium.Name = "videoMedium";
             this.videoMedium.Size = new System.Drawing.Size(155, 24);
             this.videoMedium.TabIndex = 2;
+            this.videoMedium.TabStop = true;
             this.videoMedium.Text = "Medium 960x540";
             this.videoMedium.UseVisualStyleBackColor = true;
             // 
@@ -366,12 +362,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // videoNo
             // 
             this.videoNo.AutoSize = true;
-            this.videoNo.Checked = true;
             this.videoNo.Location = new System.Drawing.Point(17, 29);
             this.videoNo.Name = "videoNo";
             this.videoNo.Size = new System.Drawing.Size(150, 24);
             this.videoNo.TabIndex = 0;
-            this.videoNo.TabStop = true;
             this.videoNo.Text = "Don\'t save video";
             this.videoNo.UseVisualStyleBackColor = true;
             // 
@@ -389,6 +383,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // saveWav
             // 
             this.saveWav.AutoSize = true;
+            this.saveWav.Checked = true;
+            this.saveWav.CheckState = System.Windows.Forms.CheckState.Checked;
             this.saveWav.Location = new System.Drawing.Point(17, 25);
             this.saveWav.Name = "saveWav";
             this.saveWav.Size = new System.Drawing.Size(130, 24);

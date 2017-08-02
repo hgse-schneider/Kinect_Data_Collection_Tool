@@ -234,8 +234,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (kinectWav != null)
             {
-                kinectWav.Write(e.Buffer, 0, e.BytesRecorded);
-                kinectWav.Flush();
+                if (logger.recording)
+                {
+                    kinectWav.Write(e.Buffer, 0, e.BytesRecorded);
+                    kinectWav.Flush();
+                }
             }
         }
 
@@ -258,8 +261,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (builtinWav != null)
             {
-                builtinWav.Write(e.Buffer, 0, e.BytesRecorded);
-                builtinWav.Flush();
+                if (logger.recording)
+                {
+                    builtinWav.Write(e.Buffer, 0, e.BytesRecorded);
+                    builtinWav.Flush();
+                }
             }
         }
 

@@ -219,6 +219,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // wire handler for body frame arrival
                 this.drawingBodies.bodyFrameReader.FrameArrived += this.drawingBodies.Reader_FrameArrived;
             }
+
+            if(logger.log_video)
+            {
+                logger.createVideoFrameWriter();
+            }
         }
 
         /// <summary>
@@ -289,16 +294,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 //this.displayBodies.IsChecked = false;
                 //this.displayImage.IsChecked = false;
             }
-        }
-
-        private void displayImage_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DisplayTalk_Checked(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)

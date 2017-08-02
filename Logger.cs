@@ -41,6 +41,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public bool log_dyad = false;
         public bool log_audio = false;
         public bool log_sound = false;
+        public bool log_video = false;
 
         // frequency at which to save the data
         public int frequency = 1;
@@ -71,7 +72,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public string[] previousLine = new string[] { "", "", "", "", "", "", "", "", "", "" };
 
         // video writer and list of people speaking
+        public int colorWidth = 1920;
+        public int ColorHeight = 1080;
+        public int scaleFactor = 1;
         public VideoWriter videowriter = null;
+        public int videoFrameCounter = 0;
 
         // get a reference to the main window
         private MainWindow main;
@@ -98,17 +103,26 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             log_are_talking = openingPrompt.are_talking.Checked;
             log_audio = openingPrompt.saveWav.Checked;
             log_sound = openingPrompt.are_talking.Checked;
+            log_video = !openingPrompt.videoNo.Checked; 
             outputcsv = openingPrompt.outputCSV.Checked;
             outputxlsx = openingPrompt.outputXLSX.Checked;
             frequency = (openingPrompt.hertz.Value - 1) *5;
             if (frequency == 0) frequency = 1;
             current_sec = DateTime.Now.Second;
 
+            // get the scaling factor from the opening prompt
+            if (openingPrompt.videoMedium.Checked) scaleFactor = 2;
+            if (openingPrompt.videoSmall.Checked) scaleFactor = 4;
+            
             // create a unique ID for the session if Default
             if (session == "Default") session += rnd.Next(1, 99);
 
             // print headers (ugly,should be re-written more cleanly)
-            header = "Timestamp,Session,Index,BodyID,";
+            header += "Timestamp,Session,Index,";
+
+            if (log_video) header += "VideoFrame,";
+
+            header += "BodyID,";
 
             if (log_upperbody) header +=
                  "SpineBase_X,SpineBase_Y,SpineBase_Z,SpineBase_inferred," +
@@ -184,23 +198,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             return logFile;
         }
 
-        public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
+        public void createVideoFrameWriter()
         {
-            if (this.openingPrompt.videoNo.Checked) return;
-
-            // get the scaling factor from the opening prompt
-            int scaleFactor = 1;
-            if (this.openingPrompt.videoMedium.Checked) scaleFactor = 2;
-            if (this.openingPrompt.videoSmall.Checked) scaleFactor = 4;
-
-            // resize the image if necessary
-            int width = colorBitmap.PixelWidth / scaleFactor;
-            int height = colorBitmap.PixelHeight / scaleFactor;
-            Size frameSize = new Size(width, height);
-            
             // create the videowriter if it doesn't exist yet
             if (videowriter == null)
             {
+                // resize the image if necessary
+                int width = colorWidth / scaleFactor;
+                int height = ColorHeight / scaleFactor;
+                Size frameSize = new Size(width, height);
+
                 String videoFilename = string.Format(@"{0}-Kinect-video-{1}.avi", session, Helpers.getTimestamp("filename"));
 
                 videoFilename = Path.Combine(this.destination, videoFilename);
@@ -211,6 +218,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                         frameSize, //frame size
                                         true); //Color
             }
+        }
+
+        public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
+        {
+            if (this.openingPrompt.videoNo.Checked) return;
+
+            if (videowriter == null) createVideoFrameWriter();
+
+            // resize the image if necessary
+            int width = colorBitmap.PixelWidth / scaleFactor;
+            int height = colorBitmap.PixelHeight / scaleFactor;
+            Size frameSize = new Size(width, height);
 
             // convert the color frame into an EMGU mat and resize it
             Image<Emgu.CV.Structure.Bgra, byte> img = Helpers.ToImage(frame);
@@ -218,6 +237,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // save the frame to the videowriter
             videowriter.Write(cpimg.Mat);
+            videoFrameCounter += 1;
         }
 
         /// <summary>
@@ -511,7 +531,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.bodies_tracked = count_bodies(drawingBodies);
 
                 // get the timestamp and creat the line for the log
-                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + "," + bodyIndex + ",";
+                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + ",";
+
+                if (log_video) data += videoFrameCounter + ",";
+
+                data += bodyIndex + ",";
 
                 // ----- RECORD BODY INFO ------- // 
                 data = record_body_data(data, drawingBodies, bodyIndex, body);
