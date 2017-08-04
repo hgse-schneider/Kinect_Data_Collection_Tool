@@ -25,10 +25,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public Bodies bodies = null;
 
         /// <summary>
+        /// the audio captured by the kinect
+        /// </summary>
+        public Audio audio = null;
+
+        /// <summary>
         /// reference to the two bodies we chose
         /// </summary>
         public Body left = null;
         public Body right = null;
+
+        /// <summary>
+        /// how much each person has been talking so far
+        /// </summary>
+        public int left_talking = 0;
+        public int right_talking = 0;
 
         /// <summary>
         /// Active Kinect sensor
@@ -55,10 +66,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         private DrawingGroup drawingGroup;
 
+        private MainWindow main;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AwarenessImage(KinectSensor kinectSensor, Bodies bodies, CheckBox displayTalk)
+        public AwarenessImage(KinectSensor kinectSensor, MainWindow main)
         {
             // get a reference to the kinect sensor
             this.kinectSensor = kinectSensor;
@@ -78,18 +91,29 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // Create an image source that we can use in our image control
             this.imageSource = new DrawingImage(this.drawingGroup);
 
+            // get the reference to the main window
+            this.main = main;
+
             // get the reference to the checkbox
-            this.displayTalk = displayTalk;
+            this.displayTalk = main.displayTalk;
 
             // get the reference to the bodies
-            this.bodies = bodies;
+            this.bodies = main.drawingBodies;
+
+            // get the reference to the audio module
+            this.audio = main.audio;
         }
-        
+
+        /// <summary>
+        /// Go through the list of bodies detected by the kinect
+        /// </summary>
         private void findBodies()
         {
             for (int i = 0; i < this.bodies.bodyCount; i++)
             {
                 Body body = this.bodies.bodies[i];
+
+                if (!body.IsTracked) continue;
 
                 // fill out the references it we don't have them already
                 if (left == null) this.left = body;
@@ -115,6 +139,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
         }
 
+        /// <summary>
+        /// Handles the face frame data arriving from the sensor
+        /// </summary>
         private void updateAwarenessImage(object sender, BodyFrameArrivedEventArgs e)
         {
             // we don't do anything if we have less than 2 bodies
@@ -126,25 +153,42 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // define who's on which side
                 if (this.right == null && this.left == null) findBodies();
 
+                // update the amount of talking we are recording
+                if (left != null && audio != null)
+                    if (audio.is_bodyID_talking(left.TrackingId)) left_talking += 1;
+                if (right != null && audio != null)
+                    if (audio.is_bodyID_talking(right.TrackingId)) right_talking += 1;
+
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
-                    if((Application.Current.MainWindow) != null)
+                    if(Application.Current.MainWindow != null)
                     {
-                        var h = ((Panel)Application.Current.MainWindow.Content).ActualHeight;
-                        var w = ((Panel)Application.Current.MainWindow.Content).ActualWidth;
-                        Rect displayRect = new Rect(0, 0, w, h);
+                        // size of the window
+                        float h = (float)((Panel)Application.Current.MainWindow.Content).ActualHeight;
+                        float w = (float)((Panel)Application.Current.MainWindow.Content).ActualWidth;
+                        
 
-                        Pen drawingPen = new Pen(Brushes.Green, 10);
-                        dc.DrawRectangle(Brushes.Green, drawingPen, new Rect(0, 0, 1, 1));
+                        // compute width of each rectangle
+                        float total = left_talking + right_talking;
+                        if (total == 0 || left_talking == 0 || right_talking == 0) return;
 
-                        this.drawingGroup.ClipGeometry = new RectangleGeometry(displayRect);
+                        float left_per = left_talking / total;
+                        float right_per = right_talking / total;
+                        float vert_left = 1 / left_per;
+                        float vert_right = 1 / right_per;
+
+                        // Draw a transparent background to set the render size
+                        dc.DrawRectangle(Brushes.Green, null, new Rect(0.0, 0.0, w*left_per, h));
+                        dc.DrawRectangle(Brushes.Red, null, new Rect(w*left_per, 0.0, w, h));
+
+                        // print amount of talking
+                        //Console.WriteLine("Left: " + left_talking + "     Right: " + right_talking + "     %: " + left_per);
                     }
                 }
             }
+            // if the checkbox isn't checked, we clear the display
             else
-            {
                 this.drawingGroup.Children.Clear();
-            }
         }
     }
 }

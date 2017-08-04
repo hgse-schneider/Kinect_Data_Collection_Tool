@@ -184,10 +184,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             // defining the wav header
             if(logger.log_audio)
-                initializeAudioFiles();
+                initializeAudio();
         }
 
-        void initializeAudioFiles()
+        void initializeAudio()
         {
             int waveInDevices = WaveIn.DeviceCount;
 
@@ -205,14 +205,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     kinectSource = new WaveIn();
                     kinectSource.DeviceNumber = waveInDevice;
                     kinectSource.WaveFormat = new WaveFormat(44100, 1);
-
                     kinectSource.DataAvailable += new EventHandler<WaveInEventArgs>(kinectSource_DataAvailable);
                     kinectSource.RecordingStopped += new EventHandler<StoppedEventArgs>(kinectSource_RecordingStopped);
-
-                    String videoFilename = string.Format(@"{0}-Kinect-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
-
-                    kinectWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, kinectSource.WaveFormat);
-
                     kinectSource.StartRecording();
                 }
                 else // record through the builtin microphone
@@ -220,41 +214,45 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     builtinSource = new WaveIn();
                     builtinSource.DeviceNumber = waveInDevice;
                     builtinSource.WaveFormat = new WaveFormat(44100, 1);
-
                     builtinSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
                     builtinSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
-
-                    String videoFilename = string.Format(@"{0}-Builtin-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
-
-                    builtinWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, builtinSource.WaveFormat);
-
                     builtinSource.StartRecording();
                 }
             }
 
         }
 
+        void initializeFile(string source)
+        {
+            if(source == "kinect")
+            {
+                String videoFilename = string.Format(@"{0}-Kinect-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
+                kinectWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, kinectSource.WaveFormat);
+            }
+            if(source == "builtin")
+            {
+                String videoFilename = string.Format(@"{0}-Builtin-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
+                builtinWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, builtinSource.WaveFormat);
+            }
+        }
+
         void kinectSource_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (kinectWav != null)
+            if (logger.recording)
             {
-                if (logger.recording)
-                {
-                    kinectWav.Write(e.Buffer, 0, e.BytesRecorded);
-                    kinectWav.Flush();
-                }
+                if (kinectWav == null) initializeFile("kinect");
+                kinectWav.Write(e.Buffer, 0, e.BytesRecorded);
+                kinectWav.Flush();
             }
         }
 
         void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (builtinWav != null)
+            if (logger.recording)
             {
-                if (logger.recording)
-                {
-                    builtinWav.Write(e.Buffer, 0, e.BytesRecorded);
-                    builtinWav.Flush();
-                }
+                if (builtinWav == null) initializeFile("builtin");
+                builtinWav.Write(e.Buffer, 0, e.BytesRecorded);
+                builtinWav.Flush();
             }
         }
 
@@ -286,6 +284,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 builtinWav.Dispose();
                 builtinWav = null;
             }
+        }
+
+        /// <summary>
+        /// Helper to make it easier to check if a person is talking
+        /// </summary>
+        public Boolean is_bodyID_talking(ulong ID)
+        {
+            return this.trackingIDSpeaking.Contains(ID);
         }
 
 

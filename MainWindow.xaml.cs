@@ -60,7 +60,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// Bitmap to display
         /// </summary>
-        private Bodies drawingBodies;
+        public Bodies drawingBodies;
         
         /// <summary>
         /// object to deal with audio
@@ -101,11 +101,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // create an object to manage the skeletons
             this.drawingBodies = new Bodies(this.kinectSensor, this.logger);
 
-            // create an object to manage the awareness frames
-            this.awarenessImage = new AwarenessImage(this.kinectSensor, drawingBodies, this.displayTalk);
-
             // creates an object to manage the audio
             this.audio = new Audio(this.kinectSensor, this.logger);
+
+            // create an object to manage the awareness frames
+            this.awarenessImage = new AwarenessImage(this.kinectSensor, this);
 
             // set IsAvailableChanged event notifier
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
@@ -171,6 +171,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             get { return this.awarenessImage.imageSource; }
         }
 
+
         /// <summary>
         /// Gets or sets the current status text to display
         /// </summary>
@@ -222,6 +223,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
             if(logger.log_video)
             {
+                // create the file for the video
                 logger.createVideoFrameWriter();
             }
         }
@@ -281,25 +283,33 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 logger.recording = false;
                 this.startRecording.Content = "Not Recording";
                 this.startRecording.Background = Brushes.Red;
-
-                //this.displayBodies.IsChecked = true;
-                //this.displayImage.IsChecked = true;
             }
             else if(!logger.recording)
             {
                 logger.recording = true;
                 this.startRecording.Content = "Recording !";
                 this.startRecording.Background = Brushes.LightGreen;
-
-                //this.displayBodies.IsChecked = false;
-                //this.displayImage.IsChecked = false;
             }
         }
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            this.displayTalk.IsChecked = false;
-            this.displayBodies.IsChecked = false;
+            //this.displayTalk.IsChecked = false;
+        }
+
+        private void displayTalk_Checked(object sender, RoutedEventArgs e)
+        {
+            this.ColorImageSourceBox.Opacity = 0.0;
+            this.ImageSourceBox.Opacity = 0.0;
+            this.AwarenessBox.Opacity = 1.0;
+        }
+
+        private void displayTalk_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.ColorImageSourceBox.Opacity = 1.0;
+            this.ImageSourceBox.Opacity = 1.0;
+            this.AwarenessBox.Opacity = 0.0;
+
         }
     }
 }

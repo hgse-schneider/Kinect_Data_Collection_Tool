@@ -20,10 +20,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Viewbox>
-            <Image Source="{Binding AwarenessImageSource}" Stretch="None" Opacity="0.5"/>
-        </Viewbox>
-
         <!--
         <Image Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5" />
         <TextBlock Grid.Row="0" Margin="0,0,-0.667,0.333" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18" Width="244" Text="Kinect Data Collection Tool"/>
@@ -31,16 +27,22 @@
         -->
 
         <Viewbox Grid.Row="1" HorizontalAlignment="Center">
-            <Image Source="{Binding ColorImageSource}" Stretch="UniformToFill" />
+            <Image x:Name="ColorImageSourceBox" Source="{Binding ColorImageSource}" Stretch="UniformToFill" />
         </Viewbox>
 
         <Viewbox Grid.Row="1" HorizontalAlignment="Center">
-            <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+            <Image x:Name="ImageSourceBox" Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
 
+        <Viewbox Grid.Row="1">
+            <Image x:Name="AwarenessBox" Source="{Binding AwarenessImageSource}" Stretch="UniformToFill" />
+        </Viewbox>
+
+        <!--
         <Viewbox Grid.Row="1" HorizontalAlignment="Center">
             <Image x:Name="DepthImage" Source="{Binding DepthImageSource}" Stretch="UniformToFill" Opacity="{Binding ElementName=depthSlider, Path=Value}" />
         </Viewbox>
+        -->
 
         <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}" Margin="0,0,410.333,-0.333">
             <StatusBarItem Content="{Binding StatusText}" HorizontalAlignment="Left"  />
@@ -54,7 +56,7 @@
         <Viewbox HorizontalAlignment="Left" Margin="31,10.333,0,-0.333" VerticalAlignment="Top" Width="157" Height="22" Grid.Row="2" Stretch="Fill"/>
         <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" />
         <CheckBox x:Name="displayBodies" Content="Display Bodies (0)" HorizontalAlignment="Left" Margin="667,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="126" IsChecked="True" />
-        <CheckBox x:Name="displayTalk" Content="Display Talk" HorizontalAlignment="Left" Margin="798,9.333,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="90"/>
+        <CheckBox x:Name="displayTalk" Content="Display Talk" HorizontalAlignment="Left" Margin="798,9.333,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="90" Checked="displayTalk_Checked" Unchecked="displayTalk_Unchecked" />
         
         
     </Grid>
