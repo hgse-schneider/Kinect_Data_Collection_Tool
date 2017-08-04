@@ -222,7 +222,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.hertzLabel.Name = "hertzLabel";
             this.hertzLabel.Size = new System.Drawing.Size(130, 20);
             this.hertzLabel.TabIndex = 17;
-            this.hertzLabel.Text = "Frequency: 15Hz";
+            this.hertzLabel.Text = "Frequency: 30Hz";
             this.hertzLabel.Click += new System.EventHandler(this.label5_Click);
             // 
             // hertz
@@ -234,7 +234,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.hertz.Name = "hertz";
             this.hertz.Size = new System.Drawing.Size(351, 69);
             this.hertz.TabIndex = 1;
-            this.hertz.Value = 4;
+            this.hertz.Value = 7;
             this.hertz.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // computeJointAngles

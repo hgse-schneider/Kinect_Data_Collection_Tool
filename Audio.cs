@@ -209,7 +209,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     kinectSource.DataAvailable += new EventHandler<WaveInEventArgs>(kinectSource_DataAvailable);
                     kinectSource.RecordingStopped += new EventHandler<StoppedEventArgs>(kinectSource_RecordingStopped);
 
-                    kinectWav = new WaveFileWriter(@"C:\Users\schneibe\Desktop\kinect.wav", kinectSource.WaveFormat);
+                    String videoFilename = string.Format(@"{0}-Kinect-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
+
+                    kinectWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, kinectSource.WaveFormat);
 
                     kinectSource.StartRecording();
                 }
@@ -222,7 +224,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     builtinSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
                     builtinSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
 
-                    builtinWav = new WaveFileWriter(@"C:\Users\schneibe\Desktop\builtin.wav", builtinSource.WaveFormat);
+                    String videoFilename = string.Format(@"{0}-Builtin-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
+
+                    builtinWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, builtinSource.WaveFormat);
 
                     builtinSource.StartRecording();
                 }
@@ -242,6 +246,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
         }
 
+        void waveSource_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (builtinWav != null)
+            {
+                if (logger.recording)
+                {
+                    builtinWav.Write(e.Buffer, 0, e.BytesRecorded);
+                    builtinWav.Flush();
+                }
+            }
+        }
+
         void kinectSource_RecordingStopped(object sender, StoppedEventArgs e)
         {
             if (kinectSource != null)
@@ -254,18 +270,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             {
                 kinectWav.Dispose();
                 kinectWav = null;
-            }
-        }
-
-        void waveSource_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            if (builtinWav != null)
-            {
-                if (logger.recording)
-                {
-                    builtinWav.Write(e.Buffer, 0, e.BytesRecorded);
-                    builtinWav.Flush();
-                }
             }
         }
 
