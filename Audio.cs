@@ -143,9 +143,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// audio source and files for saving audio
         /// </summary>
         public WaveIn kinectSource = null;
-        public WaveFileWriter kinectWav = null;
         public WaveIn builtinSource = null;
+        public WaveFileWriter kinectWav = null;
         public WaveFileWriter builtinWav = null;
+
+        // dictionary keeping track of how much people have talked
+        public Dictionary<ulong, int> talking_frames = new Dictionary<ulong, int>();
 
 
         public Audio(KinectSensor kinectSensor, Logger logger)
@@ -342,7 +345,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                             // Body tracking ID of the person speaking
                             foreach (AudioBodyCorrelation abc in subFrame.AudioBodyCorrelations)
                             {
+                                // list of people speaking
                                 this.trackingIDSpeaking.Add(abc.BodyTrackingId);
+
+                                // number of frames being spoken
+                                if (!this.talking_frames.ContainsKey(abc.BodyTrackingId))
+                                    this.talking_frames.Add(abc.BodyTrackingId, 0);
+                                this.talking_frames[abc.BodyTrackingId] += 1;
                             }
                         }
 
@@ -352,6 +361,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                             this.beamAngleConfidence = subFrame.BeamAngleConfidence;
                         }
                         
+
+                        // saves the audio frame to a temporary array
                         subFrame.CopyFrameDataToArray(this.audioBuffer);
                         
                         for (int i = 0; i < this.audioBuffer.Length; i += BytesPerSample)

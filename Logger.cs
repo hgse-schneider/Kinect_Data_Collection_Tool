@@ -75,8 +75,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public int colorWidth = 1920;
         public int ColorHeight = 1080;
         public int scaleFactor = 1;
-        public VideoWriter videowriter = null;
         public int videoFrameCounter = 0;
+        public VideoWriter videowriter = null;
 
         // get a reference to the main window
         private MainWindow main;

@@ -299,8 +299,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         private void displayTalk_Checked(object sender, RoutedEventArgs e)
         {
-            this.ColorImageSourceBox.Opacity = 0.0;
-            this.ImageSourceBox.Opacity = 0.0;
+            this.ColorImageSourceBox.Opacity = 0.1;
+            this.ImageSourceBox.Opacity = 0.1;
             this.AwarenessBox.Opacity = 1.0;
         }
 
@@ -308,8 +308,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             this.ColorImageSourceBox.Opacity = 1.0;
             this.ImageSourceBox.Opacity = 1.0;
-            this.AwarenessBox.Opacity = 0.0;
-
+            this.AwarenessBox.Opacity = 0.1;
         }
     }
 }
