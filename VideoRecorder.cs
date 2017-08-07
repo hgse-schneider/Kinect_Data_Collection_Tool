@@ -5,6 +5,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -27,18 +28,23 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         // number of frames currently recorded and current second
         public int videoFrameCounter = 0;
-        public int currentSec = DateTime.Now.Second; 
+        public int currentSecFrameCounter = 0;
+        public int currentMilliSec = 0; 
 
         // references to object instances
         public Logger logger;
         public VideoWriter videowriter = null;
+        public Stopwatch stopwatch = null;
 
+        // constructor
         public VideoRecorder(Logger logger)
         {
-            // save information
+            // saves information
             this.logger = logger;
+            this.stopwatch = new Stopwatch();
         }
 
+        // creates the video writer
         public void createVideoFrameWriter()
         {
             // create the videowriter if it doesn't exist yet
@@ -60,7 +66,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                         true); //Color
 
                 // update the time counter
-                currentSec = DateTime.Now.Second;
+                this.stopwatch.Start();
             }
         }
 
@@ -69,8 +75,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
         {
+            // if we are not recording a video, we don't do anything
             if (logger.openingPrompt.videoNo.Checked) return;
 
+            // the first time that the function is called, it creates the video writer
             if (videowriter == null) createVideoFrameWriter();
 
             // resize the image if necessary
@@ -83,13 +91,27 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Image<Emgu.CV.Structure.Bgra, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
 
             // save the frame to the videowriter
-            videowriter.Write(cpimg.Mat);
-            videoFrameCounter += 1;
-            if(currentSec != DateTime.Now.Second)
+            if(currentSecFrameCounter < 15)
             {
+                videowriter.Write(cpimg.Mat);
+                videoFrameCounter += 1;
+                currentSecFrameCounter += 1;
+            }
+
+            if (this.stopwatch.ElapsedMilliseconds > 1000)
+            {
+                // if we don't have enough frames for the current second, we repeat some
+                while (currentSecFrameCounter < 15)
+                {
+                    videowriter.Write(cpimg.Mat);
+                    videoFrameCounter += 1;
+                    currentSecFrameCounter += 1;
+                }
+
                 Console.WriteLine("Number of video frames: " + videoFrameCounter);
-                currentSec = DateTime.Now.Second;
-                videoFrameCounter = 0;
+                this.stopwatch.Reset();
+                this.stopwatch.Start();
+                currentSecFrameCounter = 0;
             }
         }
     }

@@ -406,8 +406,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (this.main.audio.trackingIDSpeaking.Contains(body.TrackingId))
             {
                 return "1," 
-                    + this.main.audio.volume.ToString().Substring(0,6) + "," 
-                    + this.main.audio.beamAngle.ToString().Substring(0, 6);
+                    + this.main.audio.volume + "," 
+                    + this.main.audio.beamAngle;
 
             }
             else return "0,0,0";
