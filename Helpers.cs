@@ -40,7 +40,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                  "AnkleRight",
                  "FootRight"
                 };
-        
+
+        /// <summary>
+        /// cnoverts a color frame into an EMgu image
+        /// </summary>
         public static Image<Emgu.CV.Structure.Bgra, byte> ToImage(this ColorFrame frame)
         {
             int width = frame.FrameDescription.Width;
@@ -83,6 +86,32 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 return ""+(Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             else
                 return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.fff");
+        }
+
+        /// <summary>
+        /// simple math helper to compute the distance between two 3D points
+        /// </summary>
+        public static double distance_between_3D_points(double x1, double y1, double z1, double x2, double y2, double z2)
+        {
+            double deltaX = x1 - x2;
+            double deltaY = y1 - y2;
+            double deltaZ = z1 - z2;
+
+            double distance = (double)Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+            return distance;
+
+            //return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2) + Math.Pow(z1 - z2, 2));
+        }
+
+        /// <summary>
+        /// compute thes distance between two Kinect joints in 3D space
+        /// </summary>
+        public static double distance_between_kinect_joints(Joint j1, Joint j2)
+        {
+            return distance_between_3D_points(
+                j1.Position.X, j1.Position.Y, j1.Position.Z,
+                j2.Position.X, j2.Position.Y, j2.Position.Z);
         }
 
     }

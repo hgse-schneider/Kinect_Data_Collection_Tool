@@ -224,7 +224,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if(logger.log_video)
             {
                 // create the file for the video
-                logger.createVideoFrameWriter();
+                logger.videoRecorder.createVideoFrameWriter();
             }
         }
 

@@ -71,15 +71,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public string[] faceInfo = new string[] { "", "", "", "", "", "", "", "", "", "" };
         public string[] previousLine = new string[] { "", "", "", "", "", "", "", "", "", "" };
 
-        // video writer and list of people speaking
-        public int colorWidth = 1920;
-        public int ColorHeight = 1080;
-        public int scaleFactor = 1;
-        public int videoFrameCounter = 0;
-        public VideoWriter videowriter = null;
-
         // get a reference to the main window
         private MainWindow main;
+        public VideoRecorder videoRecorder;
 
         /// <summary>
         /// Initializes a new instance of the Logger class.
@@ -88,6 +82,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             // get a reference to the main window 
             this.main = main;
+            this.videoRecorder = new VideoRecorder(this);
 
             // saves data from the opening prompt,
             // (those values disappear as soon as the user closes the window)
@@ -111,8 +106,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             current_sec = DateTime.Now.Second;
 
             // get the scaling factor from the opening prompt
-            if (openingPrompt.videoMedium.Checked) scaleFactor = 2;
-            if (openingPrompt.videoSmall.Checked) scaleFactor = 4;
+            if (openingPrompt.videoMedium.Checked) videoRecorder.scaleFactor = 2;
+            if (openingPrompt.videoSmall.Checked) videoRecorder.scaleFactor = 4;
             
             // create a unique ID for the session if Default
             if (session == "Default") session += rnd.Next(1, 99);
@@ -198,48 +193,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             return logFile;
         }
 
-        public void createVideoFrameWriter()
-        {
-            // create the videowriter if it doesn't exist yet
-            if (videowriter == null)
-            {
-                // resize the image if necessary
-                int width = colorWidth / scaleFactor;
-                int height = ColorHeight / scaleFactor;
-                Size frameSize = new Size(width, height);
-
-                String videoFilename = string.Format(@"{0}-Kinect-video-{1}.avi", session, Helpers.getTimestamp("filename"));
-
-                videoFilename = Path.Combine(this.destination, videoFilename);
-
-                videowriter = new VideoWriter(videoFilename, //File name
-                                        -1, //Video format -1 opens a dialogue window
-                                        15, //FPS
-                                        frameSize, //frame size
-                                        true); //Color
-            }
-        }
-
-        public void WriteFrameToVideo(WriteableBitmap colorBitmap, ColorFrame frame)
-        {
-            if (this.openingPrompt.videoNo.Checked) return;
-
-            if (videowriter == null) createVideoFrameWriter();
-
-            // resize the image if necessary
-            int width = colorBitmap.PixelWidth / scaleFactor;
-            int height = colorBitmap.PixelHeight / scaleFactor;
-            Size frameSize = new Size(width, height);
-
-            // convert the color frame into an EMGU mat and resize it
-            Image<Emgu.CV.Structure.Bgra, byte> img = Helpers.ToImage(frame);
-            Image<Emgu.CV.Structure.Bgra, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
-
-            // save the frame to the videowriter
-            videowriter.Write(cpimg.Mat);
-            videoFrameCounter += 1;
-        }
-
         /// <summary>
         /// returns an angle between three 3D points
         /// </summary>
@@ -300,47 +253,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
 
             return new Tuple<double, double>(left, right);
-        }
-
-        public double distance_between_3D_points(double x1, double y1, double z1, double x2, double y2, double z2)
-        {
-            double deltaX = x1 - x2;
-            double deltaY = y1 - y2;
-            double deltaZ = z1 - z2;
-
-            double distance = (double)Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-
-            return distance;
-
-            //return Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2) + Math.Pow(z1 - z2, 2));
-        }
-
-        public double distance_between_kinect_joints(Joint j1, Joint j2)
-        {
-            return distance_between_3D_points(
-                j1.Position.X, j1.Position.Y, j1.Position.Z, 
-                j2.Position.X, j2.Position.Y, j2.Position.Z);
-        }
-
-        public string distance_between_string_joints(string joint, string[] cur, string[] pre)
-        {
-            int index = this.header_dic[joint + "_X"];
-
-            double cur_x = Convert.ToDouble(cur[index]);
-            double cur_y = Convert.ToDouble(cur[index + 1]);
-            double cur_z = Convert.ToDouble(cur[index + 2]);
-            int cur_inferred = Int32.Parse((cur[index + 3]));
-
-            double pre_x = Convert.ToDouble(pre[index]);
-            double pre_y = Convert.ToDouble(pre[index + 1]);
-            double pre_z = Convert.ToDouble(pre[index + 2]);
-            int pre_inferred = Int32.Parse((pre[index + 3]));
-
-            if (cur_inferred == 1 || pre_inferred == 1) return "";
-
-            double total = distance_between_3D_points(cur_x, cur_y, cur_z, pre_x, pre_y, pre_z);
-
-            return ""+total;
         }
 
 
@@ -493,12 +405,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (this.main.audio.trackingIDSpeaking.Contains(body.TrackingId))
             {
-                return "1," + this.main.audio.volume + "," + this.main.audio.beamAngle;
+                return "1," 
+                    + this.main.audio.volume.ToString().Substring(0,6) + "," 
+                    + this.main.audio.beamAngle.ToString().Substring(0, 6);
 
             }
             else return "0,0,0";
         }
 
+        /// <summary>
+        /// helper to count how many bodies are currently detected
+        /// </summary>
         public int count_bodies(Bodies drawingBodies)
         {
             int count = 0;
@@ -507,6 +424,30 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 if (body.IsTracked) count += 1;
 
             return count;
+        }
+
+        /// <summary>
+        /// compute the distance between two joints (expressed as strings)
+        /// </summary>
+        public string distance_between_string_joints(string joint, string[] cur, string[] pre)
+        {
+            int index = this.header_dic[joint + "_X"];
+
+            double cur_x = Convert.ToDouble(cur[index]);
+            double cur_y = Convert.ToDouble(cur[index + 1]);
+            double cur_z = Convert.ToDouble(cur[index + 2]);
+            int cur_inferred = Int32.Parse((cur[index + 3]));
+
+            double pre_x = Convert.ToDouble(pre[index]);
+            double pre_y = Convert.ToDouble(pre[index + 1]);
+            double pre_z = Convert.ToDouble(pre[index + 2]);
+            int pre_inferred = Int32.Parse((pre[index + 3]));
+
+            if (cur_inferred == 1 || pre_inferred == 1) return "";
+
+            double total = Helpers.distance_between_3D_points(cur_x, cur_y, cur_z, pre_x, pre_y, pre_z);
+
+            return "" + total;
         }
 
         /// <summary>
@@ -533,8 +474,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // get the timestamp and creat the line for the log
                 String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + ",";
 
-                if (log_video) data += videoFrameCounter + ",";
+                // get the index at which each video frame is saved
+                if (log_video) data += videoRecorder.videoFrameCounter + ",";
 
+                // saves the body ID of that person
                 data += bodyIndex + ",";
 
                 // ----- RECORD BODY INFO ------- // 
@@ -616,8 +559,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 + rightleftmost2.Item1 + "," + rightleftmost2.Item2 + ",";
 
             // compute the distance between people
-            data += distance_between_kinect_joints(b1.Joints[JointType.Head], b2.Joints[JointType.Head]) + "," 
-                + distance_between_kinect_joints(b1.Joints[JointType.SpineMid], b2.Joints[JointType.SpineMid]) + ","
+            data += Helpers.distance_between_kinect_joints(b1.Joints[JointType.Head], b2.Joints[JointType.Head]) + "," 
+                + Helpers.distance_between_kinect_joints(b1.Joints[JointType.SpineMid], b2.Joints[JointType.SpineMid]) + ","
                 + Math.Abs(rightleftmost1.Item1 - rightleftmost2.Item2) + ","
                 + Math.Abs(rightleftmost1.Item2 - rightleftmost2.Item1) + ",";
 

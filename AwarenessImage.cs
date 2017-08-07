@@ -38,8 +38,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// how much each person has been talking so far
         /// </summary>
-        public int left_talking = 0;
-        public int right_talking = 0;
+        public int left_talking = 1;
+        public int right_talking = 1;
 
         /// <summary>
         /// Active Kinect sensor
