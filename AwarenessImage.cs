@@ -211,8 +211,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         // set the colors of the rectangles
                         Brush left_color = Brushes.Green;
                         Brush right_color = Brushes.Blue;
-                        if (left == null) left_color = Brushes.LightGreen;
-                        if (right == null) right_color = Brushes.LightBlue;
+                        if (left == null) right_color = Brushes.LightBlue;
+                        if (right == null) left_color = Brushes.LightGreen;
 
                         // Draw a transparent background to set the render size
                         dc.DrawRectangle(left_color, null, new Rect(0.0, 0.0, w*left_per, h));
