@@ -40,6 +40,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public int left_talking = 1;
         public int right_talking = 1;
+        public Dictionary<int,int> left_talking_dic = new Dictionary<int, int>();
+        public Dictionary<int,int> right_talking_dic = new Dictionary<int, int>();
 
         /// <summary>
         /// Active Kinect sensor
@@ -123,10 +125,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 if (!body.IsTracked) continue;
 
                 // fill out the references it we don't have them already
-                if (left == null)
-                    this.left = body;
-                else if (right == null)
-                    this.right = body;
+                if (left == null) this.left = body;
+                else if (right == null) this.right = body;
+
                 // if we have more than two bodies, we keep the two that are the closest to the kinect
                 else
                 {
@@ -151,6 +152,25 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         }
 
         /// <summary>
+        /// Updates dictionary of talking time
+        /// </summary>
+        private void update_dictionary(string side, int talk_time)
+        {
+            // get the dictionary
+            Dictionary<int,int> dic = left_talking_dic;
+            if (side == "right") dic = right_talking_dic;
+
+            // update the values
+            int time = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            if (!dic.ContainsKey(time)) dic.Add(time, 0);
+            dic[time] += talk_time;
+
+            // remove older values
+            if (dic.ContainsKey(time - 30)) dic.Remove(time - 30);
+
+        }
+
+        /// <summary>
         /// Handles the face frame data arriving from the sensor
         /// </summary>
         private void update_talking_time()
@@ -160,6 +180,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 if (this.audio.talking_frames.ContainsKey(left.TrackingId))
                 {
                     left_talking += this.audio.talking_frames[left.TrackingId];
+                    update_dictionary("left", this.audio.talking_frames[left.TrackingId]);
                     this.audio.talking_frames[left.TrackingId] = 0;
                 }
             // retrieve the amount of talking since last time
@@ -167,6 +188,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 if (this.audio.talking_frames.ContainsKey(right.TrackingId))
                 {
                     right_talking += this.audio.talking_frames[right.TrackingId];
+                    update_dictionary("right", this.audio.talking_frames[right.TrackingId]);
                     this.audio.talking_frames[right.TrackingId] = 0;
                 }
         }
@@ -203,10 +225,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         if (total == 0 || left_talking == 0 || right_talking == 0) return;
 
                         // compute the % of talk for each person
-                        float left_per = left_talking / total;
-                        float right_per = right_talking / total;
-                        float vert_left = 1 / left_per;
-                        float vert_right = 1 / right_per;
+                        //float left_per = left_talking / total;  
+                        float tmp_left = left_talking_dic.Sum(x => x.Value);
+                        float tmp_right = right_talking_dic.Sum(x => x.Value);
+                        float left_per = tmp_left / (tmp_left + tmp_right);
 
                         // set the colors of the rectangles
                         Brush left_color = Brushes.Green;
@@ -220,6 +242,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                         // print amount of talking
                         //Console.WriteLine("Left: " + left_talking + "     Right: " + right_talking + "     %: " + left_per);
+                        Console.WriteLine("Left: " + tmp_left + "     Right: " + tmp_right + "     %: " + left_per);
                     }
                 }
             }
