@@ -210,6 +210,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // update how much talking as taken place since last time
                 update_talking_time();
 
+                // we don't draw anything if one person is missing
+                if (left == null || right == null) return;
+
                 // draw the two rectangles
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
