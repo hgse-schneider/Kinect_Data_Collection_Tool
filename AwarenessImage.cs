@@ -226,8 +226,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                         // compute the % of talk for each person
                         //float left_per = left_talking / total;  
-                        float tmp_left = left_talking_dic.Sum(x => x.Value);
-                        float tmp_right = right_talking_dic.Sum(x => x.Value);
+                        float tmp_left = left_talking_dic.Sum(x => x.Value) + 1;
+                        float tmp_right = right_talking_dic.Sum(x => x.Value) + 1;
                         float left_per = tmp_left / (tmp_left + tmp_right);
 
                         // set the colors of the rectangles
@@ -242,7 +242,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                         // print amount of talking
                         //Console.WriteLine("Left: " + left_talking + "     Right: " + right_talking + "     %: " + left_per);
-                        Console.WriteLine("Left: " + tmp_left + "     Right: " + tmp_right + "     %: " + left_per);
+                        Console.WriteLine("Left: " + tmp_left + "     Right: " + tmp_right + "     %: " + left_per + "   width:" + w*left_per + "    total w:" + w + "     other:" + SystemParameters.VirtualScreenWidth
+);
                     }
                 }
             }
