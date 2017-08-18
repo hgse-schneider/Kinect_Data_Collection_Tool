@@ -208,15 +208,22 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         private Logger logger;
 
         /// <summary>
+        /// reference to the logger
+        /// </summary>
+        private AwarenessImage awarenessImg;
+
+        /// <summary>
         /// Initializes a new instance of the Bodies class.
         /// </summary>
-        public Bodies(KinectSensor kinectSensor, Logger logger)
+        public Bodies(KinectSensor kinectSensor, Logger logger, AwarenessImage awarenessImg)
         {
             // one sensor is currently supported
             this.kinectSensor = kinectSensor;
 
             // reference to the logger
             this.logger = logger;
+            this.awarenessImg = awarenessImg;
+            awarenessImg.bodies = this;
 
             // get the coordinate mapper
             this.coordinateMapper = this.kinectSensor.CoordinateMapper;
@@ -499,6 +506,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                             this.textFaceNotTracked,
                             this.textLayoutFaceNotTracked);
                     }
+
+                    // draw the awareness img
+                    this.awarenessImg.DrawImage(dc, this.displayWidth, this.displayHeight);
 
                     // prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));

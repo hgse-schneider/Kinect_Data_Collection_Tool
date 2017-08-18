@@ -98,14 +98,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // create an object to manage the color frames
             //this.drawingDepthImage = new DepthImage(this.kinectSensor);
 
-            // create an object to manage the skeletons
-            this.drawingBodies = new Bodies(this.kinectSensor, this.logger);
-
             // creates an object to manage the audio
             this.audio = new Audio(this.kinectSensor, this.logger);
 
             // create an object to manage the awareness frames
             this.awarenessImage = new AwarenessImage(this.kinectSensor, this);
+
+            // create an object to manage the skeletons
+            this.drawingBodies = new Bodies(this.kinectSensor, this.logger, this.awarenessImage);
 
             // set IsAvailableChanged event notifier
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged;
@@ -299,16 +299,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
         private void displayTalk_Checked(object sender, RoutedEventArgs e)
         {
-            this.ColorImageSourceBox.Opacity = 0.1;
-            this.ImageSourceBox.Opacity = 0.1;
-            this.AwarenessBox.Opacity = 1.0;
+            //this.ColorImageSourceBox.Opacity = 0.1;
+            //this.ImageSourceBox.Opacity = 0.1;
+            //this.AwarenessBox.Opacity = 1.0;
         }
 
         private void displayTalk_Unchecked(object sender, RoutedEventArgs e)
         {
-            this.ColorImageSourceBox.Opacity = 1.0;
-            this.ImageSourceBox.Opacity = 1.0;
-            this.AwarenessBox.Opacity = 0.1;
+            //this.ColorImageSourceBox.Opacity = 1.0;
+            //this.ImageSourceBox.Opacity = 1.0;
+            //this.AwarenessBox.Opacity = 0.1;
         }
     }
 }

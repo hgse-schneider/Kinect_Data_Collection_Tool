@@ -12,7 +12,7 @@ using System.Windows.Controls;
 
 namespace Microsoft.Samples.Kinect.BodyBasics
 {
-    class AwarenessImage
+    public class AwarenessImage
     {
         /// <summary>
         /// Active Kinect sensor
@@ -118,6 +118,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.left = null;
             this.right = null;
 
+            if (this.bodies == null) return;
+
             for (int i = 0; i < this.bodies.bodyCount; i++)
             {
                 Body body = this.bodies.bodies[i];
@@ -210,6 +212,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // update how much talking as taken place since last time
                 update_talking_time();
 
+                return;
+
                 // we don't draw anything if one person is missing
                 if (left == null || right == null) return;
 
@@ -220,9 +224,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     if(Application.Current.MainWindow != null)
                     {
                         // size of the window
-                        float h = (float)((Panel)Application.Current.MainWindow.Content).ActualHeight;
-                        float w = (float)((Panel)Application.Current.MainWindow.Content).ActualWidth;
+                        double windowHeigth = ((Panel)Application.Current.MainWindow.Content).ActualHeight;
+                        double windowWidth = ((Panel)Application.Current.MainWindow.Content).ActualWidth;
                         
+                        // draw the dark background
+                        dc.DrawRectangle(Brushes.Gray, null, new Rect(0.0, 0.0, windowWidth - 20, windowHeigth - 20));
+
+                        double w = (double)this.imageSource.Width;
+                        double h = (double)this.imageSource.Height;
+
                         // compute width of each rectangle
                         float total = left_talking + right_talking;
                         if (total == 0 || left_talking == 0 || right_talking == 0) return;
@@ -244,14 +254,54 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                         dc.DrawRectangle(right_color, null, new Rect(w*left_per, 0.0, w, h));
 
                         // print amount of talking
+                        Console.WriteLine("Width: " + this.imageSource.Width + "    Height: " + imageSource.Height);
                         //Console.WriteLine("Left: " + left_talking + "     Right: " + right_talking + "     %: " + left_per);
-                        Console.WriteLine("Left: " + tmp_left + "     Right: " + tmp_right + "     %: " + left_per + "   width:" + w*left_per + "    total w:" + w + "     other:" + SystemParameters.VirtualScreenWidth
-);
+                        //Console.WriteLine("Left: " + tmp_left + "     Right: " + tmp_right + "     %: " + left_per + "   width:" + w*left_per + "    total w:" + w + "     other:" + SystemParameters.VirtualScreenWidth);
                     }
                 }
             }
             // if the checkbox isn't checked, we clear the display
             else this.drawingGroup.Children.Clear();
+        }
+
+        public void DrawImage(DrawingContext dc, int w, int h)
+        {
+            // the application crashes when it starts otherwise
+            if (Application.Current.MainWindow == null) return;
+
+            // check if we actually need to display the awareness image
+            if (!this.displayTalk.IsChecked.Value) return;
+
+            // define who's on which side
+            findBodies();
+
+            // we don't draw anything if one person is missing
+            if (left == null || right == null) return;
+
+            // compute width of each rectangle
+            float total = left_talking + right_talking;
+            if (total == 0 || left_talking == 0 || right_talking == 0) return;
+
+            // compute the % of talk for each person
+            //float left_per = left_talking / total;  
+            float tmp_left = left_talking_dic.Sum(x => x.Value) + 1;
+            float tmp_right = right_talking_dic.Sum(x => x.Value) + 1;
+            float left_per = tmp_left / (tmp_left + tmp_right);
+
+            // set the colors of the rectangles
+            Brush left_color = Brushes.Green;
+            Brush right_color = Brushes.Blue;
+            if (left == null) right_color = Brushes.LightBlue;
+            if (right == null) left_color = Brushes.LightGreen;
+
+            // Draw a transparent background to set the render size
+            dc.DrawRectangle(left_color, null, new Rect(0.0, 0.0, w * left_per, h));
+            dc.DrawRectangle(right_color, null, new Rect(w * left_per, 0.0, w, h));
+
+            // print amount of talking
+            //Console.WriteLine("Width: " + this.imageSource.Width + "    Height: " + imageSource.Height);
+            //Console.WriteLine("Left: " + left_talking + "     Right: " + right_talking + "     %: " + left_per);
+            Console.WriteLine("Left: " + tmp_left + "     Right: " + tmp_right + "     %: " + left_per + "   width:" + w*left_per + "    total w:" + w + "     other:" + SystemParameters.VirtualScreenWidth);
         }
     }
 }
