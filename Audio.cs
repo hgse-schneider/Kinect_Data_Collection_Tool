@@ -14,6 +14,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     public class Audio
     {
+
+        /// <summary>
+        /// Active Kinect sensor
+        /// </summary>
+        private MainWindow main = null;
+
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
@@ -151,8 +157,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public Dictionary<ulong, int> talking_frames = new Dictionary<ulong, int>();
 
 
-        public Audio(KinectSensor kinectSensor, Logger logger)
+        public Audio(KinectSensor kinectSensor, Logger logger, MainWindow main)
         {
+            // save a reference to the main window
+            this.main = main;
+
             // save a reference to the kinect sensor object
             this.kinectSensor = kinectSensor;
 
@@ -349,9 +358,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                                 this.trackingIDSpeaking.Add(abc.BodyTrackingId);
 
                                 // number of frames being spoken
-                                if (!this.talking_frames.ContainsKey(abc.BodyTrackingId))
-                                    this.talking_frames.Add(abc.BodyTrackingId, 0);
-                                this.talking_frames[abc.BodyTrackingId] += 1;
+                                if(main.displayTalk.IsChecked.Value)
+                                {
+                                    if (!this.talking_frames.ContainsKey(abc.BodyTrackingId))
+                                        this.talking_frames.Add(abc.BodyTrackingId, 0);
+                                    this.talking_frames[abc.BodyTrackingId] += 1;
+
+                                }
                             }
                         }
 

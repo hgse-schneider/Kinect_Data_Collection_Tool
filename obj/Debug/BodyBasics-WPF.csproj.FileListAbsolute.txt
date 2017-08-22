@@ -169,3 +169,4 @@ C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\bin\AnyCPU\Debug\zh-tw\ZedGraph.resources.dll
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.exe
 C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.pdb
+C:\Users\schneibe\Documents\GitHub\Kinect_Data_Collection_Tool\obj\Debug\BodyBasics-WPF.csprojResolveAssemblyReference.cache

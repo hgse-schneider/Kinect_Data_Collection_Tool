@@ -158,18 +158,21 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         private void update_dictionary(string side, int talk_time)
         {
-            // get the dictionary
-            Dictionary<int,int> dic = left_talking_dic;
-            if (side == "right") dic = right_talking_dic;
+            // we display the image if the checkbox is checked
+            if (this.displayTalk.IsChecked.Value)
+            {
+                // get the dictionary
+                Dictionary<int, int> dic = left_talking_dic;
+                if (side == "right") dic = right_talking_dic;
 
-            // update the values
-            int time = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-            if (!dic.ContainsKey(time)) dic.Add(time, 0);
-            dic[time] += talk_time;
+                // update the values
+                int time = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                if (!dic.ContainsKey(time)) dic.Add(time, 0);
+                dic[time] += talk_time;
 
-            // remove older values
-            if (dic.ContainsKey(time - 30)) dic.Remove(time - 30);
-
+                // remove older values
+                if (dic.ContainsKey(time - 30)) dic.Remove(time - 30);
+            }
         }
 
         /// <summary>
@@ -211,57 +214,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                 // update how much talking as taken place since last time
                 update_talking_time();
-
-                return;
-
-                // we don't draw anything if one person is missing
-                if (left == null || right == null) return;
-
-                // draw the two rectangles
-                using (DrawingContext dc = this.drawingGroup.Open())
-                {
-                    // the application crashes when it starts otherwise
-                    if(Application.Current.MainWindow != null)
-                    {
-                        // size of the window
-                        double windowHeigth = ((Panel)Application.Current.MainWindow.Content).ActualHeight;
-                        double windowWidth = ((Panel)Application.Current.MainWindow.Content).ActualWidth;
-                        
-                        // draw the dark background
-                        dc.DrawRectangle(Brushes.Gray, null, new Rect(0.0, 0.0, windowWidth - 20, windowHeigth - 20));
-
-                        double w = (double)this.imageSource.Width;
-                        double h = (double)this.imageSource.Height;
-
-                        // compute width of each rectangle
-                        float total = left_talking + right_talking;
-                        if (total == 0 || left_talking == 0 || right_talking == 0) return;
-
-                        // compute the % of talk for each person
-                        //float left_per = left_talking / total;  
-                        float tmp_left = left_talking_dic.Sum(x => x.Value) + 1;
-                        float tmp_right = right_talking_dic.Sum(x => x.Value) + 1;
-                        float left_per = tmp_left / (tmp_left + tmp_right);
-
-                        // set the colors of the rectangles
-                        Brush left_color = Brushes.Green;
-                        Brush right_color = Brushes.Blue;
-                        if (left == null) right_color = Brushes.LightBlue;
-                        if (right == null) left_color = Brushes.LightGreen;
-
-                        // Draw a transparent background to set the render size
-                        dc.DrawRectangle(left_color, null, new Rect(0.0, 0.0, w*left_per, h));
-                        dc.DrawRectangle(right_color, null, new Rect(w*left_per, 0.0, w, h));
-
-                        // print amount of talking
-                        Console.WriteLine("Width: " + this.imageSource.Width + "    Height: " + imageSource.Height);
-                        //Console.WriteLine("Left: " + left_talking + "     Right: " + right_talking + "     %: " + left_per);
-                        //Console.WriteLine("Left: " + tmp_left + "     Right: " + tmp_right + "     %: " + left_per + "   width:" + w*left_per + "    total w:" + w + "     other:" + SystemParameters.VirtualScreenWidth);
-                    }
-                }
             }
-            // if the checkbox isn't checked, we clear the display
-            else this.drawingGroup.Children.Clear();
         }
 
         public void DrawImage(DrawingContext dc, int w, int h)

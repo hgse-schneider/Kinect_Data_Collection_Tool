@@ -99,7 +99,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //this.drawingDepthImage = new DepthImage(this.kinectSensor);
 
             // creates an object to manage the audio
-            this.audio = new Audio(this.kinectSensor, this.logger);
+            this.audio = new Audio(this.kinectSensor, this.logger, this);
 
             // create an object to manage the awareness frames
             this.awarenessImage = new AwarenessImage(this.kinectSensor, this);
