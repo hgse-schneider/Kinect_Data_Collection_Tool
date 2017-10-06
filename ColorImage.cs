@@ -39,7 +39,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// <summary>
         /// was the last frame saved?
         /// </summary>
-        public Boolean was_last_frame_saved = false;
         public double fps;
 
         /// <summary>
@@ -87,20 +86,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // ColorFrame is IDisposable
             using (ColorFrame colorFrame = e.FrameReference.AcquireFrame())
             {
-
                 if (colorFrame != null)
                 {
                     FrameDescription colorFrameDescription = colorFrame.FrameDescription;
 
                     // detects if we are running at 30 or 15 fps
                     this.fps = 1.0 / colorFrame.ColorCameraSettings.FrameInterval.TotalSeconds;
-
-                    // if we are running at 30 fps and the last frame was saved, we skip it
-                    if (was_last_frame_saved && fps > 30)
-                    {
-                        was_last_frame_saved = false;
-                        return;
-                    }
 
                     // grab the color frame
                     using (KinectBuffer colorBuffer = colorFrame.LockRawImageBuffer())
@@ -123,8 +114,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                         if(logger.log_video && logger.recording)
                             logger.videoRecorder.WriteFrameToVideo(colorBitmap, colorFrame);
-
-                        was_last_frame_saved = true;
                     }
                     
                 }

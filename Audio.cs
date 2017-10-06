@@ -220,6 +220,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     kinectSource.DataAvailable += new EventHandler<WaveInEventArgs>(kinectSource_DataAvailable);
                     kinectSource.RecordingStopped += new EventHandler<StoppedEventArgs>(kinectSource_RecordingStopped);
                     kinectSource.StartRecording();
+
+                    String videoFilename = string.Format(@"{0}-Kinect-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
+                    kinectWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, kinectSource.WaveFormat);
                 }
                 else // record through the builtin microphone
                 {
@@ -229,30 +232,17 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     builtinSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
                     builtinSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
                     builtinSource.StartRecording();
+                    String videoFilename = string.Format(@"{0}-Builtin-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
+                    builtinWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, builtinSource.WaveFormat);
                 }
             }
 
-        }
-
-        void initializeFile(string source)
-        {
-            if(source == "kinect")
-            {
-                String videoFilename = string.Format(@"{0}-Kinect-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
-                kinectWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, kinectSource.WaveFormat);
-            }
-            if(source == "builtin")
-            {
-                String videoFilename = string.Format(@"{0}-Builtin-audio-{1}.wav", logger.session, Helpers.getTimestamp("filename"));
-                builtinWav = new WaveFileWriter(logger.destination + "\\" + videoFilename, builtinSource.WaveFormat);
-            }
         }
 
         void kinectSource_DataAvailable(object sender, WaveInEventArgs e)
         {
             if (logger.recording)
             {
-                if (kinectWav == null) initializeFile("kinect");
                 kinectWav.Write(e.Buffer, 0, e.BytesRecorded);
                 kinectWav.Flush();
             }
@@ -262,7 +252,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         {
             if (logger.recording)
             {
-                if (builtinWav == null) initializeFile("builtin");
                 builtinWav.Write(e.Buffer, 0, e.BytesRecorded);
                 builtinWav.Flush();
             }
@@ -326,7 +315,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // AudioBeamFrameList is IDisposable
                 using (frameList)
                 {
-
                     // Only one audio beam is supported. Get the sub frame list for this beam
                     IReadOnlyList<AudioBeamSubFrame> subFrameList = frameList[0].SubFrames;
 
@@ -424,41 +412,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 }
             }
         }
-        
-        
-        /// <summary>
-        /// Handles rendering energy visualization into a bitmap.
-        /// </summary>
-        /// <param name="sender">object sending the event.</param>
-        /// <param name="e">event arguments.</param>
-        private void UpdateEnergy(object sender, EventArgs e)
-        {
-            lock (this.energyLock)
-            {
-                // Calculate how many energy samples we need to advance since the last update in order to
-                // have a smooth animation effect
-                DateTime now = DateTime.UtcNow;
-                DateTime? previousRefreshTime = this.lastEnergyRefreshTime;
-                this.lastEnergyRefreshTime = now;
-
-                // No need to refresh if there is no new energy available to render
-                if (this.newEnergyAvailable <= 0)
-                {
-                    return;
-                }
-
-                if (previousRefreshTime != null)
-                {
-                    float energyToAdvance = this.energyError + (((float)(now - previousRefreshTime.Value).TotalMilliseconds * SamplesPerMillisecond) / SamplesPerColumn);
-                    int energySamplesToAdvance = Math.Min(this.newEnergyAvailable, (int)Math.Round(energyToAdvance));
-                    this.energyError = energyToAdvance - energySamplesToAdvance;
-                    this.energyRefreshIndex = (this.energyRefreshIndex + energySamplesToAdvance) % this.energy.Length;
-                    this.newEnergyAvailable -= energySamplesToAdvance;
-                }
-
-            }
-        }
-
 
         public void close()
         {

@@ -29,7 +29,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         // number of frames currently recorded and current second
         public int videoFrameCounter = 0;
         public int currentSecFrameCounter = 0;
-        public int currentMilliSec = 0; 
+        public int currentMilliSec = 0;
+        public int lastSecond = -1;
+        public long lastFrameSavedAt = 0;
 
         // references to object instances
         public Logger logger;
@@ -78,8 +80,12 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // if we are not recording a video, we don't do anything
             if (logger.openingPrompt.videoNo.Checked) return;
 
-            // the first time that the function is called, it creates the video writer
-            if (videowriter == null) createVideoFrameWriter();
+            // keep track of the last second being recorded
+            if (lastSecond < 0) lastSecond = Int32.Parse(Helpers.getTimestamp("second"));
+
+            // if we haven't waited enough time, we skip this frame
+            if (this.stopwatch.ElapsedMilliseconds - lastFrameSavedAt < 1000.0 / 20) return;
+            else lastFrameSavedAt = this.stopwatch.ElapsedMilliseconds;
 
             // resize the image if necessary
             int width = colorBitmap.PixelWidth / scaleFactor;
@@ -90,15 +96,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             Image<Emgu.CV.Structure.Bgra, byte> img = Helpers.ToImage(frame);
             Image<Emgu.CV.Structure.Bgra, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
 
-            // save the frame to the videowriter
-            if(currentSecFrameCounter < 15)
+            if (currentSecFrameCounter < 15)
             {
                 videowriter.Write(cpimg.Mat);
                 videoFrameCounter += 1;
                 currentSecFrameCounter += 1;
             }
 
-            if (this.stopwatch.ElapsedMilliseconds > 1000)
+            if (lastSecond != Int32.Parse(Helpers.getTimestamp("second")))
             {
                 // if we don't have enough frames for the current second, we repeat some
                 while (currentSecFrameCounter < 15)
@@ -106,13 +111,18 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                     videowriter.Write(cpimg.Mat);
                     videoFrameCounter += 1;
                     currentSecFrameCounter += 1;
+                    Console.WriteLine("adding frame");
                 }
 
-                Console.WriteLine("Number of video frames: " + videoFrameCounter);
+                // reset the stopwatch
                 this.stopwatch.Reset();
                 this.stopwatch.Start();
+                lastFrameSavedAt = 0;
                 currentSecFrameCounter = 0;
+                lastSecond = Int32.Parse(Helpers.getTimestamp("second"));
             }
+
+            Console.WriteLine("Number of video frames: " + videoFrameCounter + "  stopwatch:" + this.stopwatch.ElapsedMilliseconds);
         }
     }
 }
