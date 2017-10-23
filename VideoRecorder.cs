@@ -19,6 +19,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 {
     public class VideoRecorder
     {
+        // frame per second of the video
+        public int fps; 
+
         // size of the color image
         public int colorWidth = 1920;
         public int ColorHeight = 1080;
@@ -47,12 +50,13 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         }
 
         // creates the video writer
-        public void createVideoFrameWriter()
+        public void createVideoFrameWriter(int fps)
         {
             // create the videowriter if it doesn't exist yet
             if (videowriter == null)
             {
                 // resize the image if necessary
+                this.fps = fps;
                 int width = colorWidth / scaleFactor;
                 int height = ColorHeight / scaleFactor;
                 Size frameSize = new Size(width, height);
@@ -63,7 +67,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
 
                 videowriter = new VideoWriter(videoFilename, //File name
                                         -1, //Video format -1 opens a dialogue window
-                                        15, //FPS
+                                        fps, //FPS
                                         frameSize, //frame size
                                         true); //Color
 
@@ -84,21 +88,24 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (lastSecond < 0) lastSecond = Int32.Parse(Helpers.getTimestamp("second"));
 
             // if we haven't waited enough time, we skip this frame
-            if (this.stopwatch.ElapsedMilliseconds - lastFrameSavedAt < 1000.0 / 20) return;
+            if (this.stopwatch.ElapsedMilliseconds - lastFrameSavedAt < 1000.0 / fps-5) return;
             else lastFrameSavedAt = this.stopwatch.ElapsedMilliseconds;
 
-            // resize the image if necessary
-            int width = colorBitmap.PixelWidth / scaleFactor;
-            int height = colorBitmap.PixelHeight / scaleFactor;
-            Size frameSize = new Size(width, height);
-
-            // convert the color frame into an EMGU mat and resize it
+            // convert the color frame into an EMGU mat
             Image<Emgu.CV.Structure.Bgra, byte> img = Helpers.ToImage(frame);
-            Image<Emgu.CV.Structure.Bgra, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
 
-            if (currentSecFrameCounter < 15)
+            // resize the image if necessary
+            if(scaleFactor > 1)
             {
-                videowriter.Write(cpimg.Mat);
+                int width = colorBitmap.PixelWidth / scaleFactor;
+                int height = colorBitmap.PixelHeight / scaleFactor;
+                Size frameSize = new Size(width, height);
+                img = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
+            }
+
+            if (currentSecFrameCounter < fps)
+            {
+                videowriter.Write(img.Mat);
                 videoFrameCounter += 1;
                 currentSecFrameCounter += 1;
             }
@@ -106,9 +113,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (lastSecond != Int32.Parse(Helpers.getTimestamp("second")))
             {
                 // if we don't have enough frames for the current second, we repeat some
-                while (currentSecFrameCounter < 15)
+                while (currentSecFrameCounter < fps)
                 {
-                    videowriter.Write(cpimg.Mat);
+                    videowriter.Write(img.Mat);
                     videoFrameCounter += 1;
                     currentSecFrameCounter += 1;
                     Console.WriteLine("adding frame");
