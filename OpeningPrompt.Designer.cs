@@ -54,14 +54,14 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.label2 = new System.Windows.Forms.Label();
             this.are_talking = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.fpsBox = new System.Windows.Forms.ComboBox();
             this.videoLarge = new System.Windows.Forms.RadioButton();
             this.videoMedium = new System.Windows.Forms.RadioButton();
             this.videoSmall = new System.Windows.Forms.RadioButton();
             this.videoNo = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.saveWav = new System.Windows.Forms.CheckBox();
-            this.fpsBox = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hertz)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -197,6 +197,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // quantify_movements
             // 
             this.quantify_movements.AutoSize = true;
+            this.quantify_movements.Checked = true;
+            this.quantify_movements.CheckState = System.Windows.Forms.CheckState.Checked;
             this.quantify_movements.Location = new System.Drawing.Point(14, 146);
             this.quantify_movements.Name = "quantify_movements";
             this.quantify_movements.Size = new System.Drawing.Size(180, 24);
@@ -242,6 +244,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // computeJointAngles
             // 
             this.computeJointAngles.AutoSize = true;
+            this.computeJointAngles.Checked = true;
+            this.computeJointAngles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.computeJointAngles.Location = new System.Drawing.Point(14, 116);
             this.computeJointAngles.Name = "computeJointAngles";
             this.computeJointAngles.Size = new System.Drawing.Size(189, 24);
@@ -329,6 +333,23 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.groupBox2.Text = "Video";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 161);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(31, 20);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "fps";
+            // 
+            // fpsBox
+            // 
+            this.fpsBox.FormattingEnabled = true;
+            this.fpsBox.Location = new System.Drawing.Point(17, 184);
+            this.fpsBox.Name = "fpsBox";
+            this.fpsBox.Size = new System.Drawing.Size(121, 28);
+            this.fpsBox.TabIndex = 4;
+            // 
             // videoLarge
             // 
             this.videoLarge.AutoSize = true;
@@ -343,22 +364,22 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // videoMedium
             // 
             this.videoMedium.AutoSize = true;
+            this.videoMedium.Checked = true;
             this.videoMedium.Location = new System.Drawing.Point(17, 89);
             this.videoMedium.Name = "videoMedium";
             this.videoMedium.Size = new System.Drawing.Size(155, 24);
             this.videoMedium.TabIndex = 2;
+            this.videoMedium.TabStop = true;
             this.videoMedium.Text = "Medium 960x540";
             this.videoMedium.UseVisualStyleBackColor = true;
             // 
             // videoSmall
             // 
             this.videoSmall.AutoSize = true;
-            this.videoSmall.Checked = true;
             this.videoSmall.Location = new System.Drawing.Point(17, 59);
             this.videoSmall.Name = "videoSmall";
             this.videoSmall.Size = new System.Drawing.Size(135, 24);
             this.videoSmall.TabIndex = 1;
-            this.videoSmall.TabStop = true;
             this.videoSmall.Text = "small 480x270";
             this.videoSmall.UseVisualStyleBackColor = true;
             // 
@@ -395,23 +416,6 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.saveWav.Text = "Save Wav file";
             this.saveWav.UseVisualStyleBackColor = true;
             this.saveWav.CheckedChanged += new System.EventHandler(this.saveWav_CheckedChanged);
-            // 
-            // fpsBox
-            // 
-            this.fpsBox.FormattingEnabled = true;
-            this.fpsBox.Location = new System.Drawing.Point(17, 184);
-            this.fpsBox.Name = "fpsBox";
-            this.fpsBox.Size = new System.Drawing.Size(121, 28);
-            this.fpsBox.TabIndex = 4;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 161);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(31, 20);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "fps";
             // 
             // OpeningPrompt
             // 
