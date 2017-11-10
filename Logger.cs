@@ -74,6 +74,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         // get a reference to the main window
         private MainWindow main;
         public VideoRecorder videoRecorder;
+        public int fps; 
 
         /// <summary>
         /// Initializes a new instance of the Logger class.
@@ -104,8 +105,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             frequency = (openingPrompt.hertz.Value - 1) *5;
             if (frequency == 0) frequency = 1;
             current_sec = DateTime.Now.Second;
+            fps = Int32.Parse(openingPrompt.fpsBox.SelectedItem.ToString());
 
             // get the scaling factor from the opening prompt
+            if (openingPrompt.videoLarge.Checked) videoRecorder.scaleFactor = 1;
             if (openingPrompt.videoMedium.Checked) videoRecorder.scaleFactor = 2;
             if (openingPrompt.videoSmall.Checked) videoRecorder.scaleFactor = 4;
             
