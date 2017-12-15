@@ -2,6 +2,7 @@
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,6 +113,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             return distance_between_3D_points(
                 j1.Position.X, j1.Position.Y, j1.Position.Z,
                 j2.Position.X, j2.Position.Y, j2.Position.Z);
+        }
+
+        // log exceptions in a file
+        internal static Exception Log(this Exception ex, string path)
+        {
+            string filename = "CaughtExceptions" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
+            string destination = Path.Combine(path, filename);
+            File.AppendAllText(destination, DateTime.Now.ToString("HH:mm:ss") + ": " + ex.Message + "\n" + ex.ToString() + "\n");
+            return ex;
         }
 
     }

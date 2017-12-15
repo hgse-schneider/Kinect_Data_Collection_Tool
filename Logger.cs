@@ -434,23 +434,31 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public string distance_between_string_joints(string joint, string[] cur, string[] pre)
         {
-            int index = this.header_dic[joint + "_X"];
+            try
+            {
+                int index = this.header_dic[joint + "_X"];
 
-            double cur_x = Convert.ToDouble(cur[index]);
-            double cur_y = Convert.ToDouble(cur[index + 1]);
-            double cur_z = Convert.ToDouble(cur[index + 2]);
-            int cur_inferred = Int32.Parse((cur[index + 3]));
+                double cur_x = Convert.ToDouble(cur[index]);
+                double cur_y = Convert.ToDouble(cur[index + 1]);
+                double cur_z = Convert.ToDouble(cur[index + 2]);
+                int cur_inferred = Int32.Parse((cur[index + 3]));
 
-            double pre_x = Convert.ToDouble(pre[index]);
-            double pre_y = Convert.ToDouble(pre[index + 1]);
-            double pre_z = Convert.ToDouble(pre[index + 2]);
-            int pre_inferred = Int32.Parse((pre[index + 3]));
+                double pre_x = Convert.ToDouble(pre[index]);
+                double pre_y = Convert.ToDouble(pre[index + 1]);
+                double pre_z = Convert.ToDouble(pre[index + 2]);
+                int pre_inferred = Int32.Parse((pre[index + 3]));
 
-            if (cur_inferred == 1 || pre_inferred == 1) return "";
+                if (cur_inferred == 1 || pre_inferred == 1) return "";
 
-            double total = Helpers.distance_between_3D_points(cur_x, cur_y, cur_z, pre_x, pre_y, pre_z);
+                double total = Helpers.distance_between_3D_points(cur_x, cur_y, cur_z, pre_x, pre_y, pre_z);
 
-            return "" + total;
+                return "" + total;
+            }
+            catch(Exception ex)
+            {
+                ex.Log(this.destination);
+                return ""; 
+            }
         }
 
         /// <summary>

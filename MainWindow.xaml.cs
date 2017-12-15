@@ -311,4 +311,5 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //this.AwarenessBox.Opacity = 0.1;
         }
     }
+
 }
