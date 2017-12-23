@@ -116,11 +116,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         }
 
         // log exceptions in a file
-        internal static Exception Log(this Exception ex, string path)
+        internal static Exception Log(this Exception ex, string path, string[] cur, string[] pre)
         {
             string filename = "CaughtExceptions" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
             string destination = Path.Combine(path, filename);
-            File.AppendAllText(destination, DateTime.Now.ToString("HH:mm:ss") + ": " + ex.Message + "\n" + ex.ToString() + "\n");
+            File.AppendAllText(destination, DateTime.Now.ToString("HH:mm:ss") + ": " + ex.Message + "\n" + ex.ToString() + "\n PRE: " + pre + "\n CUR: " + cur + "\n");
             return ex;
         }
 

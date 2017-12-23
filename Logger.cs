@@ -456,7 +456,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             }
             catch(Exception ex)
             {
-                ex.Log(this.destination);
+                ex.Log(this.destination, pre, cur);
                 return ""; 
             }
         }
