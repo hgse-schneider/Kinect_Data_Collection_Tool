@@ -76,7 +76,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (type == "filename")
                 return DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
             else if (type == "datetime")
-                return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             else if (type == "date")
                 return DateTime.Now.ToString("yyyy-MM-dd");
             else if (type == "time")

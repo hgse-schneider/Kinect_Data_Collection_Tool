@@ -482,7 +482,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // count the number of bodies
                 this.bodies_tracked = count_bodies(drawingBodies);
 
-                // get the timestamp and creat the line for the log
+                // get the timestamp and create the line for the log
                 String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + ",";
 
                 // get the index at which each video frame is saved
