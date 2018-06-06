@@ -324,6 +324,16 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             //this.ImageSourceBox.Opacity = 1.0;
             //this.AwarenessBox.Opacity = 0.1;
         }
+
+        private void displayImage_Checked(object sender, RoutedEventArgs e)
+        {
+            this.ColorImageSourceBox.Opacity = 1.0;
+        }
+
+        private void displayImage_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.ColorImageSourceBox.Opacity = 0.0;
+        }
     }
 
 }
