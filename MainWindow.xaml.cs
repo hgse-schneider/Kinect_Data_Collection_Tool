@@ -283,13 +283,27 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 logger.recording = false;
                 this.startRecording.Content = "Not Recording";
                 this.startRecording.Background = Brushes.Red;
+                this.TagEvent.IsEnabled = false;
             }
             else if(!logger.recording)
             {
                 logger.recording = true;
                 this.startRecording.Content = "Recording !";
                 this.startRecording.Background = Brushes.LightGreen;
+                this.TagEvent.IsEnabled = true;
             }
+        }
+
+
+        /// <summary>
+        /// increment the value in the "Tag" column of the log file
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void tag_event(object sender, RoutedEventArgs e)
+        {
+            this.logger.tag += 1;
+            this.TagEvent.Content = "Tag Event - " + this.logger.tag;
         }
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)

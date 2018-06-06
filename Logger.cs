@@ -46,6 +46,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         // frequency at which to save the data
         public int frequency = 1;
 
+        // tag count
+        public int tag = 0;
+
         // type of output file
         public bool outputcsv = true;
         public bool outputxlsx = true;
@@ -116,7 +119,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (session == "Default") session += rnd.Next(1, 99);
 
             // print headers (ugly,should be re-written more cleanly)
-            header += "Timestamp,Session,Index,";
+            header += "Timestamp,Session,Index,Tag,";
 
             if (log_video) header += "VideoFrame,";
 
@@ -483,7 +486,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 this.bodies_tracked = count_bodies(drawingBodies);
 
                 // get the timestamp and create the line for the log
-                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + ",";
+                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + "," + this.tag + ",";
 
                 // get the index at which each video frame is saved
                 if (log_video) data += videoRecorder.videoFrameCounter + ",";
