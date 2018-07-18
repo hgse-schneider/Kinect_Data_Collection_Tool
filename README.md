@@ -3,6 +3,9 @@
 ## Description
 User-friendly software for collecting data from the kinect sensor (v2). 
 
+Opening prompt:
+![alt text](https://github.com/hgse-schneider/Kinect_Data_Collection_Tool/blob/master/Images/Prompt.png?raw=true)
+
 ## Features
 Generates a log file with the following information:
 * Skeleton data
@@ -23,8 +26,3 @@ Generates a log file with the following information:
 ## Dependencies
 * .NET framework 4.5
 * [Kinect v2 SDK](https://www.microsoft.com/en-us/download/details.aspx?id44561)
-
-## Next Steps
-* add sound events to the log file (e.g., if a person is talking)
-* Give the option to save audio and video files (or just screenshots)
-
