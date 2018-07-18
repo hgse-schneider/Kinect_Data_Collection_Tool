@@ -2,6 +2,7 @@
 using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,7 +76,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (type == "filename")
                 return DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss");
             else if (type == "datetime")
-                return DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+                return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             else if (type == "date")
                 return DateTime.Now.ToString("yyyy-MM-dd");
             else if (type == "time")
@@ -112,6 +113,15 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             return distance_between_3D_points(
                 j1.Position.X, j1.Position.Y, j1.Position.Z,
                 j2.Position.X, j2.Position.Y, j2.Position.Z);
+        }
+
+        // log exceptions in a file
+        internal static Exception Log(this Exception ex, string path, string[] cur, string[] pre)
+        {
+            string filename = "CaughtExceptions" + DateTime.Now.ToString("yyyy-MM-dd") + ".log";
+            string destination = Path.Combine(path, filename);
+            File.AppendAllText(destination, DateTime.Now.ToString("HH:mm:ss") + ": " + ex.Message + "\n" + ex.ToString() + "\n PRE: " + pre + "\n CUR: " + cur + "\n");
+            return ex;
         }
 
     }

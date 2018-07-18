@@ -16,6 +16,11 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public OpeningPrompt()
         {
             InitializeComponent();
+
+            // initializing the comboBox
+            List<int> items = new List<int>() { 1, 5, 10, 15, 30 };
+            fpsBox.DataSource = items;
+            fpsBox.SelectedIndex = 3;
         }
 
         private void OpeningPrompt_Load(object sender, EventArgs e)

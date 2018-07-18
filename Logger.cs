@@ -46,6 +46,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         // frequency at which to save the data
         public int frequency = 1;
 
+        // tag count
+        public int tag = 0;
+
         // type of output file
         public bool outputcsv = true;
         public bool outputxlsx = true;
@@ -74,6 +77,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         // get a reference to the main window
         private MainWindow main;
         public VideoRecorder videoRecorder;
+        public int fps; 
 
         /// <summary>
         /// Initializes a new instance of the Logger class.
@@ -104,8 +108,10 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             frequency = (openingPrompt.hertz.Value - 1) *5;
             if (frequency == 0) frequency = 1;
             current_sec = DateTime.Now.Second;
+            fps = Int32.Parse(openingPrompt.fpsBox.SelectedItem.ToString());
 
             // get the scaling factor from the opening prompt
+            if (openingPrompt.videoLarge.Checked) videoRecorder.scaleFactor = 1;
             if (openingPrompt.videoMedium.Checked) videoRecorder.scaleFactor = 2;
             if (openingPrompt.videoSmall.Checked) videoRecorder.scaleFactor = 4;
             
@@ -113,7 +119,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             if (session == "Default") session += rnd.Next(1, 99);
 
             // print headers (ugly,should be re-written more cleanly)
-            header += "Timestamp,Session,Index,";
+            header += "Timestamp,Session,Index,Tag,";
 
             if (log_video) header += "VideoFrame,";
 
@@ -431,23 +437,31 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         /// </summary>
         public string distance_between_string_joints(string joint, string[] cur, string[] pre)
         {
-            int index = this.header_dic[joint + "_X"];
+            try
+            {
+                int index = this.header_dic[joint + "_X"];
 
-            double cur_x = Convert.ToDouble(cur[index]);
-            double cur_y = Convert.ToDouble(cur[index + 1]);
-            double cur_z = Convert.ToDouble(cur[index + 2]);
-            int cur_inferred = Int32.Parse((cur[index + 3]));
+                double cur_x = Convert.ToDouble(cur[index]);
+                double cur_y = Convert.ToDouble(cur[index + 1]);
+                double cur_z = Convert.ToDouble(cur[index + 2]);
+                int cur_inferred = Int32.Parse((cur[index + 3]));
 
-            double pre_x = Convert.ToDouble(pre[index]);
-            double pre_y = Convert.ToDouble(pre[index + 1]);
-            double pre_z = Convert.ToDouble(pre[index + 2]);
-            int pre_inferred = Int32.Parse((pre[index + 3]));
+                double pre_x = Convert.ToDouble(pre[index]);
+                double pre_y = Convert.ToDouble(pre[index + 1]);
+                double pre_z = Convert.ToDouble(pre[index + 2]);
+                int pre_inferred = Int32.Parse((pre[index + 3]));
 
-            if (cur_inferred == 1 || pre_inferred == 1) return "";
+                if (cur_inferred == 1 || pre_inferred == 1) return "";
 
-            double total = Helpers.distance_between_3D_points(cur_x, cur_y, cur_z, pre_x, pre_y, pre_z);
+                double total = Helpers.distance_between_3D_points(cur_x, cur_y, cur_z, pre_x, pre_y, pre_z);
 
-            return "" + total;
+                return "" + total;
+            }
+            catch(Exception ex)
+            {
+                ex.Log(this.destination, pre, cur);
+                return ""; 
+            }
         }
 
         /// <summary>
@@ -471,8 +485,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
                 // count the number of bodies
                 this.bodies_tracked = count_bodies(drawingBodies);
 
-                // get the timestamp and creat the line for the log
-                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + ",";
+                // get the timestamp and create the line for the log
+                String data = Helpers.getTimestamp("datetime").ToString() + "," + this.session + "," + this.row_count[bodyIndex] + "," + this.tag + ",";
 
                 // get the index at which each video frame is saved
                 if (log_video) data += videoRecorder.videoFrameCounter + ",";

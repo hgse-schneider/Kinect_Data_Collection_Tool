@@ -54,6 +54,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.label2 = new System.Windows.Forms.Label();
             this.are_talking = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.fpsBox = new System.Windows.Forms.ComboBox();
             this.videoLarge = new System.Windows.Forms.RadioButton();
             this.videoMedium = new System.Windows.Forms.RadioButton();
             this.videoSmall = new System.Windows.Forms.RadioButton();
@@ -195,6 +197,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // quantify_movements
             // 
             this.quantify_movements.AutoSize = true;
+            this.quantify_movements.Checked = true;
+            this.quantify_movements.CheckState = System.Windows.Forms.CheckState.Checked;
             this.quantify_movements.Location = new System.Drawing.Point(14, 146);
             this.quantify_movements.Name = "quantify_movements";
             this.quantify_movements.Size = new System.Drawing.Size(180, 24);
@@ -240,6 +244,8 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // computeJointAngles
             // 
             this.computeJointAngles.AutoSize = true;
+            this.computeJointAngles.Checked = true;
+            this.computeJointAngles.CheckState = System.Windows.Forms.CheckState.Checked;
             this.computeJointAngles.Location = new System.Drawing.Point(14, 116);
             this.computeJointAngles.Name = "computeJointAngles";
             this.computeJointAngles.Size = new System.Drawing.Size(189, 24);
@@ -313,22 +319,40 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.fpsBox);
             this.groupBox2.Controls.Add(this.videoLarge);
             this.groupBox2.Controls.Add(this.videoMedium);
             this.groupBox2.Controls.Add(this.videoSmall);
             this.groupBox2.Controls.Add(this.videoNo);
             this.groupBox2.Location = new System.Drawing.Point(557, 91);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(193, 186);
+            this.groupBox2.Size = new System.Drawing.Size(193, 243);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Video";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(13, 161);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(31, 20);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "fps";
+            // 
+            // fpsBox
+            // 
+            this.fpsBox.FormattingEnabled = true;
+            this.fpsBox.Location = new System.Drawing.Point(17, 184);
+            this.fpsBox.Name = "fpsBox";
+            this.fpsBox.Size = new System.Drawing.Size(121, 28);
+            this.fpsBox.TabIndex = 4;
+            // 
             // videoLarge
             // 
             this.videoLarge.AutoSize = true;
-            this.videoLarge.Enabled = false;
             this.videoLarge.Location = new System.Drawing.Point(17, 119);
             this.videoLarge.Name = "videoLarge";
             this.videoLarge.Size = new System.Drawing.Size(158, 24);
@@ -372,9 +396,9 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.saveWav);
-            this.groupBox3.Location = new System.Drawing.Point(557, 294);
+            this.groupBox3.Location = new System.Drawing.Point(557, 340);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(193, 220);
+            this.groupBox3.Size = new System.Drawing.Size(193, 174);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Audio";
@@ -385,7 +409,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
             this.saveWav.AutoSize = true;
             this.saveWav.Checked = true;
             this.saveWav.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.saveWav.Location = new System.Drawing.Point(17, 25);
+            this.saveWav.Location = new System.Drawing.Point(17, 26);
             this.saveWav.Name = "saveWav";
             this.saveWav.Size = new System.Drawing.Size(130, 24);
             this.saveWav.TabIndex = 0;
@@ -451,5 +475,7 @@ namespace Microsoft.Samples.Kinect.BodyBasics
         public CheckBox mouth_eyes;
         public CheckBox quantify_movements;
         public CheckBox saveWav;
+        private Label label5;
+        public ComboBox fpsBox;
     }
 }

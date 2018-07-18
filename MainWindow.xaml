@@ -48,16 +48,17 @@
             <StatusBarItem Content="{Binding StatusText}" HorizontalAlignment="Left"  />
             <Label x:Name="savingTo" Content="Saving to: " HorizontalAlignment="Right"/>
         </StatusBar>
-        <Button x:Name="startRecording" Content="Start Recording?" HorizontalAlignment="Left" Margin="378,4.333,0,0" VerticalAlignment="Top" Width="157" Height="22" Click="startRecording_Click" Grid.Row="2"/>
+        <Button x:Name="startRecording" Content="Start Recording?" HorizontalAlignment="Left" Margin="206,4,0,0" VerticalAlignment="Top" Width="157" Height="22" Click="startRecording_Click" Grid.Row="2"/>
         <!--
         <Slider x:Name="depthSlider" HorizontalAlignment="Left" Margin="423,25,0,0" VerticalAlignment="Top" Height="20" Width="112" Maximum="1"/>
         <Label x:Name="depthImagelabel" Content="Show Depth Image" HorizontalAlignment="Left" Margin="423,5,0,0" VerticalAlignment="Top"/>
         -->
         <Viewbox HorizontalAlignment="Left" Margin="31,10.333,0,-0.333" VerticalAlignment="Top" Width="157" Height="22" Grid.Row="2" Stretch="Fill"/>
-        <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" />
+        <CheckBox x:Name="displayImage" Content="Display Image" HorizontalAlignment="Left" Margin="560,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="17" Width="102" IsChecked="True" Checked="displayImage_Checked" Unchecked="displayImage_Unchecked"/>
         <CheckBox x:Name="displayBodies" Content="Display Bodies (0)" HorizontalAlignment="Left" Margin="667,9.5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="126" IsChecked="True" />
         <CheckBox x:Name="displayTalk" Content="Display Talk" HorizontalAlignment="Left" Margin="798,9.333,0,0" Grid.Row="2" VerticalAlignment="Top" Height="18" Width="90" IsChecked="False" Checked="displayTalk_Checked" Unchecked="displayTalk_Unchecked" />
-        
-        
+        <Button x:Name="TagEvent" Content="Tag Event - 0" HorizontalAlignment="Left" Margin="382,4,0,0" VerticalAlignment="Top" Width="157" Height="22" Click="tag_event" Grid.Row="2" IsEnabled="False"/>
+
+
     </Grid>
 </Window>
